@@ -1,0 +1,2149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rede ILPF — LAPIG/UFG</title>
+  <meta name="description"
+    content="Mapeamento Nacional de Pastagens 2024/2025 com Camada de Integração (ILPF). Parceria LAPIG–UFG / Rede ILPF. Dados abertos, scripts GEE e visualizações interativas.">
+  <meta name="author" content="Guilherme R. Vaz — LAPIG/UFG">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    /* ──────────────────────────────────────────────────────────
+       DESIGN SYSTEM — tokens
+    ────────────────────────────────────────────────────────── */
+    :root {
+      --color-bg: #ffffff;
+      --color-fg: #1a1a1a;
+      --color-muted: #6b6b6b;
+      --color-rule: #e5e5e5;
+      --color-accent: #129912;
+      --color-accent-soft: #33a633;
+      --color-accent-glow: rgba(18, 153, 18, 0.08);
+      --color-yellow: #ffd700;
+      --color-card-bg: #ffffff;
+      --color-section-bg: #f3f2ed;
+      --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --max-width: 1060px;
+      --radius: 8px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.07);
+      --transition: 0.25s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       RESET & BASE
+    ────────────────────────────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-fg);
+      font-family: var(--font-serif);
+      font-size: 18px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       NAV
+    ────────────────────────────────────────────────────────── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 250, 247, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-rule);
+    }
+
+    .site-nav__inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0.7rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-nav__brand {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .site-nav__links {
+      display: flex;
+      gap: 1.4rem;
+      list-style: none;
+    }
+
+    .site-nav__links a {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      text-decoration: none;
+      transition: color var(--transition);
+      letter-spacing: 0.01em;
+    }
+
+    .site-nav__links a:hover {
+      color: var(--color-accent);
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       HERO
+    ────────────────────────────────────────────────────────── */
+    .hero {
+      text-align: center;
+      padding: 5rem 1.5rem 3.5rem;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .hero__badge {
+      display: inline-block;
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-accent);
+      background: var(--color-accent-glow);
+      border: 1px solid rgba(45, 106, 63, 0.15);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero h1 span {
+      color: var(--color-accent);
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      color: var(--color-muted);
+      max-width: 640px;
+      margin: 0 auto 1.8rem;
+      line-height: 1.6;
+    }
+
+    .hero__meta {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero__meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .hero__meta svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0.5;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       SECTION WRAPPERS
+    ────────────────────────────────────────────────────────── */
+    .section {
+      padding: 3.5rem 1.5rem;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .section--alt {
+      background: var(--color-section-bg);
+      max-width: 100%;
+      padding: 3.5rem 1.5rem;
+    }
+
+    .section--alt>.section__inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .section__eyebrow {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-accent);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .section__title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .section__desc {
+      font-size: 0.95rem;
+      color: var(--color-muted);
+      max-width: 600px;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       CARDS GRID
+    ────────────────────────────────────────────────────────── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .card {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.8rem;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow var(--transition), transform var(--transition);
+      display: block;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .card__eyebrow {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .card__title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      color: var(--color-accent);
+    }
+
+    .card__desc {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: #3a3a3a;
+      margin: 0;
+    }
+
+    .card__arrow {
+      display: block;
+      margin-top: 1rem;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--color-accent);
+      transition: transform var(--transition);
+    }
+
+    .card:hover .card__arrow {
+      transform: translateX(4px);
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       STATS ROW
+    ────────────────────────────────────────────────────────── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 1.2rem 0.5rem;
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius);
+    }
+
+    .stat__number {
+      font-family: var(--font-sans);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      line-height: 1;
+    }
+
+    .stat__label {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      color: var(--color-muted);
+      margin-top: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       CLASSES TABLE
+    ────────────────────────────────────────────────────────── */
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .class-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      padding: 1rem 1.2rem;
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius);
+      transition: box-shadow var(--transition);
+    }
+
+    .class-item:hover {
+      box-shadow: var(--shadow-sm);
+    }
+
+    .class-item__swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .class-item__name {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.88rem;
+    }
+
+    .class-item__desc {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+      line-height: 1.4;
+      margin-top: 0.15rem;
+    }
+
+    .class-item__count {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      color: var(--color-accent);
+      font-weight: 600;
+      margin-top: 0.2rem;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       IMAGE FIGURE
+    ────────────────────────────────────────────────────────── */
+    .figure {
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .figure img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--color-rule);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .figure figcaption {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      margin-top: 0.6rem;
+      font-style: italic;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       TIMELINE
+    ────────────────────────────────────────────────────────── */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-rule);
+    }
+
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 0.5rem;
+    }
+
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -1.95rem;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      border: 2px solid var(--color-bg);
+    }
+
+    .timeline__item.done::before {
+      background: var(--color-accent);
+    }
+
+    .timeline__item.current::before {
+      background: #fff;
+      border: 3px solid var(--color-accent);
+      box-shadow: 0 0 0 3px var(--color-accent-glow);
+    }
+
+    .timeline__item.future::before {
+      background: var(--color-rule);
+    }
+
+    .timeline__date {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .timeline__title {
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-top: 0.15rem;
+    }
+
+    .timeline__desc {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      margin-top: 0.2rem;
+      line-height: 1.5;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       METHODOLOGY PROSE
+    ────────────────────────────────────────────────────────── */
+    .prose {
+      max-width: 680px;
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .prose p {
+      margin-bottom: 1.2rem;
+    }
+
+    .prose strong {
+      font-weight: 600;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       PIPELINE STEPS
+    ────────────────────────────────────────────────────────── */
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0;
+      margin: 2rem 0;
+      position: relative;
+    }
+
+    .pipeline__step {
+      text-align: center;
+      padding: 1.2rem 0.8rem;
+      position: relative;
+    }
+
+    .pipeline__step::after {
+      content: '→';
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-sans);
+      color: var(--color-rule);
+      font-size: 1.2rem;
+    }
+
+    .pipeline__step:last-child::after {
+      display: none;
+    }
+
+    .pipeline__icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .pipeline__label {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--color-fg);
+    }
+
+    .pipeline__sub {
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      color: var(--color-muted);
+      margin-top: 0.15rem;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       DELIVERABLES
+    ────────────────────────────────────────────────────────── */
+    .deliverables {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .deliverable {
+      padding: 1.2rem;
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius);
+      text-align: center;
+      transition: box-shadow var(--transition);
+    }
+
+    .deliverable:hover {
+      box-shadow: var(--shadow-sm);
+    }
+
+    .deliverable__icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .deliverable__title {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .deliverable__desc {
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      margin-top: 0.3rem;
+      line-height: 1.4;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       FOOTER
+    ────────────────────────────────────────────────────────── */
+    .site-footer {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      border-top: 1px solid var(--color-rule);
+      margin-top: 2rem;
+    }
+
+    .site-footer p {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      line-height: 1.6;
+    }
+
+    .site-footer a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       RESPONSIVE
+    ────────────────────────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .hero {
+        padding: 3rem 1rem 2rem;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pipeline {
+        grid-template-columns: 1fr;
+      }
+
+      .pipeline__step::after {
+        display: none;
+      }
+
+      .site-nav__links {
+        gap: 0.8rem;
+      }
+
+      .hero__meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       ANIMATIONS
+    ────────────────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-up {
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .fade-up:nth-child(2) {
+      animation-delay: 0.08s;
+    }
+
+    .fade-up:nth-child(3) {
+      animation-delay: 0.16s;
+    }
+
+    .fade-up:nth-child(4) {
+      animation-delay: 0.24s;
+    }
+
+    .fade-up:nth-child(5) {
+      animation-delay: 0.32s;
+    }
+
+    .fade-up:nth-child(6) {
+      animation-delay: 0.40s;
+    }
+
+    /* Scroll-triggered fade-in */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Divider */
+    hr.divider {
+      border: none;
+      height: 1px;
+      background: var(--color-rule);
+      margin: 0;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       INTERACTIVE MAP
+    ────────────────────────────────────────────────────────── */
+    .map-viz {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      min-height: 520px;
+    }
+
+    .map-container {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--color-rule);
+      box-shadow: var(--shadow-md);
+      min-height: 500px;
+    }
+
+    #map-amostras {
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+      z-index: 1;
+    }
+
+    .map-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .map-panel__card {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .map-panel__title {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .filter-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .filter-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      cursor: pointer;
+      padding: 0.3rem 0.4rem;
+      border-radius: 4px;
+      transition: background var(--transition);
+    }
+
+    .filter-list li:hover {
+      background: var(--color-accent-glow);
+    }
+
+    .filter-list input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 15px;
+      height: 15px;
+      border: 2px solid var(--color-rule);
+      border-radius: 3px;
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+      transition: all var(--transition);
+    }
+
+    .filter-list input[type="checkbox"]:checked {
+      border-color: var(--color-accent);
+      background: var(--color-accent);
+    }
+
+    .filter-list input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      top: -1px;
+      left: 1px;
+      font-size: 11px;
+      color: white;
+      font-weight: 700;
+    }
+
+    .filter-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-count {
+      margin-left: auto;
+      color: var(--color-muted);
+      font-size: 0.72rem;
+      font-weight: 500;
+    }
+
+    .map-counter {
+      text-align: center;
+      padding: 0.8rem;
+      background: var(--color-accent-glow);
+      border-radius: var(--radius);
+      margin-top: 0.2rem;
+    }
+
+    .map-counter__number {
+      font-family: var(--font-sans);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      line-height: 1;
+    }
+
+    .map-counter__label {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 0.2rem;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 220px;
+    }
+
+    /* Leaflet popup customization */
+    .leaflet-popup-content-wrapper {
+      border-radius: var(--radius) !important;
+      box-shadow: var(--shadow-md) !important;
+      font-family: var(--font-sans) !important;
+    }
+
+    .leaflet-popup-content {
+      margin: 12px 16px !important;
+      font-size: 0.82rem !important;
+      line-height: 1.5 !important;
+    }
+
+    .popup-title {
+      font-weight: 600;
+      font-size: 0.88rem;
+      margin-bottom: 0.3rem;
+      color: var(--color-fg);
+    }
+
+    .popup-class {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    .popup-class__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    .popup-meta {
+      color: var(--color-muted);
+      font-size: 0.75rem;
+    }
+
+    .map-caption {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      color: var(--color-muted);
+      font-style: italic;
+      margin-top: 0.6rem;
+      text-align: center;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       OVERLAP TABLE & SEARCH
+    ────────────────────────────────────────────────────────── */
+    .search-container {
+      margin-bottom: 1rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius);
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      background: var(--color-bg);
+      color: var(--color-fg);
+      transition: border-color var(--transition);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--color-accent);
+    }
+
+    .overlap-table-container {
+      margin-top: 1.5rem;
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+      display: none; /* hidden initially */
+    }
+
+    .overlap-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+    }
+
+    .overlap-table th,
+    .overlap-table td {
+      padding: 0.8rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-rule);
+    }
+
+    .overlap-table th {
+      background: var(--color-accent-glow);
+      font-weight: 600;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.75rem;
+    }
+
+    .overlap-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .overlap-table tbody tr:hover {
+      background: rgba(0,0,0,0.02);
+    }
+
+    .class-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.3rem 0.7rem;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+
+    /* Pie marker icon styles */
+    .pie-marker-icon {
+      background: none;
+      border: none;
+    }
+    .pie-marker-icon svg {
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+      background: #fff;
+    }
+
+    /* Reset button on map */
+    .map-reset-btn {
+      position: absolute;
+      top: 80px;
+      left: 10px;
+      z-index: 1000;
+      background: white;
+      border: 2px solid rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      padding: 5px 8px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--color-fg);
+      transition: background var(--transition);
+      line-height: 1;
+    }
+
+    .map-reset-btn:hover {
+      background: var(--color-accent-glow);
+    }
+
+    @media (max-width: 800px) {
+      .map-viz {
+        grid-template-columns: 1fr;
+      }
+
+      .map-container {
+        min-height: 380px;
+      }
+
+      #map-amostras {
+        min-height: 380px;
+      }
+    }
+      /* ──────────────────────────────────────────────────────────
+       SPLIT MAP & DASHBOARDS
+    ────────────────────────────────────────────────────────── */
+    .split-map-wrapper {
+      position: relative;
+      height: 400px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--color-rule);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 1.5rem;
+    }
+    #split-map {
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    .split-dashboards {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .split-dashboard {
+      flex: 1;
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-rule);
+      border-radius: var(--radius);
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .dashboard-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-accent);
+      text-align: center;
+    }
+    .dashboard-legend {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      font-size: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .dashboard-chart {
+      position: relative;
+      width: 100%;
+      height: 150px;
+    }
+    
+    @media (max-width: 800px) {
+      .split-dashboards {
+        flex-direction: column;
+      }
+    }
+
+    .leaflet-sbs-range::-webkit-slider-thumb { width: 80px !important; height: 80px !important; background: transparent !important; cursor: ew-resize !important; }
+    .leaflet-sbs-range::-moz-range-thumb { width: 80px !important; height: 80px !important; background: transparent !important; cursor: ew-resize !important; }
+</style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAV
+  ═══════════════════════════════════════════════════════ -->
+  <nav class="site-nav" id="nav">
+    <div class="site-nav__inner">
+      <a href="#" class="site-nav__brand">ILPF · LAPIG/UFG</a>
+      <ul class="site-nav__links">
+        <li><a href="#projeto">Projeto</a></li>
+        <li><a href="#metodologia">Metodologia</a></li>
+        <li><a href="#amostras">Amostras</a></li>
+        <li><a href="#entregas">Entregas</a></li>
+        <li><a href="#cronograma">Cronograma</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════════════════ -->
+  <header class="hero" id="projeto">
+    <div class="hero__badge fade-up">Parceria LAPIG–UFG / Rede ILPF</div>
+    <h1 class="fade-up">
+      Mapeamento Nacional de Pastagens<br>
+      com Camada de <span>Integração ILPF</span>
+    </h1>
+    <p class="hero__subtitle fade-up">
+      Pela primeira vez em escala nacional, uma camada temática capaz de distinguir
+      sistemas de integração produtiva (ILP, IPF, ILF e ILPF) da pastagem convencional
+      — com resolução de 10 metros, dados abertos e integração ao Atlas das Pastagens.
+    </p>
+    <div class="hero__meta fade-up">
+      <span>
+        <svg viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0a8 8 0 100 16A8 8 0 008 0zm.5 4.5v4l3.5 2.1-.5.8L7.5 9V4.5h1z" />
+        </svg>
+        2024/2025
+      </span>
+      <span>
+        <svg viewBox="0 0 16 16" fill="currentColor">
+          <path
+            d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a2.5 2.5 0 01-2.5 2.5h-7A2.5 2.5 0 012 13.5v-11zm2.5-1a1 1 0 00-1 1v11a1 1 0 001 1h7a1 1 0 001-1v-11a1 1 0 00-1-1h-7z" />
+        </svg>
+        Sentinel-2 · 10 m
+      </span>
+      <span>
+        <svg viewBox="0 0 16 16" fill="currentColor">
+          <path
+            d="M5.5 3.5a2 2 0 100 4 2 2 0 000-4zM2 5.5a3.5 3.5 0 115.898 2.549 5.508 5.508 0 013.034 4.084.75.75 0 11-1.482.235 4.001 4.001 0 00-7.9 0 .75.75 0 01-1.482-.236A5.507 5.507 0 013.102 8.05 3.49 3.49 0 012 5.5zM11 4a.75.75 0 100 1.5 1.5 1.5 0 01.666 2.844.75.75 0 00-.416.672v.352a.75.75 0 00.574.73c1.2.289 2.162 1.2 2.522 2.372a.75.75 0 101.434-.44 5.01 5.01 0 00-2.56-3.012A3 3 0 0011 4z" />
+        </svg>
+        Elaboração: LAPIG-UFG
+      </span>
+    </div>
+  </header>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════
+       NUMBERS
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section reveal">
+    <div class="stats">
+      <div class="stat fade-up">
+        <div class="stat__number">230</div>
+        <div class="stat__label">Bandas Espectrais</div>
+      </div>
+      <div class="stat fade-up">
+        <div class="stat__number">1.267</div>
+        <div class="stat__label">Amostras Inspecionadas</div>
+      </div>
+      <div class="stat fade-up">
+        <div class="stat__number">18.340</div>
+        <div class="stat__label">Tiles (Grade Brasil)</div>
+      </div>
+      <div class="stat fade-up">
+        <div class="stat__number">8</div>
+        <div class="stat__label">Classes Mapeadas</div>
+      </div>
+      <div class="stat fade-up">
+        <div class="stat__number">10 m</div>
+        <div class="stat__label">Resolução Espacial</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PROBLEM CARDS
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section reveal" id="cards-problema">
+    <div class="section__eyebrow">O Problema</div>
+    <h2 class="section__title">Onde estão os sistemas integrados?</h2>
+    <p class="section__desc">
+      19% do território brasileiro é pastagem, 11% é agricultura ou mosaico de usos e 1% é silvicultura
+      — mas os mapas existentes não distinguem sistemas integrados.
+    </p>
+    <div class="cards">
+      <div class="card fade-up">
+        <div class="card__eyebrow">Lacuna 01</div>
+        <div class="card__title">Degradação não mapeada</div>
+        <p class="card__desc">
+          Pastagens degradadas e sistemas integrados aparecem como a mesma classe
+          nos mapeamentos convencionais — decisões de política pública tomadas no escuro.
+        </p>
+      </div>
+      <div class="card fade-up">
+        <div class="card__eyebrow">Lacuna 02</div>
+        <div class="card__title">ILP, IPF, ILPF ignoradas</div>
+        <p class="card__desc">
+          Programas de incentivo à integração existem, mas não há base territorial
+          para monitorar sua adoção em escala nacional.
+        </p>
+      </div>
+      <div class="card fade-up">
+        <div class="card__eyebrow">Lacuna 03</div>
+        <div class="card__title">Lacuna científica real</div>
+        <p class="card__desc">
+          Séries temporais densas do Sentinel-2 têm potencial não explorado para
+          discriminar esses sistemas com precisão inédita.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════
+       METHODOLOGY
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section--alt reveal" id="metodologia">
+    <div class="section__inner">
+      <div class="section__eyebrow">Metodologia</div>
+      <h2 class="section__title">Pipeline de Processamento</h2>
+      <p class="section__desc">
+        Da imagem bruta ao cubo de dados multibanda — processamento em nuvem
+        com Google Earth Engine.
+      </p>
+
+      <div class="pipeline">
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">🛰️</div>
+          <div class="pipeline__label">Sentinel-2</div>
+          <div class="pipeline__sub">Bandas red-edge, NIR, SWIR · 10 m</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">☁️</div>
+          <div class="pipeline__label">Cloud Masking</div>
+          <div class="pipeline__sub">Cloud Score Plus · limiar 0.50</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">📊</div>
+          <div class="pipeline__label">Índices Espectrais</div>
+          <div class="pipeline__sub">NDVI, NDWI, CAI, CRI1, ARI, RGR, PSRI, SATVI</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">📐</div>
+          <div class="pipeline__label">Reduções Temporais</div>
+          <div class="pipeline__sub">Min, max, mediana, amplitude, percentis</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">🧠</div>
+          <div class="pipeline__label">Embeddings</div>
+          <div class="pipeline__sub">64 bandas · Satellite Embedding V1</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">📦</div>
+          <div class="pipeline__label">Data Cube</div>
+          <div class="pipeline__sub">230 bandas Int16 · Grade 0.2°×0.2°</div>
+        </div>
+      </div>
+
+      <div class="prose" style="margin-top: 2rem;">
+        <p>
+          As imagens Sentinel-2 são submetidas a <strong>correção atmosférica</strong> e remoção
+          de pixels afetados por nuvens via Cloud Score Plus. Para cada uma das <strong>18 bandas
+            espectrais</strong> (10 brutas + 8 índices), calculadas exclusivamente sobre observações
+          da <strong>época chuvosa</strong> (seleção adaptativa por pixel com base no percentil 25 do NDVI),
+          são derivadas estatísticas de mínimo, máximo, mediana, desvio-padrão, amplitude
+          e percentis (10, 25, 75, 90).
+        </p>
+        <p>
+          A esse conjunto somam-se atributos de <strong>relevo</strong> (elevação e slope),
+          um <strong>filtro de textura espacial</strong> (mediana focal 3×3 sobre NDVI) e as
+          <strong>64 bandas de embedding</strong> do Google Satellite Embedding V1 Annual.
+          Todos os dados são organizados em um <strong>cubo de dados</strong> para processamento
+          eficiente em escala nacional.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       CLASSES
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section reveal" id="amostras">
+    <div class="section__eyebrow">Base Amostral</div>
+    <h2 class="section__title">Classes de Integração Mapeadas</h2>
+    <p class="section__desc">
+      1.267 amostras inspecionadas visualmente em 8 classes, a partir de 1.449 talhões fornecidos pela Rede ILPF
+      (pós filtro de inconsistências). Concentração em Goiás (1.238 amostras).
+    </p>
+
+    <div class="classes-grid">
+      <div class="class-item fade-up">
+        <div class="class-item__swatch" style="background:#eddc4b"></div>
+        <div>
+          <div class="class-item__name">Pastagem</div>
+          <div class="class-item__desc">Uso extensivo convencional, sem integração de componentes produtivos adicionais.
+          </div>
+          <div class="class-item__count">364 amostras</div>
+        </div>
+      </div>
+      <div class="class-item fade-up">
+        <div class="class-item__swatch" style="background:#2fc912"></div>
+        <div>
+          <div class="class-item__name">Agricultura</div>
+          <div class="class-item__desc">Culturas agrícolas anuais ou perenes sem integração com pecuária ou floresta.
+          </div>
+          <div class="class-item__count">208 amostras</div>
+        </div>
+      </div>
+      <div class="class-item fade-up">
+        <div class="class-item__swatch" style="background:#b2f323"></div>
+        <div>
+          <div class="class-item__name">ILP — Lavoura-Pecuária</div>
+          <div class="class-item__desc">Rotação entre culturas agrícolas e forrageiras na mesma área.</div>
+          <div class="class-item__count">384 amostras</div>
+        </div>
+      </div>
+      <div class="class-item fade-up">
+        <div class="class-item__swatch" style="background:#f02907"></div>
+        <div>
+          <div class="class-item__name">IPF — Pecuária-Floresta</div>
+          <div class="class-item__desc">Componente arbóreo integrado à pastagem, com benefícios múltiplos.</div>
+          <div class="class-item__count">195 amostras</div>
+        </div>
+      </div>
+      <div class="class-item fade-up">
+        <div class="class-item__swatch" style="background:#3c4d0a"></div>
+        <div>
+          <div class="class-item__name">ILPF — Lavoura-Pecuária-Floresta</div>
+          <div class="class-item__desc">Sistema completo — máxima diversificação e sustentabilidade.</div>
+          <div class="class-item__count">23 amostras</div>
+        </div>
+      </div>
+      <div class="class-item fade-up">
+        <div class="class-item__swatch" style="background:#bcb915"></div>
+        <div>
+          <div class="class-item__name">ILF — Lavoura-Floresta</div>
+          <div class="class-item__desc">Integração entre culturas agrícolas e componente florestal.</div>
+          <div class="class-item__count">10 amostras</div>
+        </div>
+      </div>
+      <div class="class-item fade-up">
+        <div class="class-item__swatch" style="background:#d67910"></div>
+        <div>
+          <div class="class-item__name">Agrofloresta</div>
+          <div class="class-item__desc">Sistemas agroflorestais tradicionais com múltiplos extratos vegetais.</div>
+          <div class="class-item__count">0 amostras</div>
+        </div>
+      </div>
+      <div class="class-item fade-up">
+        <div class="class-item__swatch" style="background:#000000"></div>
+        <div>
+          <div class="class-item__name">Outros</div>
+          <div class="class-item__desc">Classes não enquadradas nas categorias acima.</div>
+          <div class="class-item__count">81 amostras</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VISUALIZATIONS — INTERACTIVE MAP
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section--alt reveal" id="visualizacoes">
+    <div class="section__inner">
+      <div class="section__eyebrow">Visualizações</div>
+      <h2 class="section__title">Distribuição Espacial e Quantitativa</h2>
+
+      <div class="map-viz">
+        <!-- MAP -->
+        <div class="map-container">
+          <div id="map-amostras"></div>
+          <button class="map-reset-btn" id="map-reset" title="Voltar à visão geral">⟲ Brasil</button>
+        </div>
+
+        <!-- PANEL -->
+        <div class="map-panel">
+          <!-- Counter -->
+          <div class="map-panel__card map-counter">
+            <div class="map-counter__number" id="counter-number">1.267</div>
+            <div class="map-counter__label">Amostras Visíveis</div>
+          </div>
+
+          <!-- Filters & Search -->
+          <div class="map-panel__card">
+            <div class="search-container">
+              <input type="text" id="search-input" class="search-input" placeholder="Pesquisar Nome, ID ou Ano...">
+            </div>
+            <div class="map-panel__title">Filtrar por Classe</div>
+            <ul class="filter-list" id="filter-list">
+              <!-- populated by JS -->
+            </ul>
+          </div>
+
+          <!-- Chart -->
+          <div class="map-panel__card">
+            <div class="map-panel__title">Distribuição Quantitativa</div>
+            <div class="chart-container">
+              <canvas id="chart-classes"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="map-caption">
+        Distribuição espacial das amostras por classe de integração. Fontes: Rede ILPF, IBGE. SRC: WGS 84.
+        Pontos com sobreposição exata exibem um gráfico dividindo as proporções. Clique em um marcador para detalhar as amostras.
+      </p>
+
+      <div class="overlap-table-container" id="overlap-table-container">
+        <table class="overlap-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome do Ponto</th>
+              <th>Ano da Safra</th>
+              <th>Classe</th>
+            </tr>
+          </thead>
+          <tbody id="overlap-tbody">
+            <!-- populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       COMPARAÇÃO DE MAPAS (SPLIT PANEL)
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section reveal" id="comparacao">
+    <div class="section__eyebrow">Análise Comparativa</div>
+    <h2 class="section__title">Comparação de Cenários (Raster)</h2>
+    <p class="section__desc">Arraste o divisor para comparar as camadas lado a lado sobre o mapa base.</p>
+
+    <div class="split-map-wrapper">
+      <div id="split-map"></div>
+    </div>
+    
+    <div class="split-dashboards">
+      <!-- Lado Esquerdo -->
+      <div class="split-dashboard left-dashboard">
+        <h3 class="dashboard-title">Cenário A (Esquerda)</h3>
+        <div class="dashboard-legend">
+          <div class="legend-item"><span class="legend-color" style="background:#129912"></span> Floresta</div>
+          <div class="legend-item"><span class="legend-color" style="background:#ffd700"></span> Pastagem</div>
+        </div>
+        <div class="dashboard-chart">
+          <canvas id="chart-left"></canvas>
+        </div>
+      </div>
+      
+      <!-- Lado Direito -->
+      <div class="split-dashboard right-dashboard">
+        <h3 class="dashboard-title">Cenário B (Direita)</h3>
+        <div class="dashboard-legend">
+          <div class="legend-item"><span class="legend-color" style="background:#129912"></span> Floresta</div>
+          <div class="legend-item"><span class="legend-color" style="background:#ffd700"></span> Pastagem</div>
+        </div>
+        <div class="dashboard-chart">
+          <canvas id="chart-right"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DELIVERABLES
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section reveal" id="entregas">
+    <div class="section__eyebrow">Produtos</div>
+    <h2 class="section__title">O que este projeto entrega</h2>
+    <p class="section__desc">Tudo aberto. Tudo documentado. Tudo replicável.</p>
+
+    <div class="deliverables">
+      <div class="deliverable fade-up">
+        <div class="deliverable__icon">🗺️</div>
+        <div class="deliverable__title">Mapa Raster Nacional</div>
+        <div class="deliverable__desc">Pastagens 2024/25 · ~0,1 ha · ILP · IPF · ILPF</div>
+      </div>
+      <div class="deliverable fade-up">
+        <div class="deliverable__icon">📐</div>
+        <div class="deliverable__title">Mapa Vetorial</div>
+        <div class="deliverable__desc">Polígonos temáticos com área mínima e continuidade</div>
+      </div>
+      <div class="deliverable fade-up">
+        <div class="deliverable__icon">🔬</div>
+        <div class="deliverable__title">Base Amostral</div>
+        <div class="deliverable__desc">Georreferenciada · treino · validação · teste</div>
+      </div>
+      <div class="deliverable fade-up">
+        <div class="deliverable__icon">📊</div>
+        <div class="deliverable__title">Relatório de Validação</div>
+        <div class="deliverable__desc">F1 · precision · recall · mapa de incerteza</div>
+      </div>
+      <div class="deliverable fade-up">
+        <div class="deliverable__icon">💻</div>
+        <div class="deliverable__title">App GEE Interativo</div>
+        <div class="deliverable__desc">Visualização · consulta · download · Atlas LAPIG/UFG</div>
+      </div>
+      <div class="deliverable fade-up">
+        <div class="deliverable__icon">🎓</div>
+        <div class="deliverable__title">Capacitação Rede ILPF</div>
+        <div class="deliverable__desc">Workshop presencial · materiais didáticos abertos</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════════════════
+       TIMELINE
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section reveal" id="cronograma">
+    <div class="section__eyebrow">Cronograma · 12 meses</div>
+    <h2 class="section__title">Maio 2026 → Abril 2027</h2>
+
+    <div class="timeline">
+      <div class="timeline__item done">
+        <div class="timeline__date">Mai – Jun 2026</div>
+        <div class="timeline__title">Data cube filtrado e limpo</div>
+        <div class="timeline__desc">Cubo raster com 230 bandas espectrais processado via GEE. Exportação tileada para
+          18.340 grids.</div>
+      </div>
+      <div class="timeline__item current">
+        <div class="timeline__date">Jul – Ago 2026</div>
+        <div class="timeline__title">Base amostral (treino / validação / teste)</div>
+        <div class="timeline__desc">Inspeção visual, aumento de amostras, limpeza de outliers e testes de similaridade.
+        </div>
+      </div>
+      <div class="timeline__item future">
+        <div class="timeline__date">Set – Nov 2026</div>
+        <div class="timeline__title">Versões iniciais do mapa</div>
+        <div class="timeline__desc">Classificação preliminar com Random Forest. Ajuste de hiperparâmetros e avaliação
+          OOB.</div>
+      </div>
+      <div class="timeline__item future">
+        <div class="timeline__date">Dez 2026 – Fev 2027</div>
+        <div class="timeline__title">Mapa quase final (raster + vetorial)</div>
+        <div class="timeline__desc">Refinamento do mapa nacional com polígonos temáticos e área mínima.</div>
+      </div>
+      <div class="timeline__item future">
+        <div class="timeline__date">Mar 2027</div>
+        <div class="timeline__title">Relatório de métricas + incerteza</div>
+        <div class="timeline__desc">Validação completa: F1, precision, recall, mapa de incerteza espacializado.</div>
+      </div>
+      <div class="timeline__item future">
+        <div class="timeline__date">Abr 2027</div>
+        <div class="timeline__title">App GEE · integração Atlas · entrega final</div>
+        <div class="timeline__desc">Aplicativo interativo no GEE, integração ao Atlas das Pastagens, workshop e entrega.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAVIGATION CARDS (PRODUTOS)
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section--alt reveal" id="navegacao">
+    <div class="section__inner">
+      <div class="section__eyebrow">Navegação</div>
+      <h2 class="section__title">Produtos</h2>
+      <p class="section__desc">Acesse os materiais, scripts e documentos do projeto.</p>
+
+      <div class="cards">
+        <a class="card fade-up" href="#">
+          <div class="card__eyebrow">Apresentação</div>
+          <div class="card__title">Parceria LAPIG–Rede ILPF</div>
+          <p class="card__desc">
+            Slides da parceria institucional com visão geral do projeto,
+            pipeline técnico, classes mapeadas e cronograma de entregas.
+          </p>
+          <span class="card__arrow">Acessar apresentação →</span>
+        </a>
+
+        <a class="card fade-up" href="#">
+          <div class="card__eyebrow">Documentação</div>
+          <div class="card__title">Relatório de Entrega 1</div>
+          <p class="card__desc">
+            Documentação técnica do data cube filtrado e limpo.
+            Metodologia baseada no ATBD MapBiomas Coleção 2 (beta) 10 metros.
+          </p>
+          <span class="card__arrow">Acessar relatório →</span>
+        </a>
+
+        <a class="card fade-up" href="#">
+          <div class="card__eyebrow">Google Earth Engine</div>
+          <div class="card__title">Scripts de Métricas</div>
+          <p class="card__desc">
+            Código Python e JavaScript para processamento do cubo de dados
+            com 230 bandas espectrais no GEE. Inclui mascaramento de nuvens,
+            cálculo de índices e exportação tileada.
+          </p>
+          <span class="card__arrow">Acessar scripts →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <p>
+      <strong>Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG)</strong><br>
+      Universidade Federal de Goiás · Parceria Rede ILPF
+    </p>
+    <p style="margin-top: 0.5rem;">
+      <!-- Adicione links reais aqui -->
+      <a href="#">GitHub</a> · <a href="#">Atlas das Pastagens</a> · <a href="#">Google Earth Engine</a>
+    </p>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SCROLL REVEAL SCRIPT
+  ═══════════════════════════════════════════════════════ -->
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Leaflet Side-by-Side -->
+  <script src="https://cdn.jsdelivr.net/gh/digidem/leaflet-side-by-side/leaflet-side-by-side.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+
+  <script>
+    // Intersection Observer for scroll-triggered animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Smooth active nav highlight
+    const sections = document.querySelectorAll('[id]');
+    const navLinks = document.querySelectorAll('.site-nav__links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (scrollY >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+      navLinks.forEach(link => {
+        link.style.color = link.getAttribute('href') === '#' + current
+          ? 'var(--color-accent)' : '';
+      });
+    });
+
+    // ──────────────────────────────────────────────────────────
+    //  INTERACTIVE MAP — Leaflet + Chart.js
+    // ──────────────────────────────────────────────────────────
+    (function () {
+      'use strict';
+
+      // Class color palette (matching the existing design)
+      const CLASS_CONFIG = {
+        'ILP': { color: '#b2f323', label: 'ILP — Lavoura-Pecuária' },
+        'Pastagem': { color: '#eddc4b', label: 'Pastagem' },
+        'Agricultura': { color: '#2fc912', label: 'Agricultura' },
+        'IPF': { color: '#f02907', label: 'IPF — Pecuária-Floresta' },
+        'Outros': { color: '#555555', label: 'Outros' },
+        'ILPF': { color: '#3c4d0a', label: 'ILPF — Lavoura-Pecuária-Floresta' },
+        'ILF': { color: '#bcb915', label: 'ILF — Lavoura-Floresta' },
+        'Agrofloresta': { color: '#d67910', label: 'Agrofloresta' }
+      };
+
+      // Class display order
+      const CLASS_ORDER = ['ILP', 'Pastagem', 'Agricultura', 'IPF', 'Outros', 'ILPF', 'ILF', 'Agrofloresta'];
+
+      // Default view: Brazil center
+      const BRAZIL_CENTER = [-15.0, -49.0];
+      const BRAZIL_ZOOM = 5;
+
+      // Initialize Leaflet map
+      const map = L.map('map-amostras', {
+        center: BRAZIL_CENTER,
+        zoom: BRAZIL_ZOOM,
+        scrollWheelZoom: true,
+        zoomControl: true
+      });
+
+      // CartoDB Voyager basemap (free, no API key required)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · ' +
+          '<a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
+
+      // State
+      let allData = [];
+      let activeClasses = new Set(CLASS_ORDER);
+      let searchQuery = '';
+      let markerGroup = L.featureGroup().addTo(map);
+
+      let chartInstance = null;
+
+      // ── Build filter list ──
+      function buildFilters() {
+        const filterList = document.getElementById('filter-list');
+        CLASS_ORDER.forEach(cls => {
+          const cfg = CLASS_CONFIG[cls];
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <input type="checkbox" id="filter-${cls}" checked data-class="${cls}">
+            <span class="filter-swatch" style="background:${cfg.color}"></span>
+            <span>${cls}</span>
+            <span class="filter-count" id="count-${cls}">0</span>
+          `;
+          li.querySelector('input').addEventListener('change', onFilterChange);
+          filterList.appendChild(li);
+        });
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+          searchQuery = e.target.value.trim().toLowerCase();
+          updateMarkers();
+        });
+      }
+
+      // ── Build SVG Pie Chart ──
+      function createPieSvg(points, size) {
+        const counts = {};
+        points.forEach(p => {
+          counts[p.classe] = (counts[p.classe] || 0) + 1;
+        });
+
+        const total = points.length;
+        const radius = size / 2;
+        const center = radius;
+        
+        let svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`;
+        
+        const keys = Object.keys(counts);
+        if (keys.length === 1) {
+          const color = CLASS_CONFIG[keys[0]] ? CLASS_CONFIG[keys[0]].color : CLASS_CONFIG['Outros'].color;
+          svg += `<circle cx="${center}" cy="${center}" r="${radius}" fill="${color}" />`;
+        } else {
+          let currentAngle = -Math.PI / 2;
+          keys.forEach(cls => {
+            const count = counts[cls];
+            const color = CLASS_CONFIG[cls] ? CLASS_CONFIG[cls].color : CLASS_CONFIG['Outros'].color;
+            const sliceAngle = (count / total) * 2 * Math.PI;
+            
+            const x1 = center + radius * Math.cos(currentAngle);
+            const y1 = center + radius * Math.sin(currentAngle);
+            currentAngle += sliceAngle;
+            const x2 = center + radius * Math.cos(currentAngle);
+            const y2 = center + radius * Math.sin(currentAngle);
+            
+            const largeArcFlag = sliceAngle > Math.PI ? 1 : 0;
+            
+            // Draw pie slice path
+            svg += `<path d="M ${center} ${center} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z" fill="${color}" />`;
+          });
+        }
+        
+        // Add a thin white border around the whole SVG for contrast
+        svg += `<circle cx="${center}" cy="${center}" r="${radius - 0.75}" fill="none" stroke="#fff" stroke-width="1.5" />`;
+        svg += `</svg>`;
+        return svg;
+      }
+
+      // ── Create Grouped Marker ──
+      function createGroupMarker(key, points) {
+        const lat = points[0].lat;
+        const lng = points[0].lng;
+        
+        // Scale icon size slightly by amount of points (min 20, max 36)
+        const size = Math.min(20 + (points.length - 1) * 2, 36);
+
+        const icon = L.divIcon({
+          html: createPieSvg(points, size),
+          className: 'pie-marker-icon',
+          iconSize: [size, size],
+          iconAnchor: [size/2, size/2]
+        });
+
+        const marker = L.marker([lat, lng], { icon: icon });
+
+        // Tooltip for quick hover
+        const title = points.length === 1 ? (points[0].nome || `ID: ${points[0].id}`) : `${points.length} amostras sobrepostas`;
+        marker.bindTooltip(title, { direction: 'top', offset: [0, -size/2] });
+
+        marker.on('click', function () {
+          map.flyTo([lat, lng], 14, { duration: 1.0 });
+          showOverlapTable(points);
+        });
+
+        return marker;
+      }
+
+      // ── Populate Overlap Table ──
+      function showOverlapTable(points) {
+        const container = document.getElementById('overlap-table-container');
+        const tbody = document.getElementById('overlap-tbody');
+        tbody.innerHTML = '';
+        
+        // Sort by ID or name
+        const sorted = [...points].sort((a, b) => (a.id || 0) - (b.id || 0));
+
+        sorted.forEach(pt => {
+          const cfg = CLASS_CONFIG[pt.classe] || CLASS_CONFIG['Outros'];
+          const tr = document.createElement('tr');
+          
+          // Generate a darker border/text color for readability
+          tr.innerHTML = `
+            <td><strong>#${pt.id || '—'}</strong></td>
+            <td>${pt.nome || '—'}</td>
+            <td>${pt.ano || '—'}</td>
+            <td>
+              <span class="class-tag" style="background-color: ${cfg.color}25; color: ${cfg.color}; border: 1px solid ${cfg.color}; text-shadow: 0px 0px 1px rgba(0,0,0,0.5);">
+                ${cfg.label}
+              </span>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+        
+        container.style.display = 'block';
+      }
+
+      // ── Update map markers ──
+      function updateMarkers() {
+        markerGroup.clearLayers();
+        document.getElementById('overlap-table-container').style.display = 'none';
+
+        // 1. Filter raw data
+        const visibleData = allData.filter(pt => {
+          if (!activeClasses.has(pt.classe)) return false;
+          
+          if (searchQuery) {
+            const nome = (pt.nome || '').toLowerCase();
+            const idStr = (pt.id || '').toString();
+            const anoStr = (pt.ano || '').toString().toLowerCase();
+            if (!nome.includes(searchQuery) && !idStr.includes(searchQuery) && !anoStr.includes(searchQuery)) {
+              return false;
+            }
+          }
+          return true;
+        });
+
+        // 2. Group by exact coordinate
+        const grouped = {};
+        visibleData.forEach(pt => {
+          const key = pt.lat.toFixed(5) + '_' + pt.lng.toFixed(5);
+          if (!grouped[key]) grouped[key] = [];
+          grouped[key].push(pt);
+        });
+
+        // 3. Create Pie Markers
+        Object.keys(grouped).forEach(key => {
+          markerGroup.addLayer(createGroupMarker(key, grouped[key]));
+        });
+
+        // 4. Update counters & charts
+        document.getElementById('counter-number').textContent = visibleData.length.toLocaleString('pt-BR');
+
+        const counts = {};
+        CLASS_ORDER.forEach(cls => counts[cls] = 0);
+        visibleData.forEach(pt => {
+          if (counts[pt.classe] !== undefined) counts[pt.classe]++;
+        });
+        
+        CLASS_ORDER.forEach(cls => {
+          const el = document.getElementById('count-' + cls);
+          if (el) el.textContent = counts[cls];
+        });
+
+        updateChart(counts);
+      }
+
+      // ── Chart.js ──
+      function initChart() {
+        const ctx = document.getElementById('chart-classes').getContext('2d');
+        chartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: CLASS_ORDER,
+            datasets: [{
+              data: CLASS_ORDER.map(() => 0),
+              backgroundColor: CLASS_ORDER.map(cls => CLASS_CONFIG[cls].color),
+              borderColor: CLASS_ORDER.map(cls => CLASS_CONFIG[cls].color),
+              borderWidth: 1,
+              borderRadius: 4,
+              barPercentage: 0.7
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#1a1a1a',
+                titleFont: { family: 'Inter', size: 12 },
+                bodyFont: { family: 'Inter', size: 11 },
+                cornerRadius: 6,
+                padding: 10,
+                callbacks: {
+                  label: ctx => ctx.parsed.y + ' amostras'
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: {
+                  font: { family: 'Inter', size: 10 },
+                  color: '#6b6b6b'
+                }
+              },
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(0,0,0,0.04)' },
+                ticks: {
+                  font: { family: 'Inter', size: 10 },
+                  color: '#6b6b6b',
+                  stepSize: 50
+                }
+              }
+            },
+            animation: {
+              duration: 500,
+              easing: 'easeOutQuart'
+            },
+            onClick: (evt, elements) => {
+              if (elements.length > 0) {
+                const cls = CLASS_ORDER[elements[0].index];
+                // Toggle only this class
+                if (activeClasses.size === 1 && activeClasses.has(cls)) {
+                  // If clicking the only active class, restore all
+                  CLASS_ORDER.forEach(c => activeClasses.add(c));
+                } else {
+                  activeClasses.clear();
+                  activeClasses.add(cls);
+                }
+                syncFilterCheckboxes();
+                updateMarkers();
+                fitToVisible();
+              }
+            }
+          }
+        });
+      }
+
+      function updateChart(counts) {
+        if (!chartInstance) return;
+        chartInstance.data.datasets[0].data = CLASS_ORDER.map(cls => counts[cls] || 0);
+        chartInstance.update();
+      }
+
+      // ── Filter change handler ──
+      function onFilterChange(e) {
+        const cls = e.target.dataset.class;
+        if (e.target.checked) {
+          activeClasses.add(cls);
+        } else {
+          activeClasses.delete(cls);
+        }
+        updateMarkers();
+      }
+
+      function syncFilterCheckboxes() {
+        CLASS_ORDER.forEach(cls => {
+          const cb = document.getElementById('filter-' + cls);
+          if (cb) cb.checked = activeClasses.has(cls);
+        });
+      }
+
+      // ── Fit map to visible markers ──
+      function fitToVisible() {
+        const bounds = markerGroup.getBounds();
+        if (bounds.isValid()) {
+          map.flyToBounds(bounds, { padding: [30, 30], duration: 0.8 });
+        }
+      }
+
+      // ── Reset button ──
+      document.getElementById('map-reset').addEventListener('click', function () {
+        // Restore all classes and clear search
+        CLASS_ORDER.forEach(cls => activeClasses.add(cls));
+        searchQuery = '';
+        document.getElementById('search-input').value = '';
+        syncFilterCheckboxes();
+        updateMarkers();
+        map.flyTo(BRAZIL_CENTER, BRAZIL_ZOOM, { duration: 0.8 });
+        document.getElementById('overlap-table-container').style.display = 'none';
+      });
+
+      // ── Load data and initialize ──
+      fetch('assets/amostras_data.json')
+        .then(res => res.json())
+        .then(data => {
+          allData = data;
+          buildFilters();
+          initChart();
+          updateMarkers();
+
+          // Fit to data bounds on load
+          setTimeout(() => {
+            const bounds = markerGroup.getBounds();
+            if (bounds.isValid()) {
+              map.fitBounds(bounds, { padding: [30, 30] });
+            }
+          }, 300);
+        })
+        .catch(err => {
+          console.error('Erro ao carregar dados das amostras:', err);
+          document.getElementById('map-amostras').innerHTML =
+            '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--font-sans);color:var(--color-muted);">' +
+            'Erro ao carregar dados. Verifique se assets/amostras_data.json existe.</div>';
+        });
+    })();
+
+    // ──────────────────────────────────────────────────────────
+    //  SPLIT MAP & CHARTS LOGIC
+    // ──────────────────────────────────────────────────────────
+    (function () {
+      'use strict';
+      
+      const splitMap = L.map('split-map', {
+        center: [-15.0, -49.0],
+        zoom: 5,
+        zoomControl: true,
+        scrollWheelZoom: false
+      });
+      
+      // 1. Basemap comum (Fundo) igual ao mapa superior
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(splitMap);
+      
+      // 2. Camadas Raster para Comparação (Dummies)
+      // Ajustando opacidade para que o mapa base fique visível
+      const leftLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        opacity: 0.6,
+        attribution: 'Cenário A'
+      }).addTo(splitMap);
+      
+      const rightLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        opacity: 0.6,
+        attribution: 'Cenário B'
+      }).addTo(splitMap);
+      
+      // Add Side-by-Side control
+      L.control.sideBySide(leftLayer, rightLayer).addTo(splitMap);
+      
+      // Fix: Prevenir que arrastar o divisor arraste o mapa junto
+      setTimeout(() => {
+        const divider = document.querySelector('.leaflet-sbs-divider');
+        if (divider) {
+          const disableDrag = () => splitMap.dragging.disable();
+          const enableDrag = () => splitMap.dragging.enable();
+          
+          divider.addEventListener('mousedown', disableDrag);
+          divider.addEventListener('touchstart', disableDrag, {passive: true});
+          
+          document.addEventListener('mouseup', enableDrag);
+          document.addEventListener('touchend', enableDrag);
+        }
+      }, 500);
+      
+      // Setup Charts
+      const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.parsed.y + '%';
+              }
+            }
+          }
+        },
+        scales: {
+          y: { 
+            beginAtZero: true, 
+            max: 100,
+            grid: { color: 'rgba(0,0,0,0.05)' },
+            ticks: { font: { size: 10 } }
+          },
+          x: { 
+            grid: { display: false },
+            ticks: { font: { size: 10 } }
+          }
+        }
+      };
+      
+      const ctxLeft = document.getElementById('chart-left').getContext('2d');
+      new Chart(ctxLeft, {
+        type: 'bar',
+        data: {
+          labels: ['Floresta', 'Pastagem', 'Outros'],
+          datasets: [{
+            data: [65, 25, 10],
+            backgroundColor: ['#129912', '#ffd700', '#aaaaaa'],
+            borderRadius: 4
+          }]
+        },
+        options: commonOptions
+      });
+      
+      const ctxRight = document.getElementById('chart-right').getContext('2d');
+      new Chart(ctxRight, {
+        type: 'bar',
+        data: {
+          labels: ['Floresta', 'Pastagem', 'Outros'],
+          datasets: [{
+            data: [40, 50, 10],
+            backgroundColor: ['#129912', '#ffd700', '#aaaaaa'],
+            borderRadius: 4
+          }]
+        },
+        options: commonOptions
+      });
+      
+    })();
+  </script>
+
+</body>
+
+</html>
