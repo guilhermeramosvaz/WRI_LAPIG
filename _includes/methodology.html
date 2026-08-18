@@ -1,0 +1,58 @@
+<!-- ═══════════════════════════════════════════════════════
+       METHODOLOGY
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section--alt reveal" id="metodologia">
+    <div class="section__inner">
+      <div class="section__eyebrow">Metodologia</div>
+      <h2 class="section__title">Pipeline Metodológico e Processamento</h2>
+      <p class="section__desc">
+        Da aquisição de imagens orbitais Sentinel-2 à geração de embeddings e cálculo de similaridade com a base Embrapa.
+      </p>
+
+      <div class="pipeline">
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">🛰️</div>
+          <div class="pipeline__label">Sentinel-2 MSI</div>
+          <div class="pipeline__sub">Bandas ópticas, Red-Edge, NIR, SWIR · 10 m</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">☁️</div>
+          <div class="pipeline__label">Cloud Masking</div>
+          <div class="pipeline__sub">Cloud Score Plus · Limiar adaptativo 0.50</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">📊</div>
+          <div class="pipeline__label">Índices Espectrais</div>
+          <div class="pipeline__sub">NDVI, NDWI, CAI, CRI1, ARI, RGR, PSRI, SATVI</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">📐</div>
+          <div class="pipeline__label">Reduções Temporais</div>
+          <div class="pipeline__sub">Estatísticas sazonais de época chuvosa</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">🧠</div>
+          <div class="pipeline__label">Embeddings 64 Dim</div>
+          <div class="pipeline__sub">Representação latente anual (A00 a A63)</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">⚡</div>
+          <div class="pipeline__label">Similaridade & Md3</div>
+          <div class="pipeline__sub">Produto escalar via DuckDB com 701 pontos Embrapa</div>
+        </div>
+      </div>
+
+      <div class="prose" style="margin-top: 2rem;">
+        <p>
+          O pipeline processa imagens de satélite <strong>Sentinel-2 (10 m)</strong> no Google Earth Engine com <strong>mascaramento de nuvens</strong> e
+          extração de métricas espectrais ao longo da <strong>estação chuvosa</strong> no bioma Cerrado. A cada ponto amostral é associado um vetor de
+          <strong>embedding de 64 dimensões</strong> (A00 a A63), capturando a assinatura fenológica e estrutural da vegetação.
+        </p>
+        <p>
+          Utilizando o motor analítico <strong>DuckDB</strong>, cada uma das 50.000 amostras anuais é comparada por <strong>produto escalar (similaridade cosseno)</strong>
+          contra todos os 701 pontos de verdade de campo da Embrapa. O algoritmo ranqueia os pontos mais similares, extrai a tipologia correspondente
+          e calcula a <strong>Média de Similaridade (Md3)</strong>, viabilizando o monitoramento temporal de 2019 a 2025.
+        </p>
+      </div>
+    </div>
+  </section>

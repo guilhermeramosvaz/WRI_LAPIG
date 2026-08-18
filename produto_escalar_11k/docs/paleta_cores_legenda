@@ -1,0 +1,9 @@
+CORES_TIPOLOGIA = {
+    "PASTO PRODUTIVO": "#faea40",
+    "PASTO COM ERVAS": "#d8ff6c",
+    "REG NATURAL": "#0e5f0e",
+    "INTERMEDIARIO": "#f4b346",
+    "DEG BIOLOGICA": "#813209",
+    "PASTO COM LENHOSAS": "#66c600",
+    "MISCELANEA": "#ec2b10",
+}

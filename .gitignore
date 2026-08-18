@@ -1,3 +1,24 @@
-# Ignorar guia de manutenção e documentos internos
+# Ignorar documentos internos e caches
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
 GUIA_MANUTENCAO.md
 documentos_de_base/
+
+# Pasta data/ inteira (arquivos brutos duplicados)
+data/
+
+# Jekyll build output
+_site/
+.jekyll-cache/
+.jekyll-metadata
+
+# Arquivos temporários / backup
+*.bak
+*.tmp
+
+# Arquivos brutos monolíticos acima de 100 MB (limite estrito do GitHub)
+# Obs: Os arquivos separados por ano (25 MB) e as saídas (5.7 MB) sobem normalmente!
+*embeddings_samples_50k_cvp_s2_cerrado_2019_2025_v1.parquet
+*embeddings_50k_localizado_via_join.parquet

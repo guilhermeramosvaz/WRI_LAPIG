@@ -1,0 +1,40 @@
+<!-- ═══════════════════════════════════════════════════════
+       TIMELINE
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section reveal" id="cronograma">
+    <div class="section__eyebrow">Fluxo de Trabalho</div>
+    <h2 class="section__title">Etapas Metodológicas do Projeto</h2>
+
+    <div class="timeline">
+      <div class="timeline__item done">
+        <div class="timeline__date">Etapa 01</div>
+        <div class="timeline__title">Extração de Embeddings Sentinel-2</div>
+        <div class="timeline__desc">Geração dos cubos de dados e vetores de 64 dimensões anuais (2019 a 2025) no Google Earth Engine.</div>
+      </div>
+      <div class="timeline__item done">
+        <div class="timeline__date">Etapa 02</div>
+        <div class="timeline__title">Geolocalização e Separação Anual</div>
+        <div class="timeline__desc">Integração das coordenadas (lat_alvo, lon_alvo) e divisão dos 350.000 registros em conjuntos anuais de 50k.</div>
+      </div>
+      <div class="timeline__item done">
+        <div class="timeline__date">Etapa 03</div>
+        <div class="timeline__title">Cálculo de Similaridade por Produto Escalar</div>
+        <div class="timeline__desc">Processamento streaming em DuckDB comparando cada amostra aos 701 pontos de verdade de campo da Embrapa.</div>
+      </div>
+      <div class="timeline__item done">
+        <div class="timeline__date">Etapa 04</div>
+        <div class="timeline__title">Ranqueamento e Índice Md3</div>
+        <div class="timeline__desc">Pivotação dos alvos de maior similaridade, extração de tipologias de pastagem e cálculo da concordância média Md3.</div>
+      </div>
+      <div class="timeline__item current">
+        <div class="timeline__date">Etapa 05</div>
+        <div class="timeline__title">Otimização Web e Visualizador Interativo</div>
+        <div class="timeline__desc">Compressão de dados em matrizes compactas e renderização em alta performance com GPU Canvas.</div>
+      </div>
+      <div class="timeline__item future">
+        <div class="timeline__date">Etapa 06</div>
+        <div class="timeline__title">Análises Cruzadas e Documentação Territorial</div>
+        <div class="timeline__desc">Avaliação de concordância com MapBiomas, filtros de limiar e consolidação dos relatórios técnicos.</div>
+      </div>
+    </div>
+  </section>

@@ -1,0 +1,38 @@
+<!-- ═══════════════════════════════════════════════════════
+       COMPARAÇÃO DE MAPAS (SPLIT PANEL)
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section reveal" id="comparacao">
+    <div class="section__eyebrow">Análise Comparativa</div>
+    <h2 class="section__title">Comparação de Cenários (Raster)</h2>
+    <p class="section__desc">Arraste o divisor para comparar as camadas lado a lado sobre o mapa base.</p>
+
+    <div class="split-map-wrapper">
+      <div id="split-map"></div>
+    </div>
+    
+    <div class="split-dashboards">
+      <!-- Lado Esquerdo -->
+      <div class="split-dashboard left-dashboard">
+        <h3 class="dashboard-title">Cenário A (Esquerda)</h3>
+        <div class="dashboard-legend">
+          <div class="legend-item"><span class="legend-color" style="background:#129912"></span> Floresta</div>
+          <div class="legend-item"><span class="legend-color" style="background:#ffd700"></span> Pastagem</div>
+        </div>
+        <div class="dashboard-chart">
+          <canvas id="chart-left"></canvas>
+        </div>
+      </div>
+      
+      <!-- Lado Direito -->
+      <div class="split-dashboard right-dashboard">
+        <h3 class="dashboard-title">Cenário B (Direita)</h3>
+        <div class="dashboard-legend">
+          <div class="legend-item"><span class="legend-color" style="background:#129912"></span> Floresta</div>
+          <div class="legend-item"><span class="legend-color" style="background:#ffd700"></span> Pastagem</div>
+        </div>
+        <div class="dashboard-chart">
+          <canvas id="chart-right"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>

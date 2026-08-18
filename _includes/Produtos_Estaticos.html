@@ -1,0 +1,366 @@
+<!-- ═══════════════════════════════════════════════════════
+       PRODUTOS ESTÁTICOS — RELATÓRIOS, SCRIPTS & DADOS
+  ═══════════════════════════════════════════════════════ -->
+<section class="section reveal" id="produtos-estaticos">
+  <div class="section__inner">
+    <div class="section__eyebrow">Documentação, Código & Dados</div>
+    <h2 class="section__title">Produtos Estáticos e Repositório</h2>
+    <p class="section__desc">
+      Acesso integrado aos relatórios técnicos, apresentações, scripts de processamento no Google Earth Engine e Python,
+      além das bases de dados completas geradas para download direto no GitHub.
+    </p>
+
+    <!-- GRID DE PRODUTOS -->
+    <div class="static-products-grid">
+      <!-- 1. RELATÓRIO TÉCNICO -->
+      <div class="static-card fade-up">
+        <div class="static-card__header">
+          <div class="static-card__icon-box">📄</div>
+          <div>
+            <span class="static-card__badge">Documento Técnico</span>
+            <h3 class="static-card__title">Relatório</h3>
+          </div>
+        </div>
+        <p class="static-card__desc">
+          Relatório técnico completo detalhando a metodologia de produto escalar, métricas de concordância Md3,
+          caracterização das 7 tipologias da Embrapa e análise amostral dos 50.000 pontos no Cerrado.
+        </p>
+        <div class="static-card__actions">
+          <a href="#" class="btn-static-download btn-static-download--disabled" title="Relatório em fase final de diagramação">
+            <span>⬇ Download PDF</span>
+            <small class="badge-status">Em breve</small>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. APRESENTAÇÃO -->
+      <div class="static-card fade-up">
+        <div class="static-card__header">
+          <div class="static-card__icon-box">📊</div>
+          <div>
+            <span class="static-card__badge">Apresentação</span>
+            <h3 class="static-card__title">Apresentação</h3>
+          </div>
+        </div>
+        <p class="static-card__desc">
+          Slides executivos e técnicos com síntese dos resultados, evolução temporal das tipologias (2019–2025),
+          gráficos comparativos de acurácia e validação territorial com dados de campo.
+        </p>
+        <div class="static-card__actions">
+          <a href="#" class="btn-static-download btn-static-download--disabled" title="Apresentação em formatação final">
+            <span>⬇ Download PPTX</span>
+            <small class="badge-status">Em breve</small>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. ASSETS GOOGLE EARTH ENGINE -->
+      <div class="static-card static-card--wide fade-up">
+        <div class="static-card__header">
+          <div class="static-card__icon-box">🛰️</div>
+          <div>
+            <span class="static-card__badge">Cloud Assets</span>
+            <h3 class="static-card__title">Assets Google Earth Engine</h3>
+          </div>
+        </div>
+        <p class="static-card__desc">
+          Coleções e imagens raster processadas em nuvem disponíveis no repositório Earth Engine do LAPIG/WRI para integração e análises espaciais:
+        </p>
+        <div class="asset-list">
+          <div class="asset-item">
+            <div class="asset-item__info">
+              <strong>Mapa de Pastagem MapBiomas 10m (Col. 4 | 2020–2025)</strong>
+              <code>projects/ee-vieiramesquita-mapbiomas/assets/mapbiomas_brasil_10m_pasture_col4_stable_2020_2025</code>
+            </div>
+            <button class="btn-copy-asset" onclick="navigator.clipboard.writeText('projects/ee-vieiramesquita-mapbiomas/assets/mapbiomas_brasil_10m_pasture_col4_stable_2020_2025'); this.innerText='Copiado!'; setTimeout(()=>this.innerText='Copiar ID', 2000)">Copiar ID</button>
+          </div>
+
+          <div class="asset-item">
+            <div class="asset-item__info">
+              <strong>Condição da Pastagem (Sentinel-2 / CVP 2025)</strong>
+              <code>projects/ee-gpw-app/assets/lapig_cerrado_s2_pasture_cvp_2025</code>
+            </div>
+            <button class="btn-copy-asset" onclick="navigator.clipboard.writeText('projects/ee-gpw-app/assets/lapig_cerrado_s2_pasture_cvp_2025'); this.innerText='Copiado!'; setTimeout(()=>this.innerText='Copiar ID', 2000)">Copiar ID</button>
+          </div>
+
+          <div class="asset-item">
+            <div class="asset-item__info">
+              <strong>Amostras Estratificadas (50k) com Classes da Coleção 11 (2025 e moda 2020–2025)</strong>
+              <code>projects/ee-gpw-app/assets/lapig_pontos_estratificados_cvp_2025_50k_with_MapBiomasC11_fixed</code>
+            </div>
+            <button class="btn-copy-asset" onclick="navigator.clipboard.writeText('projects/ee-gpw-app/assets/lapig_pontos_estratificados_cvp_2025_50k_with_MapBiomasC11_fixed'); this.innerText='Copiado!'; setTimeout(()=>this.innerText='Copiar ID', 2000)">Copiar ID</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. SCRIPTS (GEE & PYTHON) -->
+      <div class="static-card static-card--wide fade-up">
+        <div class="static-card__header">
+          <div class="static-card__icon-box">💻</div>
+          <div>
+            <span class="static-card__badge">Código Fonte</span>
+            <h3 class="static-card__title">Scripts</h3>
+          </div>
+        </div>
+        <p class="static-card__desc">
+          Códigos abertos no Google Earth Engine Code Editor e rotinas em Python/DuckDB para reprodução do pipeline analítico:
+        </p>
+
+        <!-- Sub-bloco GEE -->
+        <h4 class="static-subheading">Scripts (Google Earth Engine)</h4>
+        <div class="script-links-grid">
+          <a href="https://code.earthengine.google.com/0502efbe5908928e33f5ccbaaa12a105" target="_blank" rel="noopener noreferrer" class="script-link-item">
+            <div class="script-link-item__text">
+              <strong>Exportação de Pastagem Estável (2020–2025)</strong>
+              <small>MapBiomas 10m (Coleção 4)</small>
+            </div>
+            <span class="script-link-item__arrow">Abrir no GEE ↗</span>
+          </a>
+
+          <a href="https://code.earthengine.google.com/dce31c4554bc9bedc8b0557d0bd0a7f1" target="_blank" rel="noopener noreferrer" class="script-link-item">
+            <div class="script-link-item__text">
+              <strong>Média Anual de EVI para Pastagens (Sentinel-2)</strong>
+              <small>Medianas mensais com janela móvel de 15 dias</small>
+            </div>
+            <span class="script-link-item__arrow">Abrir no GEE ↗</span>
+          </a>
+
+          <a href="https://code.earthengine.google.com/9e3b4b31c4bca9b13e2fba25a0f9bc36" target="_blank" rel="noopener noreferrer" class="script-link-item">
+            <div class="script-link-item__text">
+              <strong>Amostragem Aleatória Estratificada (50k pontos)</strong>
+              <small>Baseada na Condição de Vigor da Pastagem (CVP 2025)</small>
+            </div>
+            <span class="script-link-item__arrow">Abrir no GEE ↗</span>
+          </a>
+
+          <a href="https://code.earthengine.google.com/f0f483bdb7379d2605d2e0d65090fcf6" target="_blank" rel="noopener noreferrer" class="script-link-item">
+            <div class="script-link-item__text">
+              <strong>Extração de Séries Espectrais Mensais Sentinel-2</strong>
+              <small>2019–2025 · 50k Amostras</small>
+            </div>
+            <span class="script-link-item__arrow">Abrir no GEE ↗</span>
+          </a>
+
+          <a href="https://code.earthengine.google.com/7ae7438f8cdee355158da9cd400e9bbb" target="_blank" rel="noopener noreferrer" class="script-link-item">
+            <div class="script-link-item__text">
+              <strong>Extração de Séries Alpha Earth Embeddings</strong>
+              <small>2019–2025 · 50k Amostras (Vetores de 64 dimensões)</small>
+            </div>
+            <span class="script-link-item__arrow">Abrir no GEE ↗</span>
+          </a>
+        </div>
+
+        <!-- Sub-bloco Python GitHub -->
+        <h4 class="static-subheading" style="margin-top: 1.2rem;">Scripts Locais (Python & DuckDB no GitHub)</h4>
+        <div class="script-links-grid">
+          <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_scripts/gerar_top3_pivotada_50k.py" target="_blank" rel="noopener noreferrer" class="script-link-item script-link-item--github">
+            <div class="script-link-item__text">
+              <strong>gerar_top3_pivotada_50k.py</strong>
+              <small>Cálculo do produto escalar, ranqueamento Top-3, cálculo de Md3, Vigor e exportação Parquet/CSV/JSON (Série 50k · 350k total)</small>
+            </div>
+            <span class="script-link-item__arrow">Ver no GitHub ↗</span>
+          </a>
+
+          <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_11k/scripts/gerar_top3_pivotada_11k.py" target="_blank" rel="noopener noreferrer" class="script-link-item script-link-item--github">
+            <div class="script-link-item__text">
+              <strong>gerar_top3_pivotada_12k.py</strong>
+              <small>Pipeline da Série 12k: união MapBiomas (Col11 + 85k), correção de coordenadas, produto escalar e Md3 (88k total)</small>
+            </div>
+            <span class="script-link-item__arrow">Ver no GitHub ↗</span>
+          </a>
+
+          <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_scripts/exportar_referencia_embrapa.py" target="_blank" rel="noopener noreferrer" class="script-link-item script-link-item--github">
+            <div class="script-link-item__text">
+              <strong>exportar_referencia_embrapa.py</strong>
+              <small>Consolidação da base de 701 pontos de campo Embrapa e cálculo de distribuição estática de tipologias</small>
+            </div>
+            <span class="script-link-item__arrow">Ver no GitHub ↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 5. DADOS GERADOS -->
+      <div class="static-card static-card--wide fade-up">
+        <div class="static-card__header">
+          <div class="static-card__icon-box">📦</div>
+          <div>
+            <span class="static-card__badge">Open Data</span>
+            <h3 class="static-card__title">Dados Gerados</h3>
+          </div>
+        </div>
+        <p class="static-card__desc">
+          Bases de dados processadas completas (totalizando 438.200 amostras na série 2019–2025: 350k Série 50k + 88k Série 12k + 701 pontos de referência Embrapa) disponíveis para download direto nos formatos Parquet, CSV e JSON estruturado no GitHub:
+        </p>
+
+        <div class="data-table-wrapper">
+          <table class="static-data-table">
+            <thead>
+              <tr>
+                <th>Conjunto de Dados</th>
+                <th>Série / Ano</th>
+                <th>Tamanho / Amostras</th>
+                <th>Downloads (GitHub)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- SÉRIE 50k -->
+              <tr>
+                <td><strong>Tabela Md3 Pivotada 2025</strong></td>
+                <td>Série 50k · 2025</td>
+                <td>50.000 pontos · 16 atributos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2025.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2025.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_metricas/arquivos_saida/tabela_top3_pivotada_50k_2025.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Tabela Md3 Pivotada 2024</strong></td>
+                <td>Série 50k · 2024</td>
+                <td>50.000 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2024.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2024.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_metricas/arquivos_saida/tabela_top3_pivotada_50k_2024.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Tabela Md3 Pivotada 2023</strong></td>
+                <td>Série 50k · 2023</td>
+                <td>50.000 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2023.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2023.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_metricas/arquivos_saida/tabela_top3_pivotada_50k_2023.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Tabela Md3 Pivotada 2022</strong></td>
+                <td>Série 50k · 2022</td>
+                <td>50.000 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2022.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2022.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_metricas/arquivos_saida/tabela_top3_pivotada_50k_2022.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Tabela Md3 Pivotada 2021</strong></td>
+                <td>Série 50k · 2021</td>
+                <td>50.000 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2021.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2021.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_metricas/arquivos_saida/tabela_top3_pivotada_50k_2021.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Tabela Md3 Pivotada 2020</strong></td>
+                <td>Série 50k · 2020</td>
+                <td>50.000 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2020.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2020.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_metricas/arquivos_saida/tabela_top3_pivotada_50k_2020.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Tabela Md3 Pivotada 2019</strong></td>
+                <td>Série 50k · 2019</td>
+                <td>50.000 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2019.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_50k_2019.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_metricas/arquivos_saida/tabela_top3_pivotada_50k_2019.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+
+              <!-- SÉRIE 12k -->
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Tabela Md3 Pivotada 2025</strong></td>
+                <td>Série 12k · 2025</td>
+                <td>12.395 pontos (Pastagem + 85k)</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2025.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2025.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_11k/saida/tabela_top3_pivotada_12k_2025.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Tabela Md3 Pivotada 2024</strong></td>
+                <td>Série 12k · 2024</td>
+                <td>12.422 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2024.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2024.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_11k/saida/tabela_top3_pivotada_12k_2024.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Tabela Md3 Pivotada 2023</strong></td>
+                <td>Série 12k · 2023</td>
+                <td>12.470 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2023.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2023.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_11k/saida/tabela_top3_pivotada_12k_2023.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Tabela Md3 Pivotada 2022</strong></td>
+                <td>Série 12k · 2022</td>
+                <td>12.548 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2022.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2022.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_11k/saida/tabela_top3_pivotada_12k_2022.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Tabela Md3 Pivotada 2021</strong></td>
+                <td>Série 12k · 2021</td>
+                <td>12.681 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2021.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2021.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_11k/saida/tabela_top3_pivotada_12k_2021.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Tabela Md3 Pivotada 2020</strong></td>
+                <td>Série 12k · 2020</td>
+                <td>12.792 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2020.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2020.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_11k/saida/tabela_top3_pivotada_12k_2020.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Tabela Md3 Pivotada 2019</strong></td>
+                <td>Série 12k · 2019</td>
+                <td>12.892 pontos</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2019.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/tabela_top3_12k_2019.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_11k/saida/tabela_top3_pivotada_12k_2019.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+
+              <!-- EMBRAPA -->
+              <tr>
+                <td><strong>Referência de Campo Embrapa (701 Pontos)</strong></td>
+                <td>Verdade de Campo</td>
+                <td>701 pontos · 7 tipologias</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/assets/embrapa_referencia.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/guilhermeramosvaz/WRI_LAPIG/blob/main/produto_escalar_metricas/arquivos_base/embeddings_embrapa_year_colet.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

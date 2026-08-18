@@ -1,0 +1,226 @@
+<!-- ═══════════════════════════════════════════════════════
+       VISUALIZATIONS — MD3 INTERACTIVE MAP
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section--alt reveal" id="visualizacoes">
+    <div class="section__inner">
+      <div class="section__eyebrow">Visualizações Interativas</div>
+      <h2 class="section__title">Distribuição Espacial e Classificação Md3</h2>
+      <p class="section__desc">
+        Cruzamento de 50.000 pontos amostrais do MapBiomas com os 701 pontos de referência da Embrapa por produto escalar.
+        Explore as amostras no mapa, filtre por ano, vigor e limiares de concordância, ou desenhe um retângulo para analisar áreas específicas.
+      </p>
+
+      <div class="map-viz">
+        <!-- MAP WRAPPER -->
+        <div class="map-container">
+          <div id="map-amostras"></div>
+          
+          <!-- MAP CONTROLS OVERLAY -->
+          <div class="map-controls-overlay">
+            <button class="map-btn map-btn--reset" id="map-reset" title="Voltar à visão geral do Cerrado">
+              ⟲ Cerrado / Brasil
+            </button>
+            <button class="map-btn map-btn--draw" id="btn-draw-rect" title="Desenhar retângulo para filtrar amostras na área">
+              ⛶ Seleção Retangular
+            </button>
+            <button class="map-btn map-btn--clear-rect" id="btn-clear-rect" title="Remover seleção retangular" style="display: none;">
+              ✕ Limpar Seleção
+            </button>
+            <button class="map-btn map-btn--embrapa" id="btn-toggle-embrapa" title="Exibir ou ocultar os 701 pontos de campo da Embrapa">
+              📍 Pontos Embrapa (701)
+            </button>
+          </div>
+
+          <div class="map-selection-hint" id="map-selection-hint" style="display: none;">
+            <span>🖱️ <strong>Modo de Seleção Ativo:</strong> Clique e arraste no mapa para definir a área retangular.</span>
+          </div>
+        </div>
+
+        <!-- PANEL -->
+        <div class="map-panel">
+          <!-- Counter Card -->
+          <div class="map-panel__card map-counter">
+            <div class="map-counter__number" id="counter-number">50.000</div>
+            <div class="map-counter__label" id="counter-label">Amostras MapBiomas (Ano 2025)</div>
+            <div class="map-counter__sub" id="counter-sub">100% dos pontos visíveis</div>
+          </div>
+
+          <!-- UNIFIED FILTER CARD -->
+          <div class="map-panel__card filter-card">
+            <div class="filter-card__header">
+              <div class="filter-card__title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
+                Filtros
+                <span class="filter-badge" id="active-filters-count">Padrão</span>
+              </div>
+              <button type="button" class="btn-clear-filters" id="btn-clear-filters" title="Restaurar todos os filtros para o padrão">
+                Limpar Filtros
+              </button>
+            </div>
+
+            <!-- DATASET SELECTOR (50k vs 12k) -->
+            <div class="dataset-select-group">
+              <label class="filter-label">Base Amostral</label>
+              <div class="dataset-chips">
+                <button type="button" class="dataset-chip active" data-dataset="50k" id="btn-dataset-50k">
+                  <strong>Série 50k</strong>
+                  <small>Estratificada CVP (50.000 pts/ano)</small>
+                </button>
+                <button type="button" class="dataset-chip" data-dataset="12k" id="btn-dataset-12k">
+                  <strong>Série 12k</strong>
+                  <small>Pastagem + 85k (12.395 pts/ano)</small>
+                </button>
+              </div>
+            </div>
+
+            <!-- Search input -->
+            <div class="search-container">
+              <input type="text" id="search-input" class="search-input" placeholder="Buscar ID, Target FID, Tipologia ou Coord...">
+            </div>
+
+            <!-- Accordion Filter Sections -->
+            <div class="filter-accordion">
+              <!-- 1. ANO DE ANÁLISE -->
+              <div class="filter-item open">
+                <button type="button" class="filter-item__header" data-target="filter-body-year">
+                  <span id="year-filter-title">📅 Ano de Análise (Série 50k · 50.000 pts)</span>
+                  <span class="filter-item__icon">▾</span>
+                </button>
+                <div class="filter-item__body" id="filter-body-year">
+                  <div class="year-selector-grid" id="year-selector-grid">
+                    <label class="year-chip active"><input type="radio" name="year-radio" value="2025" checked> 2025</label>
+                    <label class="year-chip"><input type="radio" name="year-radio" value="2024"> 2024</label>
+                    <label class="year-chip"><input type="radio" name="year-radio" value="2023"> 2023</label>
+                    <label class="year-chip"><input type="radio" name="year-radio" value="2022"> 2022</label>
+                    <label class="year-chip"><input type="radio" name="year-radio" value="2021"> 2021</label>
+                    <label class="year-chip"><input type="radio" name="year-radio" value="2020"> 2020</label>
+                    <label class="year-chip"><input type="radio" name="year-radio" value="2019"> 2019</label>
+                  </div>
+                  <small class="filter-note">Carregamento individual de 50k pontos por ano.</small>
+                </div>
+              </div>
+
+              <!-- 2. VIGOR (CLASS_CVP) -->
+              <div class="filter-item open">
+                <button type="button" class="filter-item__header" data-target="filter-body-vigor">
+                  <span>🌿 Vigor da Pastagem (CVP)</span>
+                  <span class="filter-item__icon">▾</span>
+                </button>
+                <div class="filter-item__body" id="filter-body-vigor">
+                  <div class="vigor-checkboxes">
+                    <label class="checkbox-label">
+                      <input type="checkbox" class="vigor-checkbox" value="1" checked>
+                      <span class="vigor-tag vigor-1">Vigor 1</span>
+                      <span class="vigor-desc">Alto vigor / biomassa</span>
+                    </label>
+                    <label class="checkbox-label">
+                      <input type="checkbox" class="vigor-checkbox" value="2" checked>
+                      <span class="vigor-tag vigor-2">Vigor 2</span>
+                      <span class="vigor-desc">Médio vigor</span>
+                    </label>
+                    <label class="checkbox-label">
+                      <input type="checkbox" class="vigor-checkbox" value="3" checked>
+                      <span class="vigor-tag vigor-3">Vigor 3</span>
+                      <span class="vigor-desc">Baixo vigor</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. SIMILARIDADE MD3 -->
+              <div class="filter-item open">
+                <button type="button" class="filter-item__header" data-target="filter-body-md3">
+                  <span>⚡ Similaridade Cosseno (Md3)</span>
+                  <span class="filter-item__icon">▾</span>
+                </button>
+                <div class="filter-item__body" id="filter-body-md3">
+                  <div class="md3-slider-wrapper">
+                    <div class="md3-slider-label">
+                      <span>Corte Mínimo:</span>
+                      <strong id="md3-val-display">Md3 ≥ 0.00</strong>
+                    </div>
+                    <input type="range" id="md3-slider" min="0.00" max="0.95" step="0.01" value="0.00" class="md3-slider">
+                    <div class="md3-chips">
+                      <button type="button" class="md3-chip active" data-val="0.00">Todos</button>
+                      <button type="button" class="md3-chip" data-val="0.70">≥ 0.70</button>
+                      <button type="button" class="md3-chip" data-val="0.75">≥ 0.75</button>
+                      <button type="button" class="md3-chip" data-val="0.80">≥ 0.80</button>
+                      <button type="button" class="md3-chip" data-val="0.85">≥ 0.85</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. TIPOLOGIAS DE PASTAGEM -->
+              <div class="filter-item open">
+                <button type="button" class="filter-item__header" data-target="filter-body-classes">
+                  <span>🏷️ Tipologias de Pastagem</span>
+                  <span class="filter-item__icon">▾</span>
+                </button>
+                <div class="filter-item__body" id="filter-body-classes">
+                  <div class="filter-classes-actions">
+                    <button type="button" class="btn-toggle-all" id="btn-toggle-all">Desmarcar Todos</button>
+                  </div>
+                  <ul class="filter-list" id="filter-list">
+                    <!-- populated dynamically by JS -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DUAL CHARTS -->
+          <div class="map-panel__card chart-card">
+            <div class="chart-header">
+              <div class="map-panel__title" id="chart-title">Distribuição Amostral MapBiomas (50k)</div>
+              <span class="chart-badge">Dinâmico</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chart-classes"></canvas>
+            </div>
+          </div>
+
+          <div class="map-panel__card chart-card chart-card--embrapa">
+            <div class="chart-header">
+              <div class="map-panel__title">Referência Embrapa (701 Pontos)</div>
+              <span class="chart-badge chart-badge--ref">Verdade de Campo</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chart-embrapa"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="map-caption" id="map-caption">
+        Pontos exibem a distribuição espacial das amostras MapBiomas geolocalizadas no Cerrado.
+        Utilize a ferramenta de seleção retangular ou os filtros de vigor e similaridade Md3 para explorar subconjuntos territoriais.
+      </p>
+
+      <div class="overlap-table-container" id="overlap-table-container">
+        <div class="overlap-table-header">
+          <h3>Amostras na Área / Filtro Selecionado (<span id="table-count">0</span> exibidas)</h3>
+          <small>Exibindo até as primeiras 100 amostras ordenadas por similaridade cosseno.</small>
+        </div>
+        <table class="overlap-table">
+          <thead id="overlap-thead">
+            <tr>
+              <th>ID (50k)</th>
+              <th>Coord. Alvo (Lat, Lon)</th>
+              <th>Vigor (CVP)</th>
+              <th>Alvo Embrapa (FID)</th>
+              <th>Tipologia Atribuída</th>
+              <th>Similaridade Cosseno</th>
+              <th>Média Md3</th>
+              <th>Ref. Embrapa (Lat, Lon)</th>
+            </tr>
+          </thead>
+          <tbody id="overlap-tbody">
+            <!-- populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
