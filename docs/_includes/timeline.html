@@ -1,0 +1,40 @@
+<!-- ═══════════════════════════════════════════════════════
+       TIMELINE
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section reveal" id="cronograma">
+    <div class="section__eyebrow">Project Workflow</div>
+    <h2 class="section__title">Methodological Stages</h2>
+
+    <div class="timeline">
+      <div class="timeline__item done">
+        <div class="timeline__date">Stage 01</div>
+        <div class="timeline__title">Sentinel-2 Embedding Extraction</div>
+        <div class="timeline__desc">Data cube processing and 64-dimensional annual vector generation (2019 to 2025) on Google Earth Engine.</div>
+      </div>
+      <div class="timeline__item done">
+        <div class="timeline__date">Stage 02</div>
+        <div class="timeline__title">Geolocation & Temporal Partitioning</div>
+        <div class="timeline__desc">Geographic coordinate alignment (lat_target, lon_target) and division of records into structured annual datasets.</div>
+      </div>
+      <div class="timeline__item done">
+        <div class="timeline__date">Stage 03</div>
+        <div class="timeline__title">Dot-Product Similarity Computation</div>
+        <div class="timeline__desc">High-throughput streaming execution in DuckDB comparing samples against Embrapa's 701 ground-truth points.</div>
+      </div>
+      <div class="timeline__item done">
+        <div class="timeline__date">Stage 04</div>
+        <div class="timeline__title">Top-3 Ranking & Md3 Metric</div>
+        <div class="timeline__desc">Pivoting top similarity matches, assigning pasture typologies, and computing the mean concordance score (Md3).</div>
+      </div>
+      <div class="timeline__item current">
+        <div class="timeline__date">Stage 05</div>
+        <div class="timeline__title">Web Optimization & Interactive Viewer</div>
+        <div class="timeline__desc">Data matrix compression and high-performance browser rendering via GPU-accelerated Leaflet Canvas.</div>
+      </div>
+      <div class="timeline__item future">
+        <div class="timeline__date">Stage 06</div>
+        <div class="timeline__title">Cross-Analysis & Territorial Documentation</div>
+        <div class="timeline__desc">Concordance evaluation against MapBiomas collections, threshold filters, and technical report delivery.</div>
+      </div>
+    </div>
+  </section>

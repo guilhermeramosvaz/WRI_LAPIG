@@ -1,0 +1,366 @@
+<!-- ═══════════════════════════════════════════════════════
+       STATIC PRODUCTS — REPORTS, SCRIPTS & DATA
+  ═══════════════════════════════════════════════════════ -->
+<section class="section reveal" id="produtos-estaticos">
+  <div class="section__inner">
+    <div class="section__eyebrow">Documentation, Code & Open Data</div>
+    <h2 class="section__title">Static Deliverables & Repository</h2>
+    <p class="section__desc">
+      Integrated access to technical reports, presentation decks, Google Earth Engine & Python routines,
+      and full processed datasets available for direct download on GitHub.
+    </p>
+
+    <!-- PRODUCT CARDS GRID -->
+    <div class="static-products-grid">
+      <!-- 1. TECHNICAL REPORT -->
+      <div class="static-card fade-up">
+        <div class="static-card__header">
+          <div class="static-card__icon-box">📄</div>
+          <div>
+            <span class="static-card__badge">Technical Document</span>
+            <h3 class="static-card__title">Technical Report</h3>
+          </div>
+        </div>
+        <p class="static-card__desc">
+          Comprehensive technical report detailing the 64-dimensional dot product methodology, Md3 concordance metrics,
+          characterization of Embrapa's 7 typologies, and territorial sample analysis in the Cerrado.
+        </p>
+        <div class="static-card__actions">
+          <a href="{{ '/material_suplementar/Report_Product_1_WRI_LAPIG_20260817_EN.pdf' | relative_url }}" target="_blank" rel="noopener noreferrer" class="btn-static-download" title="Download Technical Report (PDF)">
+            <span>⬇ Download Report (PDF)</span>
+            <small class="badge-status badge-status--ready">569 KB</small>
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. PRESENTATION -->
+      <div class="static-card fade-up">
+        <div class="static-card__header">
+          <div class="static-card__icon-box">📊</div>
+          <div>
+            <span class="static-card__badge">Presentation Slides</span>
+            <h3 class="static-card__title">Presentation Deck</h3>
+          </div>
+        </div>
+        <p class="static-card__desc">
+          Executive and technical slide deck: <em>"Scaling Ground Truth"</em> — summarizing findings, temporal evolution of typologies (2019–2025),
+          comparative accuracy charts, and field validation statistics.
+        </p>
+        <div class="static-card__actions">
+          <a href="{{ '/material_suplementar/Scaling_Ground_Truth_wribrasil.pdf' | relative_url }}" target="_blank" rel="noopener noreferrer" class="btn-static-download" title="Download Presentation Slides (PDF)">
+            <span>⬇ Download Slides (PDF)</span>
+            <small class="badge-status badge-status--ready">11 MB</small>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. GOOGLE EARTH ENGINE ASSETS -->
+      <div class="static-card static-card--wide fade-up">
+        <div class="static-card__header">
+          <div class="static-card__icon-box">🛰️</div>
+          <div>
+            <span class="static-card__badge">Cloud Assets</span>
+            <h3 class="static-card__title">Google Earth Engine Assets</h3>
+          </div>
+        </div>
+        <p class="static-card__desc">
+          Cloud-processed raster image collections and feature datasets available in LAPIG/WRI Earth Engine repositories:
+        </p>
+        <div class="asset-list">
+          <div class="asset-item">
+            <div class="asset-item__info">
+              <strong>MapBiomas 10m Stable Pasture Map (Col. 4 | 2020–2025)</strong>
+              <code>projects/ee-vieiramesquita-mapbiomas/docs/assets/mapbiomas_brasil_10m_pasture_col4_stable_2020_2025</code>
+            </div>
+            <button class="btn-copy-asset" onclick="navigator.clipboard.writeText('projects/ee-vieiramesquita-mapbiomas/docs/assets/mapbiomas_brasil_10m_pasture_col4_stable_2020_2025'); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy ID', 2000)">Copy ID</button>
+          </div>
+
+          <div class="asset-item">
+            <div class="asset-item__info">
+              <strong>Pasture Condition (Sentinel-2 / CVP 2025)</strong>
+              <code>projects/ee-gpw-app/docs/assets/lapig_cerrado_s2_pasture_cvp_2025</code>
+            </div>
+            <button class="btn-copy-asset" onclick="navigator.clipboard.writeText('projects/ee-gpw-app/docs/assets/lapig_cerrado_s2_pasture_cvp_2025'); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy ID', 2000)">Copy ID</button>
+          </div>
+
+          <div class="asset-item">
+            <div class="asset-item__info">
+              <strong>Stratified Samples (50k) with Collection 11 Classes (2025 & Mode 2020–2025)</strong>
+              <code>projects/ee-gpw-app/docs/assets/lapig_pontos_estratificados_cvp_2025_50k_with_MapBiomasC11_fixed</code>
+            </div>
+            <button class="btn-copy-asset" onclick="navigator.clipboard.writeText('projects/ee-gpw-app/docs/assets/lapig_pontos_estratificados_cvp_2025_50k_with_MapBiomasC11_fixed'); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy ID', 2000)">Copy ID</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. SCRIPTS (GEE & PYTHON) -->
+      <div class="static-card static-card--wide fade-up">
+        <div class="static-card__header">
+          <div class="static-card__icon-box">💻</div>
+          <div>
+            <span class="static-card__badge">Source Code</span>
+            <h3 class="static-card__title">Scripts</h3>
+          </div>
+        </div>
+        <p class="static-card__desc">
+          Open algorithms in Google Earth Engine Code Editor and Python/DuckDB routines for end-to-end reproduction:
+        </p>
+
+        <!-- Sub-block GEE -->
+        <h4 class="static-subheading">Scripts (Google Earth Engine)</h4>
+        <div class="script-links-grid">
+          <a href="https://code.earthengine.google.com/0502efbe5908928e33f5ccbaaa12a105" target="_blank" rel="noopener noreferrer" class="script-link-item">
+            <div class="script-link-item__text">
+              <strong>Stable Pasture Export (2020–2025)</strong>
+              <small>MapBiomas 10m (Collection 4)</small>
+            </div>
+            <span class="script-link-item__arrow">Open in GEE ↗</span>
+          </a>
+
+          <a href="https://code.earthengine.google.com/dce31c4554bc9bedc8b0557d0bd0a7f1" target="_blank" rel="noopener noreferrer" class="script-link-item">
+            <div class="script-link-item__text">
+              <strong>Annual EVI Mean for Pastures (Sentinel-2)</strong>
+              <small>Monthly medians with 15-day moving window</small>
+            </div>
+            <span class="script-link-item__arrow">Open in GEE ↗</span>
+          </a>
+
+          <a href="https://code.earthengine.google.com/9e3b4b31c4bca9b13e2fba25a0f9bc36" target="_blank" rel="noopener noreferrer" class="script-link-item">
+            <div class="script-link-item__text">
+              <strong>Stratified Random Sampling (50k points)</strong>
+              <small>Based on Pasture Vigor Condition (CVP 2025)</small>
+            </div>
+            <span class="script-link-item__arrow">Open in GEE ↗</span>
+          </a>
+
+          <a href="https://code.earthengine.google.com/f0f483bdb7379d2605d2e0d65090fcf6" target="_blank" rel="noopener noreferrer" class="script-link-item">
+            <div class="script-link-item__text">
+              <strong>Monthly Spectral Series Extraction (Sentinel-2)</strong>
+              <small>2019–2025 · 50k Samples</small>
+            </div>
+            <span class="script-link-item__arrow">Open in GEE ↗</span>
+          </a>
+
+          <a href="https://code.earthengine.google.com/7ae7438f8cdee355158da9cd400e9bbb" target="_blank" rel="noopener noreferrer" class="script-link-item">
+            <div class="script-link-item__text">
+              <strong>Alpha Earth Embeddings Series Extraction</strong>
+              <small>2019–2025 · 50k Samples (64-dimensional vectors)</small>
+            </div>
+            <span class="script-link-item__arrow">Open in GEE ↗</span>
+          </a>
+        </div>
+
+        <!-- Sub-block Python GitHub -->
+        <h4 class="static-subheading" style="margin-top: 1.2rem;">Local Processing Scripts (Python & DuckDB on GitHub)</h4>
+        <div class="script-links-grid">
+          <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/scripts/gerar_top3_pivotada_50k.py" target="_blank" rel="noopener noreferrer" class="script-link-item script-link-item--github">
+            <div class="script-link-item__text">
+              <strong>gerar_top3_pivotada_50k.py</strong>
+              <small>Dot-product computation, Top-3 ranking, Md3 metric, and Parquet/CSV/JSON exports (50k Series · 350k total)</small>
+            </div>
+            <span class="script-link-item__arrow">View on GitHub ↗</span>
+          </a>
+
+          <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/scripts/gerar_top3_pivotada_11k.py" target="_blank" rel="noopener noreferrer" class="script-link-item script-link-item--github">
+            <div class="script-link-item__text">
+              <strong>gerar_top3_pivotada_12k.py</strong>
+              <small>12k-Series pipeline: MapBiomas union (Col11 + 85k), coordinate correction, dot product, and Md3 exports (88k total)</small>
+            </div>
+            <span class="script-link-item__arrow">View on GitHub ↗</span>
+          </a>
+
+          <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/scripts/exportar_referencia_embrapa.py" target="_blank" rel="noopener noreferrer" class="script-link-item script-link-item--github">
+            <div class="script-link-item__text">
+              <strong>exportar_referencia_embrapa.py</strong>
+              <small>Consolidation of Embrapa's 701 ground-truth points and static typology distribution export</small>
+            </div>
+            <span class="script-link-item__arrow">View on GitHub ↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 5. GENERATED DATASETS -->
+      <div class="static-card static-card--wide fade-up">
+        <div class="static-card__header">
+          <div class="static-card__icon-box">📦</div>
+          <div>
+            <span class="static-card__badge">Open Data</span>
+            <h3 class="static-card__title">Generated Datasets</h3>
+          </div>
+        </div>
+        <p class="static-card__desc">
+          Complete processed datasets (totaling 438,200 samples across the 2019–2025 series: 350k 50k-Series + 88k 12k-Series + 701 Embrapa reference points) available for direct download in Parquet, CSV, and JSON formats on GitHub:
+        </p>
+
+        <div class="data-table-wrapper">
+          <table class="static-data-table">
+            <thead>
+              <tr>
+                <th>Dataset</th>
+                <th>Series / Year</th>
+                <th>Size / Sample Count</th>
+                <th>Downloads (GitHub)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 50K SERIES -->
+              <tr>
+                <td><strong>Md3 Pivoted Table 2025</strong></td>
+                <td>50k Series · 2025</td>
+                <td>50,000 points · 16 attributes</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2025.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2025.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_50k_2025.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Md3 Pivoted Table 2024</strong></td>
+                <td>50k Series · 2024</td>
+                <td>50,000 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2024.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2024.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_50k_2024.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Md3 Pivoted Table 2023</strong></td>
+                <td>50k Series · 2023</td>
+                <td>50,000 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2023.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2023.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_50k_2023.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Md3 Pivoted Table 2022</strong></td>
+                <td>50k Series · 2022</td>
+                <td>50,000 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2022.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2022.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_50k_2022.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Md3 Pivoted Table 2021</strong></td>
+                <td>50k Series · 2021</td>
+                <td>50,000 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2021.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2021.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_50k_2021.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Md3 Pivoted Table 2020</strong></td>
+                <td>50k Series · 2020</td>
+                <td>50,000 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2020.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2020.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_50k_2020.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Md3 Pivoted Table 2019</strong></td>
+                <td>50k Series · 2019</td>
+                <td>50,000 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2019.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_50k_2019.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_50k_2019.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+
+              <!-- 12K SERIES -->
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Md3 Pivoted Table 2025</strong></td>
+                <td>12k Series · 2025</td>
+                <td>12,395 points (Pasture + 85k)</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2025.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2025.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_12k_2025.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Md3 Pivoted Table 2024</strong></td>
+                <td>12k Series · 2024</td>
+                <td>12,422 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2024.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2024.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_12k_2024.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Md3 Pivoted Table 2023</strong></td>
+                <td>12k Series · 2023</td>
+                <td>12,470 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2023.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2023.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_12k_2023.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Md3 Pivoted Table 2022</strong></td>
+                <td>12k Series · 2022</td>
+                <td>12,548 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2022.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2022.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_12k_2022.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Md3 Pivoted Table 2021</strong></td>
+                <td>12k Series · 2021</td>
+                <td>12,681 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2021.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2021.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_12k_2021.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Md3 Pivoted Table 2020</strong></td>
+                <td>12k Series · 2020</td>
+                <td>12,792 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2020.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2020.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_12k_2020.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+              <tr style="background: rgba(18, 153, 18, 0.03);">
+                <td><strong>Md3 Pivoted Table 2019</strong></td>
+                <td>12k Series · 2019</td>
+                <td>12,892 points</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2019.csv" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--csv">CSV</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/tabela_top3_12k_2019.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_saida/tabela_top3_pivotada_12k_2019.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+
+              <!-- EMBRAPA -->
+              <tr>
+                <td><strong>Embrapa Field Reference (701 Points)</strong></td>
+                <td>Ground Truth Reference</td>
+                <td>701 points · 7 typologies</td>
+                <td class="download-links-cell">
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/docs/assets/embrapa_referencia.json" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--json">JSON</a>
+                  <a href="https://github.com/lapig-ufg/lapig-wribrasil/blob/main/dados/arquivos_base/embeddings_embrapa_year_colet.parquet" target="_blank" rel="noopener noreferrer" class="data-badge data-badge--parquet">Parquet</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

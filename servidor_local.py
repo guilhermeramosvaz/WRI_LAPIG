@@ -12,7 +12,7 @@ import urllib.parse
 import webbrowser
 
 PORT = 8000
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'docs')
 
 
 def parse_frontmatter(content):

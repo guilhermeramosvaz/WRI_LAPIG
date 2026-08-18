@@ -1,0 +1,38 @@
+<!-- ═══════════════════════════════════════════════════════
+       MAP COMPARISON (SPLIT PANEL)
+  ═══════════════════════════════════════════════════════ -->
+  <section class="section reveal" id="comparacao">
+    <div class="section__eyebrow">Comparative Analysis</div>
+    <h2 class="section__title">Scenario Comparison (Raster)</h2>
+    <p class="section__desc">Drag the divider to compare thematic layers side by side over the basemap.</p>
+
+    <div class="split-map-wrapper">
+      <div id="split-map"></div>
+    </div>
+    
+    <div class="split-dashboards">
+      <!-- Left Side -->
+      <div class="split-dashboard left-dashboard">
+        <h3 class="dashboard-title">Scenario A (Left)</h3>
+        <div class="dashboard-legend">
+          <div class="legend-item"><span class="legend-color" style="background:#129912"></span> Forest</div>
+          <div class="legend-item"><span class="legend-color" style="background:#ffd700"></span> Pasture</div>
+        </div>
+        <div class="dashboard-chart">
+          <canvas id="chart-left"></canvas>
+        </div>
+      </div>
+      
+      <!-- Right Side -->
+      <div class="split-dashboard right-dashboard">
+        <h3 class="dashboard-title">Scenario B (Right)</h3>
+        <div class="dashboard-legend">
+          <div class="legend-item"><span class="legend-color" style="background:#129912"></span> Forest</div>
+          <div class="legend-item"><span class="legend-color" style="background:#ffd700"></span> Pasture</div>
+        </div>
+        <div class="dashboard-chart">
+          <canvas id="chart-right"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>

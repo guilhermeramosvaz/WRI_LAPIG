@@ -26,9 +26,9 @@ The platform integrates **438,200 MapBiomas samples** across a 7-year historical
 
 ---
 
-## 🌐 Interactive Web Platform
+## 🌐 Interactive Web Platform (`docs/`)
 
-Built upon a lightweight, modular static architecture (compatible with Jekyll and GitHub Pages) featuring browser GPU acceleration via **Leaflet Canvas Markers** and dynamic charts via **Chart.js**:
+Built upon a lightweight, modular static architecture (compatible with Jekyll and GitHub Pages Source: `/docs`) featuring browser GPU acceleration via **Leaflet Canvas Markers** and dynamic charts via **Chart.js**:
 
 * **Home Page (`/`)**: Institutional overview, objectives, key figures, and section navigation.
 * **Md3 Analysis (`/analise-top3/`)**:
@@ -44,40 +44,33 @@ Built upon a lightweight, modular static architecture (compatible with Jekyll an
 ## 📁 Repository Directory Structure
 
 ```
-WRI_LAPIG/
-├── _includes/                     # Modular HTML components
-│   ├── map_viz.html               # Leaflet map viewer, GPU canvas & unified filter panel
-│   ├── Produtos_Estaticos.html    # Static deliverables, scripts & GEE assets
-│   ├── SOM.html                   # Self-Organizing Maps (SOM) section
-│   ├── navigation_cards.html      # Homepage navigation cards
-│   ├── stats.html                 # Key metrics & statistics counters
-│   ├── hero.html / footer.html    # Institutional header & footer
-│   └── timeline.html              # Methodological timeline
-├── _layouts/                      # Jekyll base layouts (default.html, page.html)
-├── analise-top3/                  # Md3 Analysis & Static Deliverables page
-│   └── index.html
-├── assets/                        # Static web assets
-│   ├── css/style.css              # Design system, theme & responsive layout
-│   ├── js/main.js                 # Reactive filters engine, bounding box & dual charts
-│   ├── tabela_top3_50k_{year}.json# Compact JSONs for the 50k Series (2019 to 2025)
-│   ├── tabela_top3_12k_{year}.json# Compact JSONs for the 12k Series (2019 to 2025)
-│   ├── tabela_top3_50k_{year}.csv # Full CSVs for the 50k Series
-│   ├── tabela_top3_12k_{year}.csv # Full CSVs for the 12k Series
-│   └── embrapa_referencia.json    # Georeferenced data of Embrapa's 701 field points
-├── produto_escalar_scripts/       # Python/DuckDB pipelines for the 50k Series
-│   ├── gerar_top3_pivotada_50k.py # Dot-product & Top-3 generator for the 50k Series
-│   ├── exportar_referencia_embrapa.py # Exporter for Embrapa ground-truth points
-│   └── analise_top3_50k.py        # Statistical metrics & distributions
-├── produto_escalar_11k/           # Pipeline & data for the 12k Series (Pasture + 85k)
-│   ├── arquivos_base/             # Raw input Parquets
-│   ├── scripts/                   # DuckDB SQL and processing scripts
-│   │   └── gerar_top3_pivotada_11k.py # Multi-year generator with coordinate correction
-│   └── saida/                     # Output Parquets and CSVs (2019 to 2025)
-├── produto_escalar_metricas/      # Output Parquets and matrices for the 50k Series
-│   ├── arquivos_base/             # Sentinel-2 input embeddings and Embrapa data
-│   └── arquivos_saida/            # Pivoted Top-3 Parquets
-├── procedimentos_manutencao/      # Maintenance manuals and architecture maps
-└── servidor_local.py              # Local multi-page HTTP server with Liquid/YAML parsing
+lapig-wribrasil/
+│
+├── 🌐 docs/                          # Web Platform (Jekyll / GitHub Pages: /docs)
+│   ├── _config.yml                  # Central Jekyll configuration (baseurl: "/lapig-wribrasil")
+│   ├── _layouts/                    # Base layouts (default.html, page.html)
+│   ├── _includes/                   # Modular HTML includes (map_viz, Produtos_Estaticos, etc.)
+│   ├── assets/                      # Stylesheets, JavaScript engine, and JSON/CSV datasets
+│   ├── material_suplementar/        # Technical Report (PDF) & Presentation (PDF)
+│   ├── analise-top3/                # Md3 Analysis & Deliverables page
+│   ├── comparacao/                  # Scenario comparison page
+│   └── index.html                   # Homepage
+│
+├── 📊 dados/                         # Data Pipelines & Processing Engine
+│   ├── arquivos_base/               # Raw Sentinel-2 embeddings, Embrapa points, MapBiomas inputs
+│   ├── arquivos_saida/              # Processed Top-3 Parquets (50k & 12k Series · 2019–2025)
+│   └── scripts/                     # Python / DuckDB processing pipelines
+│
+├── 📁 documentos/                    # Reports, Slide Decks, QGIS Styles & Maintenance Guides
+│   ├── Report_Product_1_*.pdf       # Technical Report PDF
+│   ├── Scaling_Ground_Truth_*.pdf   # Executive Presentation PDF
+│   ├── campo_md3.pptx               # Field Presentation Deck
+│   ├── qgis_cores.qml               # QGIS layer styling palette
+│   └── procedimentos_manutencao/    # Maintenance & configuration documentation
+│
+├── 🛠️ servidor_local.py              # Local testing server (serves docs/ in real time)
+├── 📄 LICENSE                       # Creative Commons Attribution 4.0 (CC BY 4.0)
+└── 📘 README.md                      # Repository presentation and documentation
 ```
 
 ---
@@ -98,17 +91,17 @@ Open in your browser: **`http://localhost:8000`** or **`http://localhost:8000/an
 
 ### 1. Generate Top-3 Tables for the 50k Series (2019–2025)
 ```bash
-python produto_escalar_scripts/gerar_top3_pivotada_50k.py --year all
+python dados/scripts/gerar_top3_pivotada_50k.py --year all
 ```
 
 ### 2. Generate Top-3 Tables for the 12k Series (2019–2025)
 ```bash
-python produto_escalar_11k/scripts/gerar_top3_pivotada_11k.py --year all
+python dados/scripts/gerar_top3_pivotada_11k.py --year all
 ```
 
 ### 3. Update Embrapa Reference Dataset (701 Points)
 ```bash
-python produto_escalar_scripts/exportar_referencia_embrapa.py
+python dados/scripts/exportar_referencia_embrapa.py
 ```
 
 ---
