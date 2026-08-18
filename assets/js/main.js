@@ -28,7 +28,7 @@ window.addEventListener('scroll', () => {
 });
 
 // ──────────────────────────────────────────────────────────
-//  INTERACTIVE MAP — Md3 50k MapBiomas × Embrapa Series
+//  INTERACTIVE MAP — Md3 Series (50k & 12k) MapBiomas × Embrapa
 // ──────────────────────────────────────────────────────────
 (function () {
   'use strict';
@@ -37,16 +37,16 @@ window.addEventListener('scroll', () => {
   const mapEl = document.getElementById('map-amostras');
   if (!mapEl) return;
 
-  // 1. Tipologia color palette (Embrapa official schema)
+  // 1. Tipologia color palette (Embrapa official schema with English labels)
   const TIPOLOGIA_CONFIG = {
-    'PASTO PRODUTIVO': { color: '#faea40', label: 'Pasto Produtivo' },
-    'PASTO COM ERVAS': { color: '#d8ff6c', label: 'Pasto com Ervas' },
-    'PASTO COM LENHOSAS': { color: '#66c600', label: 'Pasto com Lenhosas' },
-    'INTERMEDIARIO': { color: '#f4b346', label: 'Intermediário' },
-    'DEG BIOLOGICA': { color: '#813209', label: 'Degradação Biológica' },
-    'REG NATURAL': { color: '#0e5f0e', label: 'Regeneração Natural' },
-    'MISCELANEA': { color: '#ec2b10', label: 'Miscelânea' },
-    'Outros': { color: '#888888', label: 'Outros' }
+    'PASTO PRODUTIVO': { color: '#faea40', label: 'Productive Pasture' },
+    'PASTO COM ERVAS': { color: '#d8ff6c', label: 'Pasture with Weeds' },
+    'PASTO COM LENHOSAS': { color: '#66c600', label: 'Pasture with Shrubs / Trees' },
+    'INTERMEDIARIO': { color: '#f4b346', label: 'Intermediate Pasture' },
+    'DEG BIOLOGICA': { color: '#813209', label: 'Biological Degradation' },
+    'REG NATURAL': { color: '#0e5f0e', label: 'Natural Regeneration' },
+    'MISCELANEA': { color: '#ec2b10', label: 'Miscellaneous' },
+    'Outros': { color: '#888888', label: 'Other' }
   };
 
   const TIPOLOGIA_ORDER = [
@@ -58,7 +58,7 @@ window.addEventListener('scroll', () => {
   const BRAZIL_CENTER = [-15.5, -49.5];
   const BRAZIL_ZOOM = 6;
 
-  // GPU-Accelerated Canvas Renderer for 50k markers
+  // GPU-Accelerated Canvas Renderer for high-throughput markers
   const canvasRenderer = L.canvas({ padding: 0.5 });
 
   // Initialize Leaflet map
@@ -82,7 +82,7 @@ window.addEventListener('scroll', () => {
   const DATA_CACHE = {};
 
   // State
-  let currentDataset = '50k'; // '50k' or '11k'
+  let currentDataset = '50k'; // '50k' or '12k'
   let currentYear = '2025';
   let allData = [];
   let filteredData = [];
@@ -119,7 +119,7 @@ window.addEventListener('scroll', () => {
         currentDataset = '50k';
         btn50k.classList.add('active');
         btn12k.classList.remove('active');
-        if (yearFilterTitle) yearFilterTitle.textContent = '📅 Ano de Análise (Série 50k · 50.000 pts)';
+        if (yearFilterTitle) yearFilterTitle.textContent = '📅 Analysis Year (50k Series · 50,000 pts)';
         loadMd3Year(currentYear);
       });
 
@@ -128,7 +128,7 @@ window.addEventListener('scroll', () => {
         currentDataset = '12k';
         btn12k.classList.add('active');
         btn50k.classList.remove('active');
-        if (yearFilterTitle) yearFilterTitle.textContent = '📅 Ano de Análise (Série 12k · 12.395 pts)';
+        if (yearFilterTitle) yearFilterTitle.textContent = '📅 Analysis Year (12k Series · 12,395 pts)';
         loadMd3Year(currentYear);
       });
     }
@@ -146,7 +146,7 @@ window.addEventListener('scroll', () => {
     });
   }
 
-  // ── 2. Build Filter Checkboxes (Tipologias) ──
+  // ── 2. Build Filter Checkboxes (Typologies) ──
   function buildFilters() {
     const filterList = document.getElementById('filter-list');
     if (!filterList) return;
@@ -173,9 +173,9 @@ window.addEventListener('scroll', () => {
     const btn = document.getElementById('btn-toggle-all');
     if (!btn) return;
     if (activeClasses.size === 0) {
-      btn.textContent = 'Marcar Todos';
+      btn.textContent = 'Select All';
     } else {
-      btn.textContent = 'Desmarcar Todos';
+      btn.textContent = 'Deselect All';
     }
   }
 
@@ -240,7 +240,6 @@ window.addEventListener('scroll', () => {
         if (display) {
           display.textContent = val === 0 ? 'Md3 ≥ 0.00' : `Md3 ≥ ${val.toFixed(2)}`;
         }
-        // Update chips active state
         chips.forEach(c => {
           c.classList.toggle('active', parseFloat(c.getAttribute('data-val')) === val);
         });
@@ -266,7 +265,7 @@ window.addEventListener('scroll', () => {
   // ── 5. Year Selector Radio Chips ──
   function setupYearSelector() {
     document.querySelectorAll('.year-chip').forEach(chip => {
-      chip.addEventListener('click', (e) => {
+      chip.addEventListener('click', () => {
         const radio = chip.querySelector('input[type="radio"]');
         if (radio && radio.value !== currentYear) {
           document.querySelectorAll('.year-chip').forEach(c => c.classList.remove('active'));
@@ -325,7 +324,7 @@ window.addEventListener('scroll', () => {
 
       const bounds = tempRect.getBounds();
       
-      // If rectangle is too small (just a click), dismiss
+      // If rectangle is too small (accidental click), dismiss
       if (bounds.getNorth() === bounds.getSouth() && bounds.getEast() === bounds.getWest()) {
         map.removeLayer(tempRect);
         tempRect = null;
@@ -430,12 +429,12 @@ window.addEventListener('scroll', () => {
             });
 
             marker.bindPopup(`
-              <div class="popup-box" style="font-family: var(--font-sans); font-size: 0.8rem; min-width: 190px;">
+              <div class="popup-box" style="font-family: var(--font-sans); font-size: 0.8rem; min-width: 200px;">
                 <div style="font-weight: 700; color: #1e3a8a; border-bottom: 1px solid #ddd; padding-bottom: 3px; margin-bottom: 6px;">
-                  📍 Referência Embrapa (Campo)
+                  📍 Embrapa Reference (Ground Truth)
                 </div>
                 <div><strong>Target FID:</strong> #${pt.fid}</div>
-                <div><strong>Tipologia:</strong> <span style="display:inline-flex; align-items: center; padding: 2px 7px; border-radius: 4px; background: ${cfg.color}35; color: #000000; font-weight: 700; border: 1px solid ${cfg.color};"><span style="display:inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: ${cfg.color}; margin-right: 5px; border: 1px solid rgba(0,0,0,0.25);"></span>${cfg.label}</span></div>
+                <div><strong>Typology:</strong> <span style="display:inline-flex; align-items: center; padding: 2px 7px; border-radius: 4px; background: ${cfg.color}35; color: #000000; font-weight: 700; border: 1px solid ${cfg.color};"><span style="display:inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: ${cfg.color}; margin-right: 5px; border: 1px solid rgba(0,0,0,0.25);"></span>${cfg.label}</span></div>
                 <div style="font-size: 0.72rem; color: #444; margin-top: 4px;"><strong>Coords:</strong> ${pt.lat.toFixed(4)}, ${pt.lon.toFixed(4)}</div>
               </div>
             `);
@@ -444,7 +443,7 @@ window.addEventListener('scroll', () => {
           });
         }
       })
-      .catch(err => console.warn('Erro ao carregar dados Embrapa:', err));
+      .catch(err => console.warn('Could not load Embrapa ground-truth points:', err));
   }
 
   // ── 8. Multi-Criteria Filter Engine ──
@@ -471,7 +470,8 @@ window.addEventListener('scroll', () => {
       if (searchQuery) {
         const matchesId = String(pt.id).includes(searchQuery);
         const matchesFid = String(pt.target_fid_1).includes(searchQuery);
-        const matchesClass = pt.classe.toLowerCase().includes(searchQuery);
+        const cfg = TIPOLOGIA_CONFIG[pt.classe];
+        const matchesClass = pt.classe.toLowerCase().includes(searchQuery) || (cfg && cfg.label.toLowerCase().includes(searchQuery));
         const matchesLoc = (pt.loc_1 || '').toLowerCase().includes(searchQuery);
         if (!matchesId && !matchesFid && !matchesClass && !matchesLoc) return false;
       }
@@ -509,13 +509,13 @@ window.addEventListener('scroll', () => {
   }
 
   function getPopupContent(pt, cfg) {
-    const vigorLabels = { 1: 'Vigor 1 (Alto)', 2: 'Vigor 2 (Médio)', 3: 'Vigor 3 (Baixo)' };
+    const vigorLabels = { 1: 'Vigor 1 (High)', 2: 'Vigor 2 (Medium)', 3: 'Vigor 3 (Low)' };
     const vigorStr = vigorLabels[pt.cvp] || `Vigor ${pt.cvp}`;
 
     return `
       <div class="popup-box" style="font-family: var(--font-sans); font-size: 0.82rem; line-height: 1.4; min-width: 220px;">
         <div style="font-weight: 700; font-size: 0.88rem; color: #1a1a1a; margin-bottom: 4px;">
-          Amostra MapBiomas #${pt.id}
+          MapBiomas Sample #${pt.id}
         </div>
         <div style="margin-bottom: 6px;">
           <span style="display:inline-flex; align-items: center; padding: 2px 7px; border-radius: 4px; background: ${cfg.color}35; color: #000000; font-weight: 700; border: 1px solid ${cfg.color};">
@@ -525,10 +525,10 @@ window.addEventListener('scroll', () => {
           <span class="vigor-tag vigor-${pt.cvp}" style="margin-left: 4px;">${vigorStr}</span>
         </div>
         <div style="margin-top: 6px; line-height: 1.4; color: #111111;">
-          <strong>Coord. Alvo:</strong> ${pt.lat.toFixed(4)}, ${pt.lng.toFixed(4)}<br>
-          <strong>Alvo Embrapa:</strong> FID #${pt.target_fid_1} (${(pt.prod_escalar_1 || 0).toFixed(3)})<br>
-          <strong>Média Md3:</strong> ${(pt.md3 || 0).toFixed(3)}<br>
-          <strong>Ref. Embrapa:</strong> ${pt.loc_1 || '—'}
+          <strong>Target Coords:</strong> ${pt.lat.toFixed(4)}, ${pt.lng.toFixed(4)}<br>
+          <strong>Embrapa Match:</strong> FID #${pt.target_fid_1} (${(pt.prod_escalar_1 || 0).toFixed(3)})<br>
+          <strong>Mean Md3:</strong> ${(pt.md3 || 0).toFixed(3)}<br>
+          <strong>Embrapa Ref:</strong> ${pt.loc_1 || '—'}
         </div>
       </div>
     `;
@@ -541,23 +541,23 @@ window.addEventListener('scroll', () => {
     const countSubEl = document.getElementById('counter-sub');
     const chartTitleEl = document.getElementById('chart-title');
 
-    const total = allData.length || (currentDataset === '50k' ? 50000 : 12500);
+    const total = allData.length || (currentDataset === '50k' ? 50000 : 12395);
     const current = filteredData.length;
     const pct = total > 0 ? ((current / total) * 100).toFixed(1) : '100';
-    const seriesLabel = currentDataset === '50k' ? 'Série 50k' : 'Série 12k';
+    const seriesLabel = currentDataset === '50k' ? '50k Series' : '12k Series';
 
-    if (countNumberEl) countNumberEl.textContent = current.toLocaleString('pt-BR');
-    if (countLabelEl) countLabelEl.textContent = `Amostras MapBiomas (${seriesLabel} · Ano ${currentYear})`;
-    if (chartTitleEl) chartTitleEl.textContent = `Distribuição Amostral MapBiomas (${seriesLabel})`;
+    if (countNumberEl) countNumberEl.textContent = current.toLocaleString('en-US');
+    if (countLabelEl) countLabelEl.textContent = `MapBiomas Samples (${seriesLabel} · Year ${currentYear})`;
+    if (chartTitleEl) chartTitleEl.textContent = `MapBiomas Sample Distribution (${seriesLabel})`;
     if (countSubEl) {
       if (currentBBox) {
-        countSubEl.textContent = `${pct}% dos pontos (Área Retangular Selecionada)`;
+        countSubEl.textContent = `${pct}% of points (Custom Bounding Box Selection)`;
       } else {
-        countSubEl.textContent = `${pct}% dos pontos visíveis`;
+        countSubEl.textContent = `${pct}% of visible points`;
       }
     }
 
-    // Update counts per tipologia in filter checkboxes
+    // Update counts per typology in filter checkboxes
     const countsByClass = {};
     filteredData.forEach(pt => {
       countsByClass[pt.classe] = (countsByClass[pt.classe] || 0) + 1;
@@ -566,7 +566,7 @@ window.addEventListener('scroll', () => {
     TIPOLOGIA_ORDER.forEach(tip => {
       const span = document.getElementById('count-' + tip.replace(/\s+/g, '_'));
       if (span) {
-        span.textContent = (countsByClass[tip] || 0).toLocaleString('pt-BR');
+        span.textContent = (countsByClass[tip] || 0).toLocaleString('en-US');
       }
     });
   }
@@ -584,10 +584,10 @@ window.addEventListener('scroll', () => {
     if (currentBBox) activeFilterCount++;
 
     if (activeFilterCount === 0) {
-      badge.textContent = 'Padrão';
+      badge.textContent = 'Default';
       badge.style.background = 'var(--color-accent-glow)';
     } else {
-      badge.textContent = `${activeFilterCount} Ativo${activeFilterCount > 1 ? 's' : ''}`;
+      badge.textContent = `${activeFilterCount} Active`;
       badge.style.background = '#fef08a';
     }
   }
@@ -635,7 +635,7 @@ window.addEventListener('scroll', () => {
                   const val = ctx.parsed.x || 0;
                   const total = filteredData.length || 1;
                   const pct = ((val / total) * 100).toFixed(1);
-                  return `${val.toLocaleString('pt-BR')} pontos (${pct}%)`;
+                  return `${val.toLocaleString('en-US')} points (${pct}%)`;
                 }
               }
             }
@@ -691,7 +691,7 @@ window.addEventListener('scroll', () => {
                 label: function (ctx) {
                   const val = ctx.parsed.x || 0;
                   const pct = ((val / 701) * 100).toFixed(1);
-                  return `${val} pontos de campo (${pct}%)`;
+                  return `${val} field points (${pct}%)`;
                 }
               }
             }
@@ -728,7 +728,7 @@ window.addEventListener('scroll', () => {
     }
 
     container.style.display = 'block';
-    if (countSpan) countSpan.textContent = points.length.toLocaleString('pt-BR');
+    if (countSpan) countSpan.textContent = points.length.toLocaleString('en-US');
 
     tbody.innerHTML = '';
 
@@ -762,7 +762,7 @@ window.addEventListener('scroll', () => {
       const trExtra = document.createElement('tr');
       trExtra.innerHTML = `
         <td colspan="8" style="text-align:center; color: var(--color-muted); font-style: italic; padding: 0.8rem;">
-          ... e mais ${(points.length - maxTableRows).toLocaleString('pt-BR')} amostras correspondentes (total filtrado: ${points.length.toLocaleString('pt-BR')})
+          ... and ${(points.length - maxTableRows).toLocaleString('en-US')} more matching samples (total filtered: ${points.length.toLocaleString('en-US')})
         </td>
       `;
       tbody.appendChild(trExtra);
@@ -774,10 +774,10 @@ window.addEventListener('scroll', () => {
     currentYear = year;
     const countNumberEl = document.getElementById('counter-number');
     const countLabelEl = document.getElementById('counter-label');
-    const seriesLabel = currentDataset === '50k' ? 'Série 50k' : 'Série 12k';
+    const seriesLabel = currentDataset === '50k' ? '50k Series' : '12k Series';
 
-    if (countNumberEl) countNumberEl.textContent = 'Carregando...';
-    if (countLabelEl) countLabelEl.textContent = `Carregando ${seriesLabel} (${year})...`;
+    if (countNumberEl) countNumberEl.textContent = 'Loading...';
+    if (countLabelEl) countLabelEl.textContent = `Loading ${seriesLabel} (${year})...`;
 
     const cacheKey = `${currentDataset}_${year}`;
     if (DATA_CACHE[cacheKey]) {
@@ -819,9 +819,9 @@ window.addEventListener('scroll', () => {
         applyFilters();
       })
       .catch(err => {
-        console.error('Erro ao carregar dados Md3:', err);
-        if (countNumberEl) countNumberEl.textContent = 'Erro';
-        alert(`Não foi possível carregar os dados para o ano "${year}" na ${seriesLabel}. Verifique se o arquivo ${url} está presente.`);
+        console.error('Error loading Md3 data:', err);
+        if (countNumberEl) countNumberEl.textContent = 'Error';
+        alert(`Could not load data for year "${year}" in ${seriesLabel}. Please verify that ${url} exists.`);
       });
   }
 
@@ -930,28 +930,28 @@ window.addEventListener('scroll', () => {
     scrollWheelZoom: false
   });
 
-  // Basemap comum (Fundo)
+  // Common Basemap (Background)
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
     maxZoom: 19
   }).addTo(splitMap);
 
-  // Camadas Raster para Comparação
+  // Raster Layers for Comparison
   const leftLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     opacity: 0.6,
-    attribution: 'Cenário A'
+    attribution: 'Scenario A'
   }).addTo(splitMap);
 
   const rightLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
     opacity: 0.6,
-    attribution: 'Cenário B'
+    attribution: 'Scenario B'
   }).addTo(splitMap);
 
   // Side-by-Side control
   L.control.sideBySide(leftLayer, rightLayer).addTo(splitMap);
 
-  // Prevenir arrasto acidental
+  // Prevent accidental drag interference
   setTimeout(() => {
     const divider = document.querySelector('.leaflet-sbs-divider');
     if (divider) {
@@ -1000,7 +1000,7 @@ window.addEventListener('scroll', () => {
     new Chart(ctxLeft, {
       type: 'bar',
       data: {
-        labels: ['Floresta', 'Pastagem', 'Outros'],
+        labels: ['Forest', 'Pasture', 'Other'],
         datasets: [{
           data: [65, 25, 10],
           backgroundColor: ['#129912', '#ffd700', '#aaaaaa'],
@@ -1017,7 +1017,7 @@ window.addEventListener('scroll', () => {
     new Chart(ctxRight, {
       type: 'bar',
       data: {
-        labels: ['Floresta', 'Pastagem', 'Outros'],
+        labels: ['Forest', 'Pasture', 'Other'],
         datasets: [{
           data: [40, 50, 10],
           backgroundColor: ['#129912', '#ffd700', '#aaaaaa'],

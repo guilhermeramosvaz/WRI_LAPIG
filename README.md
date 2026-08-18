@@ -1,132 +1,132 @@
-# Caracterização e Mapeamento de Pastagens no Cerrado com Embeddings Espectrais (Sentinel-2)
+# Characterization and Mapping of Cerrado Pastures with Spectral Embeddings (Sentinel-2)
 
-Repositório institucional de dados, rotinas de processamento de alto desempenho (DuckDB / Python) e plataforma web interativa desenvolvida em cooperação técnica entre **LAPIG/UFG**, **WRI Brasil** e **Embrapa**.
+Institutional repository containing data, high-performance analytical pipelines (DuckDB / Python), and an interactive web platform developed through technical cooperation between **LAPIG/UFG**, **WRI Brasil**, and **Embrapa**.
 
 ---
 
-## 📊 Síntese dos Dados e Séries Amostrais
+## 📊 Summary of Datasets & Sample Series
 
-A plataforma integra **438.200 amostras MapBiomas** processadas ao longo de uma série histórica de 7 anos (2019 a 2025), cruzadas via **produto escalar de 64 dimensões** com os **701 pontos de verdade de campo da Embrapa**:
+The platform integrates **438,200 MapBiomas samples** across a 7-year historical series (2019 to 2025), matched via **64-dimensional dot product** against Embrapa's **701 in situ ground-truth reference points**:
 
-| Série Amostral | Descrição e Estratificação | Amostras / Ano (2025) | Total Série Histórica (2019–2025) |
+| Sample Series | Description & Stratification | Samples / Year (2025) | Historical Series Total (2019–2025) |
 | :--- | :--- | :--- | :--- |
-| **Série 50k** | Amostragem aleatória estratificada pela Condição de Vigor da Pastagem (CVP) | **50.000** | **350.000** |
-| **Série 12k** | União filtrada por pastagem: MapBiomas Pastagem (Col. 11) + MapBiomas 85k | **12.395** | **88.200** |
-| **Total Combinado** | Cobertura integrada sobre o bioma Cerrado | **62.395** | **438.200** |
-| **Referência Embrapa** | Verdade de campo coletada in situ com 7 tipologias canônicas | **701** | **701** |
+| **50k Series** | Stratified random sampling based on Pasture Vigor Condition (CVP) | **50,000** | **350,000** |
+| **12k Series** | Pasture-filtered union: MapBiomas Pasture (Col. 11) + MapBiomas 85k | **12,395** | **88,200** |
+| **Combined Total** | Comprehensive spatial coverage across the Cerrado biome | **62,395** | **438,200** |
+| **Embrapa Reference** | In situ ground-truth reference points classified into 7 canonical typologies | **701** | **701** |
 
-### Distribuição Exata da Série 12k por Ano:
-* **2019**: 12.892 pontos
-* **2020**: 12.792 pontos
-* **2021**: 12.681 pontos
-* **2022**: 12.548 pontos
-* **2023**: 12.470 pontos
-* **2024**: 12.422 pontos
-* **2025**: 12.395 pontos
-
----
-
-## 🌐 Plataforma Web Interativa
-
-Construída sobre arquitetura estática modular (compatível com Jekyll e GitHub Pages) com renderização GPU no navegador via **Leaflet Canvas Markers** e gráficos dinâmicos via **Chart.js**:
-
-* **Página Principal (`/`)**: Visão geral institucional, objetivos, números-chave e links de navegação.
-* **Análise Md3 (`/analise-top3/`)**:
-  * **Painel de Filtros Unificado**: Alternância instantânea entre a **Série 50k** e a **Série 12k**, seleção de ano (2019 a 2025), filtragem por vigor CVP (1, 2, 3), threshold de similaridade Md3 (0.00 a 0.95), busca textual e filtro de tipologias.
-  * **Seleção Retangular Espacial (Box Selection)**: Ferramenta para selecionar dinamicamente qualquer região geográfica do Cerrado e atualizar imediatamente contadores, gráficos e tabela de amostras.
-  * **Dual Charts Sincronizados**: Gráfico 1 (Distribuição amostral MapBiomas no recorte ativo) e Gráfico 2 (Distribuição fixa da verdade de campo Embrapa - 701 pontos).
-  * **Tabela de Detalhamento**: Visualização dos 3 maiores produtos escalares, IDs de referência, coordenadas e tipologias associadas.
-  * **Produtos Estáticos**: Downloads diretos de Relatórios, Apresentações, Assets GEE, Scripts e Tabelas nos formatos Parquet, CSV e JSON.
-  * **SOM (Self-Organizing Maps)**: Seção dedicada para agrupamento por redes neurais não supervisionadas.
+### Annual Breakdown of the 12k Series:
+* **2019**: 12,892 points
+* **2020**: 12,792 points
+* **2021**: 12,681 points
+* **2022**: 12,548 points
+* **2023**: 12,470 points
+* **2024**: 12,422 points
+* **2025**: 12,395 points
 
 ---
 
-## 📁 Estrutura de Diretórios do Repositório
+## 🌐 Interactive Web Platform
+
+Built upon a lightweight, modular static architecture (compatible with Jekyll and GitHub Pages) featuring browser GPU acceleration via **Leaflet Canvas Markers** and dynamic charts via **Chart.js**:
+
+* **Home Page (`/`)**: Institutional overview, objectives, key figures, and section navigation.
+* **Md3 Analysis (`/analise-top3/`)**:
+  * **Unified Filter Panel**: Instant switching between the **50k Series** and the **12k Series**, year selection (2019 to 2025), pasture vigor filtering (CVP 1, 2, 3), Md3 similarity thresholds (0.00 to 0.95), full-text search, and typology checkboxes.
+  * **Spatial Bounding Box Selection**: Tool to interactively select any custom geographic bounding box across the Cerrado, automatically updating counters, charts, and sample inspection tables.
+  * **Synchronized Dual Charts**: Chart 1 (Dynamic MapBiomas sample distribution in the active view) and Chart 2 (Fixed distribution of Embrapa's 701 ground-truth points).
+  * **Detailed Table**: Inspection of Top-3 dot products, reference FIDs, target coordinates, and assigned typologies.
+  * **Static Deliverables**: Direct downloads of technical Reports, Presentation decks, GEE Assets, Python scripts, and Open Data tables in Parquet, CSV, and JSON formats.
+  * **SOM (Self-Organizing Maps)**: Section dedicated to unsupervised topological neural network clustering.
+
+---
+
+## 📁 Repository Directory Structure
 
 ```
 WRI_LAPIG/
-├── _includes/                     # Componentes modulares HTML
-│   ├── map_viz.html               # Visualizador do mapa Leaflet, GPU canvas e painel de filtros
-│   ├── Produtos_Estaticos.html    # Seção de downloads abertos, scripts e assets GEE
-│   ├── SOM.html                   # Seção de Redes Neurais Auto-Organizáveis (SOM)
-│   ├── navigation_cards.html      # Cards de navegação da página inicial
-│   ├── stats.html                 # Seção de estatísticas e números-chave
-│   ├── hero.html / footer.html    # Cabeçalho e rodapé institucionais
-│   └── timeline.html              # Cronograma metodológico
-├── _layouts/                      # Layouts base Jekyll (default.html)
-├── analise-top3/                  # Página da Análise Md3 e Produtos Estáticos
+├── _includes/                     # Modular HTML components
+│   ├── map_viz.html               # Leaflet map viewer, GPU canvas & unified filter panel
+│   ├── Produtos_Estaticos.html    # Static deliverables, scripts & GEE assets
+│   ├── SOM.html                   # Self-Organizing Maps (SOM) section
+│   ├── navigation_cards.html      # Homepage navigation cards
+│   ├── stats.html                 # Key metrics & statistics counters
+│   ├── hero.html / footer.html    # Institutional header & footer
+│   └── timeline.html              # Methodological timeline
+├── _layouts/                      # Jekyll base layouts (default.html, page.html)
+├── analise-top3/                  # Md3 Analysis & Static Deliverables page
 │   └── index.html
-├── assets/                        # Assets estáticos servidos pela aplicação
-│   ├── css/style.css              # Design system completo, responsivo e temas
-│   ├── js/main.js                 # Engine de filtros reativos, box selection e dual charts
-│   ├── tabela_top3_50k_{ano}.json # Dados compactos da Série 50k (2019 a 2025)
-│   ├── tabela_top3_12k_{ano}.json # Dados compactos da Série 12k (2019 a 2025)
-│   ├── tabela_top3_50k_{ano}.csv  # CSVs completos da Série 50k para download
-│   ├── tabela_top3_12k_{ano}.csv  # CSVs completos da Série 12k para download
-│   └── embrapa_referencia.json    # Dados georreferenciados dos 701 pontos Embrapa
-├── produto_escalar_scripts/       # Scripts Python/DuckDB para a Série 50k
-│   ├── gerar_top3_pivotada_50k.py # Pipeline de produto escalar e Top-3 da Série 50k
-│   ├── exportar_referencia_embrapa.py # Exportador da base de referência Embrapa
-│   └── analise_top3_50k.py        # Análises estatísticas e histogramas
-├── produto_escalar_11k/           # Pipeline e dados da Série 12k (Pastagem + 85k)
-│   ├── arquivos_base/             # Parquets brutos de entrada
-│   ├── scripts/                   # Scripts de processamento e consultas SQL DuckDB
-│   │   └── gerar_top3_pivotada_11k.py # Gerador unificado multi-ano com correção de coordenadas
-│   └── saida/                     # Parquets e CSVs gerados (2019 a 2025)
-├── produto_escalar_metricas/      # Parquets de saída e matrizes da Série 50k
-│   ├── arquivos_base/             # Embeddings de entrada e Embrapa
-│   └── arquivos_saida/            # Tabelas Top-3 pivotadas 50k (.parquet)
-├── procedimentos_manutencao/      # Manuais de manutenção e mapas de arquitetura
-└── servidor_local.py              # Servidor HTTP local multi-página com parser Liquid/YAML
+├── assets/                        # Static web assets
+│   ├── css/style.css              # Design system, theme & responsive layout
+│   ├── js/main.js                 # Reactive filters engine, bounding box & dual charts
+│   ├── tabela_top3_50k_{year}.json# Compact JSONs for the 50k Series (2019 to 2025)
+│   ├── tabela_top3_12k_{year}.json# Compact JSONs for the 12k Series (2019 to 2025)
+│   ├── tabela_top3_50k_{year}.csv # Full CSVs for the 50k Series
+│   ├── tabela_top3_12k_{year}.csv # Full CSVs for the 12k Series
+│   └── embrapa_referencia.json    # Georeferenced data of Embrapa's 701 field points
+├── produto_escalar_scripts/       # Python/DuckDB pipelines for the 50k Series
+│   ├── gerar_top3_pivotada_50k.py # Dot-product & Top-3 generator for the 50k Series
+│   ├── exportar_referencia_embrapa.py # Exporter for Embrapa ground-truth points
+│   └── analise_top3_50k.py        # Statistical metrics & distributions
+├── produto_escalar_11k/           # Pipeline & data for the 12k Series (Pasture + 85k)
+│   ├── arquivos_base/             # Raw input Parquets
+│   ├── scripts/                   # DuckDB SQL and processing scripts
+│   │   └── gerar_top3_pivotada_11k.py # Multi-year generator with coordinate correction
+│   └── saida/                     # Output Parquets and CSVs (2019 to 2025)
+├── produto_escalar_metricas/      # Output Parquets and matrices for the 50k Series
+│   ├── arquivos_base/             # Sentinel-2 input embeddings and Embrapa data
+│   └── arquivos_saida/            # Pivoted Top-3 Parquets
+├── procedimentos_manutencao/      # Maintenance manuals and architecture maps
+└── servidor_local.py              # Local multi-page HTTP server with Liquid/YAML parsing
 ```
 
 ---
 
-## 🚀 Como Executar o Servidor Local
+## 🚀 How to Run the Local Server
 
-Para visualizar a plataforma web localmente em tempo real:
+To preview the web platform locally in real time:
 
 ```bash
 python servidor_local.py
 ```
 
-Abra no navegador: **`http://localhost:8000`** ou **`http://localhost:8000/analise-top3/`**.
+Open in your browser: **`http://localhost:8000`** or **`http://localhost:8000/analise-top3/`**.
 
 ---
 
-## 🛠️ Como Reproduzir o Processamento de Dados
+## 🛠️ Reproducing Data Pipelines
 
-### 1. Gerar Tabelas Top-3 da Série 50k (2019–2025)
+### 1. Generate Top-3 Tables for the 50k Series (2019–2025)
 ```bash
 python produto_escalar_scripts/gerar_top3_pivotada_50k.py --year all
 ```
 
-### 2. Gerar Tabelas Top-3 da Série 12k (2019–2025)
+### 2. Generate Top-3 Tables for the 12k Series (2019–2025)
 ```bash
 python produto_escalar_11k/scripts/gerar_top3_pivotada_11k.py --year all
 ```
 
-### 3. Atualizar Dados de Referência Embrapa (701 Pontos)
+### 3. Update Embrapa Reference Dataset (701 Points)
 ```bash
 python produto_escalar_scripts/exportar_referencia_embrapa.py
 ```
 
 ---
 
-## 📜 Tipologias Canônicas de Pastagem (Embrapa)
+## 🌿 Canonical Pasture Typologies (Embrapa)
 
-As amostras de campo e as predições por similaridade espectral são classificadas em 7 categorias principais:
-1. **PASTO PRODUTIVO** (`#22c55e`): Pastagem bem manejada com alta biomassa forrageira.
-2. **PASTO COM ERVAS** (`#f59e0b`): Pastagem com infestação de espécies herbáceas ruderais.
-3. **PASTO COM LENHOSAS** (`#84cc16`): Pastagem com presença de arbustos e invasoras lenhosas.
-4. **INTERMEDIARIO** (`#eab308`): Pastagem em condição intermediária de vigor/cobertura.
-5. **DEG BIOLOGICA** (`#ef4444`): Degradação biológica acentuada com presença de solo exposto.
-6. **REG NATURAL** (`#10b981`): Áreas de pastagem em regeneração natural da vegetação nativa.
-7. **MISCELANEA** (`#a855f7`): Outras feições territoriais e usos associados.
+Ground-truth samples and spectral similarity predictions are categorized into 7 primary classes:
+1. **Productive Pasture** (`#faea40`): Well-managed pasture with high forage biomass.
+2. **Pasture with Weeds** (`#d8ff6c`): Infestation of herbaceous/ruderal invasive plants.
+3. **Pasture with Shrubs / Woody Species** (`#66c600`): Significant presence of shrub and tree canopy layers.
+4. **Intermediate Pasture** (`#f4b346`): Moderate vegetative vigor with mixed grass and soil coverage.
+5. **Biological Degradation** (`#813209`): Severe degradation with prominent bare soil.
+6. **Natural Regeneration** (`#0e5f0e`): Areas undergoing natural recovery of native Cerrado vegetation.
+7. **Miscellaneous** (`#ec2b10`): Atypical, transitional, or mixed land-use features.
 
 ---
 
-## 🤝 Instituições Parceiras
-* **LAPIG / UFG** — Laboratório de Processamento de Imagens e Geoprocessamento (Universidade Federal de Goiás)
+## 🤝 Partner Institutions
+* **LAPIG / UFG** — Image Processing and Geoprocessing Laboratory (Federal University of Goiás)
 * **WRI Brasil** — World Resources Institute Brasil
-* **Embrapa** — Empresa Brasileira de Pesquisa Agropecuária
+* **Embrapa** — Brazilian Agricultural Research Corporation
