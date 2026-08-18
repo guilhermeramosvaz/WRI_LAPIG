@@ -130,3 +130,9 @@ Ground-truth samples and spectral similarity predictions are categorized into 7 
 * **LAPIG / UFG** — Image Processing and Geoprocessing Laboratory (Federal University of Goiás)
 * **WRI Brasil** — World Resources Institute Brasil
 * **Embrapa** — Brazilian Agricultural Research Corporation
+
+---
+
+## 📄 License
+
+This work, including all code, datasets, documentation, and web assets, is licensed under a **[Creative Commons Attribution 4.0 International License (CC BY 4.0)](file:///C:/Users/windows/Documents/github/WRI_LAPIG/LICENSE)**.
