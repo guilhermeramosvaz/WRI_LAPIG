@@ -1,6 +1,6 @@
-# Guia de Configuração, Jekyll e Criação de Páginas
+# Guia de Configuração, Jekyll e Criação de Páginas — lapig-wribrasil
 
-Este manual ensina como o site foi construído, como o **GitHub Pages (`github.io`)** interpreta os arquivos, como rodar localmente e o passo a passo para **adicionar novas páginas, seções e dados**.
+Este manual ensina como a plataforma foi construída, como o **GitHub Pages (`github.io`)** interpreta os arquivos, como rodar localmente e o passo a passo para **adicionar novas páginas, seções e dados**, além de como evitar erros de compilação no Jekyll.
 
 ---
 
@@ -15,13 +15,13 @@ O site utiliza o **Jekyll**, o motor de sites estáticos oficial e nativo do Git
 ### B. Includes (`_includes/`)
 São blocos HTML reutilizáveis. Em vez de escrever um arquivo gigantesco, cada seção do site é um include separado:
 * `hero.html` → Seção de destaque inicial
-* `stats.html` → Métricas e números
+* `stats.html` → Métricas e números (62.395 amostras anuais / 438k total)
 * `problem.html` → Contexto e justificativa
 * `methodology.html` → Pipeline de processamento
 * `classes.html` → Tipologias de pastagem Embrapa
-* `map_viz.html` → Mapa interativo Md3
+* `map_viz.html` → Mapa interativo Md3 (Série 50k e Série 12k)
 * `map_compare.html` → Split-map de comparação de cenários
-* `Produtos_Estaticos.html` → Seção de downloads abertos
+* `Produtos_Estaticos.html` → Seção de downloads abertos (Relatório, Apresentação, GEE, Scripts, Tabelas)
 * `SOM.html` → Seção de mapas auto-organizáveis
 * `deliverables.html` → Cards de produtos
 * `timeline.html` → Cronograma de etapas
@@ -49,22 +49,22 @@ page_desc: Descrição breve do conteúdo apresentado nesta página.
 
 ## 2. Como o GitHub Pages (`github.io`) Reconhece o Site
 
-Quando você envia o código para o GitHub (`git push origin main`), o GitHub Pages executa o Jekyll automaticamente:
+Quando você envia o código para o repositório `lapig-wribrasil` (`git push origin main`), o GitHub Pages executa o Jekyll automaticamente:
 
 1. **Geração de URLs Limpas**:
-   * O arquivo `index.html` na raiz se torna: `https://usuario.github.io/WRI_LAPIG/`
-   * A pasta `analise-top3/index.html` se torna: `https://usuario.github.io/WRI_LAPIG/analise-top3/`
-   * A pasta `comparacao/index.html` se torna: `https://usuario.github.io/WRI_LAPIG/comparacao/`
+   * O arquivo `index.html` na raiz se torna: `https://guilhermeramosvaz.github.io/lapig-wribrasil/`
+   * A pasta `analise-top3/index.html` se torna: `https://guilhermeramosvaz.github.io/lapig-wribrasil/analise-top3/`
+   * A pasta `comparacao/index.html` se torna: `https://guilhermeramosvaz.github.io/lapig-wribrasil/comparacao/`
 
 2. **O Filtro `relative_url`**:
-   * Como o site no GitHub Pages roda sob o subcaminho do repositório (ex: `/WRI_LAPIG/`), todos os links, imagens e estilos utilizam o filtro Liquid:
+   * Como o site roda sob o subcaminho `/lapig-wribrasil/`, todos os links, imagens e estilos utilizam o filtro Liquid:
      {% raw %}
      ```html
      {{ '/analise-top3/' | relative_url }}
      {{ '/assets/css/style.css' | relative_url }}
      ```
      {% endraw %}
-   * O Jekyll substitui isso automaticamente para `/WRI_LAPIG/analise-top3/` no GitHub, e para `/analise-top3/` localmente.
+   * O Jekyll substitui isso automaticamente para `/lapig-wribrasil/analise-top3/` no GitHub Pages, e para `/analise-top3/` no servidor local.
 
 3. **Integração com o JavaScript (`main.js`)**:
    * No `_layouts/default.html`, injetamos a variável:
@@ -78,22 +78,36 @@ Quando você envia o código para o GitHub (`git push origin main`), o GitHub Pa
    * No `assets/js/main.js`, as requisições `fetch` para carregar arquivos JSON usam essa variável base:
      ```javascript
      const baseUrl = window.siteBaseUrl || '';
-     const url = `${baseUrl}/assets/tabela_top3_50k_${year}.json`;
+     const url = `${baseUrl}/assets/tabela_top3_${currentDataset}_${year}.json`;
      ```
-   * Isso garante que os mapas encontrem os dados JSON tanto na Home quanto dentro de sub-pastas como `/analise-top3/`.
 
 ---
 
-## 3. Configuração do `_config.yml`
+## 3. Configuração do `_config.yml` e Prevenção de Erros de Build
 
 O arquivo [`_config.yml`](file:///C:/Users/windows/Documents/github/WRI_LAPIG/_config.yml) na raiz do projeto controla as propriedades globais:
 
 ```yaml
 title: Pasture Mapping — WRI Brasil & LAPIG/UFG
-description: Mapping, Analysis, and Spectral Similarity Platform for Cerrado Pastures (2019–2025)
-baseurl: "/WRI_LAPIG"
+description: Mapping, Analysis, and Spectral Similarity Platform for Cerrado Pastures (2019–2025) — WRI Brasil & LAPIG/UFG
+baseurl: "/lapig-wribrasil"
 url: "https://guilhermeramosvaz.github.io"
+
+# Excluir pastas internas de scripts, parquets e documentação para o Jekyll compilar sem erros
+exclude:
+  - procedimentos_manutencao/
+  - produto_escalar_scripts/
+  - produto_escalar_11k/
+  - produto_escalar_metricas/
+  - material_suplementear/
+  - data/
+  - servidor_local.py
+  - README.md
 ```
+
+> [!IMPORTANT]
+> **Dica para evitar erros no GitHub Actions:**
+> Se você escrever exemplos de código Liquid (como tags de include) em arquivos Markdown, sempre envolva o bloco com `{% raw %}` e `{% endraw %}` ou garanta que a pasta do arquivo esteja na lista de `exclude:` do `_config.yml`.
 
 ---
 
@@ -127,19 +141,6 @@ Edite `_includes/nav.html` e adicione o item:
 ```
 {% endraw %}
 
-### Passo 4: (Opcional) Adicionar um Card na Home
-Em `_includes/navigation_cards.html`, adicione um card de acesso:
-{% raw %}
-```html
-<a class="card fade-up" href="{{ '/nova-metodologia/' | relative_url }}">
-  <div class="card__eyebrow">Metodologia</div>
-  <div class="card__title">Nova Metodologia</div>
-  <p class="card__desc">Descrição resumida do que o usuário encontrará na página.</p>
-  <span class="card__arrow">Acessar página →</span>
-</a>
-```
-{% endraw %}
-
 ---
 
 ## 5. Como Executar e Testar Localmente
@@ -160,7 +161,8 @@ Você pode visualizar e testar o site em tempo real sem precisar instalar Ruby o
 Após testar localmente:
 ```bash
 git add .
-git commit -m "Fix jekyll build config"
+git commit -m "Atualizacao da documentacao e da plataforma web"
 git push origin main
 ```
-O GitHub Pages atualizará o site automaticamente em cerca de 1 a 2 minutos.
+O GitHub Pages atualizará o site automaticamente em cerca de 1 a 2 minutos no link:  
+👉 **`https://guilhermeramosvaz.github.io/lapig-wribrasil/`**
