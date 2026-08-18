@@ -1,68 +1,80 @@
-# Campo `md3` — Métrica de Concordância dos 3 Melhores Matches
+# Especificação das Métricas de Concordância: `Md3` e `score_concordancia`
 
-## Contexto
+## 1. Contexto e Conceito
 
-Para cada ponto do MapBiomas (`id_alvo`), calculamos o **produto escalar** entre seu embedding e o embedding de cada uma das 701 amostras de campo da Embrapa (`TARGET_FID`). Dos 701 resultados, selecionamos os **3 maiores valores** de produto escalar — ou seja, as 3 amostras Embrapa mais similares àquele ponto.
+Para cada ponto amostral no Cerrado (`id_alvo`), calculamos o **produto escalar de 64 dimensões** entre seu embedding Sentinel-2 e os embeddings de cada um dos 701 pontos de verdade de campo da Embrapa (`TARGET_FID`).
 
-Cada uma dessas 3 amostras possui uma classe de tipologia (`Tipologia_`), atribuída em campo. A partir dessas 3 classes, derivamos dois campos:
+Dos 701 resultados, selecionamos os **3 maiores valores** de produto escalar — representando as 3 amostras de campo com maior similaridade espectral àquele ponto:
+* **Top-1**: Maior produto escalar ($p_1$), classe associada ($t_1$) e ponto de campo ($fid_1$).
+* **Top-2**: Segundo maior produto escalar ($p_2$), classe associada ($t_2$) e ponto de campo ($fid_2$).
+* **Top-3**: Terceiro maior produto escalar ($p_3$), classe associada ($t_3$) e ponto de campo ($fid_3$).
 
-| Campo | Descrição |
-|---|---|
-| `class_embrapa` | A classe `Tipologia_` da amostra com **maior** produto escalar (top-1) |
-| `md3` | Grau de **concordância** entre as classes dos 3 melhores matches |
+A partir desse trio, derivamos duas métricas complementares:
+1. **Md3 Espectral (Contínuo)**: Média aritmética dos 3 maiores produtos escalares.
+2. **Score de Concordância Categórica (Discreto 1..3)**: Nível de concordância entre as tipologias de campo dos 3 vizinhos mais próximos.
 
 ---
 
-## Fórmula do `md3`
+## 2. Fórmulas Matemáticas
 
-O `md3` mede quantas das 3 amostras mais similares atribuem a **mesma classe** que o top-1. A fórmula é:
+### A. Métrica Espectral: `Md3`
+O `Md3` reflete a intensidade média de similaridade espectral das 3 amostras de campo mais próximas no espaço latente de 64 dimensões:
 
 $$
-\text{md3} = 1 + \mathbb{1}[\text{Tipologia\_2} = \text{Tipologia\_1}] + \mathbb{1}[\text{Tipologia\_3} = \text{Tipologia\_1}]
+\text{Md3} = \frac{p_1 + p_2 + p_3}{3}
 $$
-
-Onde $\mathbb{1}[\cdot]$ é a **função indicadora** (vale 1 se a condição é verdadeira, 0 caso contrário).
 
 Em SQL (DuckDB):
-
 ```sql
-1
-+ CASE WHEN tipologia_2 = tipologia_1 THEN 1 ELSE 0 END
-+ CASE WHEN tipologia_3 = tipologia_1 THEN 1 ELSE 0 END
-AS md3
+ROUND((prod_escalar_1 + prod_escalar_2 + prod_escalar_3) / 3.0, 4) AS md3
+```
+
+* **Interpretação**:
+  * $\text{Md3} \ge 0.85$: Similaridade espectral altíssima com a verdade de campo.
+  * $0.70 \le \text{Md3} < 0.85$: Boa representatividade espectral.
+  * $\text{Md3} < 0.70$: Assinatura espectral atípica ou com baixa proximidade aos pontos de campo cadastrados.
+
+---
+
+### B. Métrica Categórica: `score_concordancia`
+Mede se as 3 amostras mais similares pertencem à mesma classe tipológica atribuída pelo top-1:
+
+$$
+\text{score\_concordancia} = 1 + \mathbb{1}[t_2 = t_1] + \mathbb{1}[t_3 = t_1]
+$$
+
+Onde $\mathbb{1}[\cdot]$ é a função indicadora (vale 1 se a condição for verdadeira, 0 caso contrário).
+
+Em SQL (DuckDB):
+```sql
+(1 
+ + CASE WHEN tipologia_c_2 = tipologia_c_1 THEN 1 ELSE 0 END 
+ + CASE WHEN tipologia_c_3 = tipologia_c_1 THEN 1 ELSE 0 END
+) AS score_concordancia
 ```
 
 ---
 
-## Interpretação dos Valores
+## 3. Matriz de Interpretação da Concordância Categórica
 
-| Valor | Significado | Interpretação |
-|:---:|---|---|
-| **md3 = 3** | `Tipologia_1 = Tipologia_2 = Tipologia_3` | **Alta confiança.** Todos os 3 melhores matches concordam na mesma classe. |
-| **md3 = 2** | Apenas **um** entre `Tipologia_2` e `Tipologia_3` é igual a `Tipologia_1` | **Confiança moderada.** 2 de 3 matches concordam. |
-| **md3 = 1** | Nem `Tipologia_2` nem `Tipologia_3` são iguais a `Tipologia_1` | **Baixa confiança.** Somente o match mais similar atribui aquela classe; os outros dois divergem. |
-
----
-
-## Exemplo Prático
-
-Considere um ponto MapBiomas cujos 3 melhores matches Embrapa são:
-
-| Ranking | TARGET_FID | Produto Escalar | Tipologia_ |
-|:---:|:---:|:---:|---|
-| 1º (top-1) | 342 | 0.97 | PASTO PRODUTIVO |
-| 2º (top-2) | 118 | 0.95 | PASTO PRODUTIVO |
-| 3º (top-3) | 507 | 0.93 | PASTO COM ERVAS |
-
-Cálculo:
-
-- `class_embrapa` = `PASTO PRODUTIVO` (classe do top-1)
-- `Tipologia_2 = Tipologia_1`? → `PASTO PRODUTIVO = PASTO PRODUTIVO` → **Sim** → +1
-- `Tipologia_3 = Tipologia_1`? → `PASTO COM ERVAS = PASTO PRODUTIVO` → **Não** → +0
-- **`md3 = 1 + 1 + 0 = 2`** (confiança moderada)
+| Score | Concordância | Nível de Certeza | Descrição |
+| :---: | :---: | :---: | :--- |
+| **3** | $t_1 = t_2 = t_3$ | **Alta Confiança** | Todos os 3 vizinhos espectrais mais próximos pertencem exatamente à mesma tipologia. |
+| **2** | $t_2 = t_1 \lor t_3 = t_1$ | **Confiança Moderada** | 2 dos 3 vizinhos espectrais concordam na mesma tipologia. |
+| **1** | $t_2 \ne t_1 \land t_3 \ne t_1$ | **Baixa Confiança** | Apenas o top-1 possui essa tipologia; o 2º e o 3º vizinhos pertencem a outras classes. |
 
 ---
 
-## Uso
+## 4. Exemplo Numérico
 
-O campo `md3` serve como um **indicador de confiança** na classificação atribuída por similaridade. Pontos com `md3 = 3` podem ser considerados mais confiáveis para treinamento ou validação, enquanto pontos com `md3 = 1` merecem revisão ou maior cautela na interpretação.
+Considere uma amostra onde os 3 melhores matches são:
+
+| Ranking | TARGET_FID | Produto Escalar | Tipologia Padronizada |
+| :---: | :---: | :---: | :--- |
+| **1º (Top-1)** | 342 | 0.942 | `PASTO PRODUTIVO` |
+| **2º (Top-2)** | 118 | 0.920 | `PASTO PRODUTIVO` |
+| **3º (Top-3)** | 507 | 0.886 | `PASTO COM ERVAS` |
+
+* **Classe Atribuída**: `PASTO PRODUTIVO`
+* **Md3 Espectral**: $\frac{0.942 + 0.920 + 0.886}{3} = \mathbf{0.9160}$
+* **Score de Concordância**: $1 + 1 (\text{Top-2}) + 0 (\text{Top-3}) = \mathbf{2}$
