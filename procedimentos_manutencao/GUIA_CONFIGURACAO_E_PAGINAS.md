@@ -52,9 +52,9 @@ page_desc: Descrição breve do conteúdo apresentado nesta página.
 Quando você envia o código para o repositório `lapig-wribrasil` (`git push origin main`), o GitHub Pages executa o Jekyll automaticamente:
 
 1. **Geração de URLs Limpas**:
-   * O arquivo `index.html` na raiz se torna: `https://guilhermeramosvaz.github.io/lapig-wribrasil/`
-   * A pasta `analise-top3/index.html` se torna: `https://guilhermeramosvaz.github.io/lapig-wribrasil/analise-top3/`
-   * A pasta `comparacao/index.html` se torna: `https://guilhermeramosvaz.github.io/lapig-wribrasil/comparacao/`
+   * O arquivo `index.html` na raiz se torna: `https://lapig-ufg.github.io/lapig-wribrasil/`
+   * A pasta `analise-top3/index.html` se torna: `https://lapig-ufg.github.io/lapig-wribrasil/analise-top3/`
+   * A pasta `comparacao/index.html` se torna: `https://lapig-ufg.github.io/lapig-wribrasil/comparacao/`
 
 2. **O Filtro `relative_url`**:
    * Como o site roda sob o subcaminho `/lapig-wribrasil/`, todos os links, imagens e estilos utilizam o filtro Liquid:
@@ -91,7 +91,7 @@ O arquivo [`_config.yml`](file:///C:/Users/windows/Documents/github/WRI_LAPIG/_c
 title: Pasture Mapping — WRI Brasil & LAPIG/UFG
 description: Mapping, Analysis, and Spectral Similarity Platform for Cerrado Pastures (2019–2025) — WRI Brasil & LAPIG/UFG
 baseurl: "/lapig-wribrasil"
-url: "https://guilhermeramosvaz.github.io"
+url: "https://lapig-ufg.github.io"
 
 # Excluir pastas internas de scripts, parquets e documentação para o Jekyll compilar sem erros
 exclude:
@@ -165,4 +165,4 @@ git commit -m "Atualizacao da documentacao e da plataforma web"
 git push origin main
 ```
 O GitHub Pages atualizará o site automaticamente em cerca de 1 a 2 minutos no link:  
-👉 **`https://guilhermeramosvaz.github.io/lapig-wribrasil/`**
+👉 **`https://lapig-ufg.github.io/lapig-wribrasil/`**
