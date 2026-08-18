@@ -1921,6 +1921,19 @@ hr.divider {
   text-transform: uppercase;
 }
 
+.badge-status--ready {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.btn-static-download:hover:not(.btn-static-download--disabled) {
+  background: #0d750d;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(18, 153, 18, 0.25);
+}
+
 /* Asset List GEE */
 .asset-list {
   display: flex;

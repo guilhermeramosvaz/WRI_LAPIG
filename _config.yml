@@ -9,7 +9,6 @@ exclude:
   - produto_escalar_scripts/
   - produto_escalar_11k/
   - produto_escalar_metricas/
-  - material_suplementear/
   - data/
   - servidor_local.py
   - README.md
