@@ -19,8 +19,10 @@ São blocos HTML reutilizáveis. Em vez de escrever um arquivo gigantesco, cada 
 * `problem.html` → Contexto e justificativa
 * `methodology.html` → Pipeline de processamento
 * `classes.html` → Tipologias de pastagem Embrapa
-* `map_viz.html` → Mapa interativo Top-3
+* `map_viz.html` → Mapa interativo Md3
 * `map_compare.html` → Split-map de comparação de cenários
+* `Produtos_Estaticos.html` → Seção de downloads abertos
+* `SOM.html` → Seção de mapas auto-organizáveis
 * `deliverables.html` → Cards de produtos
 * `timeline.html` → Cronograma de etapas
 * `navigation_cards.html` → Cards de navegação para as sub-páginas
@@ -30,6 +32,7 @@ São blocos HTML reutilizáveis. Em vez de escrever um arquivo gigantesco, cada 
 
 ### C. Páginas (`index.html`, `analise-top3/index.html`, etc.)
 Cada página é um arquivo `.html` que define no topo um bloco de metadados chamado **Frontmatter YAML**:
+{% raw %}
 ```yaml
 ---
 layout: page
@@ -40,6 +43,7 @@ page_desc: Descrição breve do conteúdo apresentado nesta página.
 
 {% include meu_conteudo.html %}
 ```
+{% endraw %}
 
 ---
 
@@ -54,19 +58,23 @@ Quando você envia o código para o GitHub (`git push origin main`), o GitHub Pa
 
 2. **O Filtro `relative_url`**:
    * Como o site no GitHub Pages roda sob o subcaminho do repositório (ex: `/WRI_LAPIG/`), todos os links, imagens e estilos utilizam o filtro Liquid:
+     {% raw %}
      ```html
      {{ '/analise-top3/' | relative_url }}
      {{ '/assets/css/style.css' | relative_url }}
      ```
+     {% endraw %}
    * O Jekyll substitui isso automaticamente para `/WRI_LAPIG/analise-top3/` no GitHub, e para `/analise-top3/` localmente.
 
 3. **Integração com o JavaScript (`main.js`)**:
    * No `_layouts/default.html`, injetamos a variável:
+     {% raw %}
      ```html
      <script>
        window.siteBaseUrl = "{{ '' | relative_url }}";
      </script>
      ```
+     {% endraw %}
    * No `assets/js/main.js`, as requisições `fetch` para carregar arquivos JSON usam essa variável base:
      ```javascript
      const baseUrl = window.siteBaseUrl || '';
@@ -81,18 +89,11 @@ Quando você envia o código para o GitHub (`git push origin main`), o GitHub Pa
 O arquivo [`_config.yml`](file:///C:/Users/windows/Documents/github/WRI_LAPIG/_config.yml) na raiz do projeto controla as propriedades globais:
 
 ```yaml
-title: Mapeamento de Pastagens — LAPIG/UFG
-description: Plataforma de Mapeamento e Metodologias de Pastagens
-baseurl: "" 
-url: ""
+title: Pasture Mapping — WRI Brasil & LAPIG/UFG
+description: Mapping, Analysis, and Spectral Similarity Platform for Cerrado Pastures (2019–2025)
+baseurl: "/WRI_LAPIG"
+url: "https://guilhermeramosvaz.github.io"
 ```
-
-* **Ao rodar localmente**: Deixe `baseurl: ""`
-* **Ao publicar no GitHub Pages (se necessário)**:
-  ```yaml
-  baseurl: "/WRI_LAPIG"
-  url: "https://seu-usuario.github.io"
-  ```
 
 ---
 
@@ -102,7 +103,7 @@ Para criar uma nova página independente (ex: `/nova-metodologia/`):
 
 ### Passo 1: Criar a pasta e o arquivo `index.html`
 Crie uma pasta com o nome da rota e um `index.html` dentro dela (ex: `nova-metodologia/index.html`):
-
+{% raw %}
 ```html
 ---
 layout: page
@@ -113,18 +114,22 @@ page_desc: Detalhamento da nova metodologia de classificação aplicada ao proje
 
 {% include nova_secao.html %}
 ```
+{% endraw %}
 
 ### Passo 2: (Opcional) Criar o Include com o Conteúdo
 Crie o arquivo `_includes/nova_secao.html` contendo o HTML da sua seção.
 
 ### Passo 3: Adicionar o Link no Menu de Navegação
 Edite `_includes/nav.html` e adicione o item:
+{% raw %}
 ```html
 <li><a href="{{ '/nova-metodologia/' | relative_url }}">Nova Metodologia</a></li>
 ```
+{% endraw %}
 
 ### Passo 4: (Opcional) Adicionar um Card na Home
 Em `_includes/navigation_cards.html`, adicione um card de acesso:
+{% raw %}
 ```html
 <a class="card fade-up" href="{{ '/nova-metodologia/' | relative_url }}">
   <div class="card__eyebrow">Metodologia</div>
@@ -133,6 +138,7 @@ Em `_includes/navigation_cards.html`, adicione um card de acesso:
   <span class="card__arrow">Acessar página →</span>
 </a>
 ```
+{% endraw %}
 
 ---
 
@@ -154,7 +160,7 @@ Você pode visualizar e testar o site em tempo real sem precisar instalar Ruby o
 Após testar localmente:
 ```bash
 git add .
-git commit -m "Adiciona nova pagina e atualiza configuracoes"
+git commit -m "Fix jekyll build config"
 git push origin main
 ```
 O GitHub Pages atualizará o site automaticamente em cerca de 1 a 2 minutos.

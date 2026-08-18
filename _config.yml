@@ -2,3 +2,14 @@ title: Pasture Mapping — WRI Brasil & LAPIG/UFG
 description: Mapping, Analysis, and Spectral Similarity Platform for Cerrado Pastures (2019–2025) — WRI Brasil & LAPIG/UFG
 baseurl: "/WRI_LAPIG"
 url: "https://guilhermeramosvaz.github.io"
+
+# Exclude internal data, backend scripts and maintenance documentation from Jekyll compilation
+exclude:
+  - procedimentos_manutencao/
+  - produto_escalar_scripts/
+  - produto_escalar_11k/
+  - produto_escalar_metricas/
+  - material_suplementear/
+  - data/
+  - servidor_local.py
+  - README.md
