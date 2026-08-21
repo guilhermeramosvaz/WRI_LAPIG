@@ -7,7 +7,7 @@
     <h2 class="section__title">SOM Analysis (Self-Organizing Maps)</h2>
     <p class="section__desc">
       Methodology based on 12×12 Kohonen Self-Organizing Maps (144 neurons) for organizing multivariate Sentinel-2 time series,
-      evaluating spectral-temporal neighborhood coherence, and filtering pseudo-labels via Dirichlet-Multinomial Bayesian smoothing.
+      evaluating spectral-temporal neighborhood coherence, and filtering candidate pseudo-labels via Bayesian smoothing.
     </p>
 
     <div class="som-development-card fade-up">
@@ -15,10 +15,10 @@
       <h3 class="som-development-title">12×12 SOM Topological Curation (144 Neurons)</h3>
       <div class="som-development-divider"></div>
       <p class="som-development-status">Component 06 — Under Development</p>
-      <small class="som-development-note" style="display: block; max-width: 680px; margin: 0.8rem auto 0; text-align: left; line-height: 1.6;">
-        • <strong>Multivariate Input:</strong> Standardized monthly indices (NDVI, EVI, NDII, NDWI, PSRI, CAI) over annual (12×J) and multi-year (72×J) temporal support.<br>
-        • <strong>Bayesian Smoothing:</strong> Dirichlet-Multinomial smoothing over neuron neighborhoods to categorize candidates into: <em>Keep</em>, <em>Forward for CBERS-4A Inspection</em>, or <em>Reject</em>.<br>
-        • <strong>Self-Reference Control:</strong> Separate tracking of Embrapa reference evidence from candidate pseudo-label frequencies to prevent confirmation bias.
+      <small class="som-development-note" style="display: block; max-width: 720px; margin: 0.8rem auto 0; text-align: left; line-height: 1.6;">
+        • <strong>Input Dimensionality:</strong> Standardized monthly indices (NDVI, EVI, NDII, NDWI, PSRI, CAI) structured as <strong>12×J</strong> for annual cycles or <strong>72×J</strong> for the full 6-year multi-year series (2020–2025).<br>
+        • <strong>Bayesian Smoothing:</strong> Dirichlet-Multinomial smoothing over neuron neighborhood compositions (with Normal-Normal conjugate models evaluated as an alternative) to triage candidates into: <em>Keep</em>, <em>Forward for CBERS-4A Inspection</em>, or <em>Reject</em>.<br>
+        • <strong>Preparation & Quality Controls:</strong> Feature z-score normalization, missing observation handling, monitoring of quantization and topographic errors, seed stability testing, and strict segregation of reference evidence from candidate pseudo-label frequencies.
       </small>
     </div>
   </div>

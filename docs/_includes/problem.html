@@ -12,21 +12,21 @@
         <div class="card__eyebrow">Sample Expansion at Scale</div>
         <div class="card__title">62,009 Candidates across the Cerrado</div>
         <p class="card__desc">
-          Structured universe combining 5,453 Sentinel-2 Col. 4 points, 6,556 Landsat validation points, and 50,000 persistent pasture points (2020–2025) stratified across low (~35%), medium (~44%), and high (~21%) vigor. Sensitivity analysis comparing inclusive universe vs. 44,943 points corroborated by Collection 11.
+          Structured candidate universe combining 5,453 Sentinel-2 Col. 4 points, 6,556 Landsat validation points, and 50,000 persistent pasture points (2020–2025; ~35% low, ~44% medium, ~21% high vigor). Sensitivity analysis compares the inclusive universe (62,009) against the Collection 11 agreement scenario (56,952 points).
         </p>
       </div>
       <div class="card fade-up">
         <div class="card__eyebrow">Dual Representation Spaces</div>
         <div class="card__title">64-Dim Embeddings & S2 Time Series</div>
         <p class="card__desc">
-          AlphaEarth Foundations annual embeddings (64 latent dimensions at 10 m) combined with monthly Sentinel-2 spectral series (NDVI, EVI, NDII, NDWI, PSRI, CAI) extracted via a 60-day moving window using the joint median of valid pixel-date pairs.
+          AlphaEarth Foundations annual embeddings (64 latent dimensions at 10 m with L2-renormalization) combined with monthly Sentinel-2 spectral series (NDVI, EVI, NDII, NDWI, PSRI, CAI) extracted via a 60-day moving window using the joint median of valid pixel-date pairs.
         </p>
       </div>
       <div class="card fade-up">
         <div class="card__eyebrow">Quality Control & Validation</div>
         <div class="card__title">Cosine Similarity, SOM & CBERS-4A</div>
         <p class="card__desc">
-          L2-renormalized cosine similarity against 608 classified Embrapa reference polygons, Top-1/Top-3 md3 concordance, 12×12 SOM clustering with Dirichlet-Multinomial Bayesian smoothing, and stratified ~2 m CBERS-4A visual inspection before Random Forest training.
+          Two-stage filtering via L2 cosine similarity against 608 classified Embrapa reference polygons, Top-1/Top-3 md3 concordance, 12×12 SOM clustering with Bayesian smoothing, and stratified ~2 m CBERS-4A visual inspection before Random Forest training.
         </p>
       </div>
     </div>

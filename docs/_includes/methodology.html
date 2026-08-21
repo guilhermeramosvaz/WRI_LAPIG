@@ -1,61 +1,313 @@
 <!-- ═══════════════════════════════════════════════════════
-       METHODOLOGY
+       METHODOLOGY & COMPREHENSIVE PROJECT ARCHITECTURE
   ═══════════════════════════════════════════════════════ -->
-  <section class="section--alt reveal" id="metodologia">
-    <div class="section__inner">
-      <div class="section__eyebrow">Methodology</div>
-      <h2 class="section__title">Methodological Pipeline & Multi-Stage Quality Controls</h2>
-      <p class="section__desc">
-        Progressive sample expansion, representation space filtering, and quality control architecture for the new 10 m Cerrado pasture mapping.
-      </p>
+<section class="section--alt reveal" id="metodologia">
+  <div class="section__inner">
+    <div class="section__eyebrow">Methodological Framework & Technical Progress</div>
+    <h2 class="section__title">Methodological Architecture & Quality Assurance Framework</h2>
+    <p class="section__desc">
+      Detailed technical overview of the sampling plan, representation spaces, two-stage filtering, quality control protocols, and machine learning roadmap under the WRI Brasil - FUNAPE - LAPIG/UFG - Embrapa Cenargen agreement (Report Product 1 — August 17, 2026).
+    </p>
 
-      <div class="pipeline">
-        <div class="pipeline__step fade-up">
-          <div class="pipeline__icon">🛰️</div>
-          <div class="pipeline__label">Sentinel-2 & AlphaEarth</div>
-          <div class="pipeline__sub">60-day monthly medians & 64-dim embeddings · 10 m (2020–2025)</div>
-        </div>
-        <div class="pipeline__step fade-up">
-          <div class="pipeline__icon">📍</div>
-          <div class="pipeline__label">Reference & Candidates</div>
-          <div class="pipeline__sub">701 Embrapa polygons (~1 ha) + 62,009 candidate points</div>
-        </div>
-        <div class="pipeline__step fade-up">
-          <div class="pipeline__icon">📐</div>
-          <div class="pipeline__label">Cosine Similarity & md3</div>
-          <div class="pipeline__sub">L2-renormalized dot product, Top-1/Top-3 & md3 concordance</div>
-        </div>
-        <div class="pipeline__step fade-up">
-          <div class="pipeline__icon">🧠</div>
-          <div class="pipeline__label">SOM Neural Filtering</div>
-          <div class="pipeline__sub">12×12 grid (144 neurons) & Dirichlet-Multinomial smoothing</div>
-        </div>
-        <div class="pipeline__step fade-up">
-          <div class="pipeline__icon">🔍</div>
-          <div class="pipeline__label">CBERS-4A Inspection</div>
-          <div class="pipeline__sub">Stratified ~2 m pan-sharpened quality control (~1,040 points)</div>
-        </div>
-        <div class="pipeline__step fade-up">
-          <div class="pipeline__icon">🌲</div>
-          <div class="pipeline__label">Random Forest & Field</div>
-          <div class="pipeline__sub">10 m classification models & ~100 field campaign points</div>
-        </div>
+    <!-- SCOPE LIMITATION NOTICE -->
+    <div style="background: rgba(244, 179, 70, 0.08); border: 1px solid rgba(244, 179, 70, 0.35); border-left: 4px solid #f4b346; border-radius: var(--radius); padding: 1.1rem 1.4rem; margin: 1.5rem 0 2rem; font-size: 0.88rem; line-height: 1.6; color: #2c2c2c;">
+      <strong>⚠️ Scope & Status Note (Product 1 Progress Report):</strong> This documentation details the methodological architecture and progress established as of August 17, 2026. While reference databases, Sentinel-2 multi-index series, and AlphaEarth embeddings are assembled and extracted, all downstream components — including similarity thresholds, SOM neural configurations, visual inspection protocols, final training dataset assembly, and field campaign executions — represent <strong>preliminary analyses, work under active development, or planned stages</strong>.
+    </div>
+
+    <!-- PIPELINE STEPS WITH STATUS -->
+    <div class="pipeline">
+      <div class="pipeline__step fade-up">
+        <div class="pipeline__icon">📍</div>
+        <div class="pipeline__label">1. Reference & Candidates</div>
+        <div class="pipeline__sub">701 Embrapa Polygons + 62,009 Candidates<br><strong style="color: var(--color-accent);">[Status: Assembled]</strong></div>
       </div>
-
-      <div class="prose" style="margin-top: 2rem;">
-        <p>
-          The pipeline structures a progressive, verifiable sample expansion framework designed for the new <strong>10 m pasture mapping of the Cerrado biome</strong>. 
-          For each of the <strong>701 Embrapa Cenargen field polygons</strong> (approximately 1 ha; 608 classified across 7 pasture condition categories and 93 unlabeled) and 
-          the <strong>62,009 candidate points</strong> (50,000 persistent Sentinel-2 points, 5,453 MapBiomas Col. 4 S2 points, and 6,556 Landsat validation points), two complementary representation spaces are organized across <strong>2020–2025</strong>:
-        </p>
-        <p>
-          <strong>1. Monthly Sentinel-2 Time Series:</strong> Extracted on Google Earth Engine using a centered moving window of ~60 days (the second half of the previous month, the full reference month, and the first half of the following month). The monthly value is calculated as the joint median of all cloud-free, valid pixel-date pairs (covering NDVI, EVI, NDII, NDWI, PSRI, and CAI).<br>
-          <strong>2. Annual Latent Embeddings (AlphaEarth Foundations):</strong> 64-dimensional annual vectors (A00–A63) representative of the ~1 ha spatial support. Because the spatial average of unit vectors does not preserve a unit norm, explicit <strong>L2-renormalization</strong> is enforced before calculating cosine similarity against the 608 classified Embrapa references.
-        </p>
-        <p>
-          Candidates approved through embedding similarity (evaluating Top-1/Top-3 nearest neighbors, concordance score <em>md3</em>, margin separation, and MapBiomas Col. 11 agreement) undergo a second filtering stage in a <strong>12×12 Self-Organizing Map (SOM)</strong>. The SOM evaluates spectral-temporal coherence using <strong>Dirichlet-Multinomial Bayesian smoothing</strong>, categorizing samples into <em>keep</em>, <em>forward for inspection</em>, or <em>reject</em>. 
-          Pre-selected subsets undergo high-resolution visual quality control using <strong>pan-sharpened CBERS-4A imagery (~2 m)</strong> under a blind, multi-interpreter protocol before feeding the <strong>Random Forest</strong> models and undergoing subsequent image- and field-based validation (~100 localities, prioritizing Goiás).
-        </p>
+      <div class="pipeline__step fade-up">
+        <div class="pipeline__icon">🛰️</div>
+        <div class="pipeline__label">2. S2 Series & Embeddings</div>
+        <div class="pipeline__sub">60-day medians & 64-dim L2 vectors (2020–2025)<br><strong style="color: var(--color-accent);">[Status: Extracted]</strong></div>
+      </div>
+      <div class="pipeline__step fade-up">
+        <div class="pipeline__icon">📐</div>
+        <div class="pipeline__label">3. Embedding Similarity</div>
+        <div class="pipeline__sub">Top-1/Top-3, md3 & Scenarios A–E<br><strong style="color: #c98a0c;">[Status: Preliminary]</strong></div>
+      </div>
+      <div class="pipeline__step fade-up">
+        <div class="pipeline__icon">🧠</div>
+        <div class="pipeline__label">4. SOM Neural Filtering</div>
+        <div class="pipeline__sub">12×12 grid (144 neurons) & Bayesian smoothing<br><strong style="color: #c98a0c;">[Status: Under Development]</strong></div>
+      </div>
+      <div class="pipeline__step fade-up">
+        <div class="pipeline__icon">🔍</div>
+        <div class="pipeline__label">5. CBERS-4A Inspection</div>
+        <div class="pipeline__sub">Stratified sample (n ≈ 1,040) on ~2 m imagery<br><strong style="color: var(--color-muted);">[Status: Planning]</strong></div>
+      </div>
+      <div class="pipeline__step fade-up">
+        <div class="pipeline__icon">🌲</div>
+        <div class="pipeline__label">6. ML & Field Campaign</div>
+        <div class="pipeline__sub">Random Forest 10 m & ~100 field localities<br><strong style="color: var(--color-muted);">[Status: Planning]</strong></div>
       </div>
     </div>
-  </section>
+
+    <!-- THEMATIC METHODOLOGY BLOCKS -->
+    <div class="method-grid">
+
+      <!-- 1. INSTITUTIONAL CONTEXT & GOALS -->
+      <div class="method-block fade-up">
+        <div class="method-block__header">
+          <div class="method-block__icon">🏛️</div>
+          <div>
+            <div class="method-block__eyebrow">Institutional Governance · Component 01</div>
+            <h3 class="method-block__title">1. Governance, Technical Scope & Strategic Goals</h3>
+          </div>
+        </div>
+        <div class="method-block__body">
+          <p>
+            The project operates under the technical agreement between <strong>WRI Brasil</strong> and <strong>FUNAPE</strong>, with technical execution by <strong>LAPIG/UFG</strong> in technical cooperation with <strong>Embrapa Cenargen</strong> (Project GR000153-73077-CARGILL-BRAZIL), under the scientific coordination of <strong>Prof. Dr. Laerte G. Ferreira</strong> and statistical consulting by <strong>Prof. Luis Rodrigo Fernandes Baumann</strong> (IME/UFG).
+          </p>
+          <p>
+            <strong>Strategic Objective:</strong> Develop the sampling and analytical infrastructure to produce the first version of the <strong>new 10-meter resolution pasture map for the Cerrado biome</strong>, specifically designed to <em>differentiate among viable pasture condition categories</em> and quantify sampling uncertainty across the biome.
+          </p>
+          <div class="method-tags">
+            <span class="method-tag">WRI Brasil · FUNAPE</span>
+            <span class="method-tag">LAPIG / UFG</span>
+            <span class="method-tag">Embrapa Cenargen</span>
+            <span class="method-tag">10 m Cerrado Pasture Map</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. REFERENCE & CANDIDATE DATABASES -->
+      <div class="method-block fade-up">
+        <div class="method-block__header">
+          <div class="method-block__icon">📍</div>
+          <div>
+            <div class="method-block__eyebrow">Databases & Independence Caveats · Status: Assembled</div>
+            <h3 class="method-block__title">2. Embrapa Ground Truth & 62,009 Candidate Universe</h3>
+          </div>
+        </div>
+        <div class="method-block__body">
+          <p>
+            <strong>Embrapa Reference Base (701 Polygons):</strong> 701 in situ polygons (~1 ha). Currently, 608 polygons have consolidated labels across pasture condition categories, while 93 remain unclassified (retained for unsupervised tasks). 
+            <em>Dictionary Reconciliation:</em> There is an unresolved inconsistency between an initial 5-class proposal and the 7-class implementation; a single unified dictionary is currently being constructed. An explicit <strong>integrity rule</strong> prevents presenting category distributions as definitive until this reconciliation is formalized. Polygons include partially intercepted pixels in full (without area-weighting), expanding effective spatial support beyond nominal boundaries. The 93 unclassified samples may enter unsupervised SOM training, but <em>must not be used to assign neuron labels or vote in Top-k neighborhood decisions</em>.
+          </p>
+          <p>
+            <strong>Candidate Universe (62,009 Points) & Independence Caveats:</strong>
+          </p>
+          <ul class="method-block__list">
+            <li><strong>5,453 visually inspected pasture points (MapBiomas Col. 4 S2):</strong> Carries methodological and spatial dependence from MapBiomas classification algorithms.</li>
+            <li><strong>6,556 points (Landsat validation database, ~85k dataset):</strong> <em>Critical Caveat:</em> If incorporated into model training, these points lose independence and can no longer serve for validation.</li>
+            <li><strong>50,000 persistent pasture points (2020–2025):</strong> Generated as remote sensing <em>pseudo-labels</em> (stratified proportionally to 2025 vigor: ~35% low, ~44% medium, ~21% high vigor), not in situ ground truth.</li>
+          </ul>
+          <p>
+            <strong>Extraction Window & Scenarios:</strong> Candidate extraction uses a <strong>3×3 pixel window (900 m² / 0.09 ha)</strong>, carrying inherent spectral mixing risks at field edges and narrow corridors. In the <em>Agreement Scenario</em> (corroborated by Col. 11), the universe totals <strong>56,952 candidates</strong> (44,943 persistent + 5,453 S2 + 6,556 validation), while the <em>Inclusive Scenario</em> comprises <strong>62,009 candidates</strong> (retaining 5,057 disagreeing points for sensitivity testing).
+          </p>
+          <div class="method-tags">
+            <span class="method-tag">701 Embrapa Polygons</span>
+            <span class="method-tag">62,009 Candidates</span>
+            <span class="method-tag">56,952 Agreement Scenario</span>
+            <span class="method-tag">3×3 Window (900 m²)</span>
+            <span class="method-tag">Integrity Rule</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. DUAL REPRESENTATION SPACES -->
+      <div class="method-block fade-up">
+        <div class="method-block__header">
+          <div class="method-block__icon">🛰️</div>
+          <div>
+            <div class="method-block__eyebrow">Dense Remote Sensing · Status: Extracted</div>
+            <h3 class="method-block__title">3. Dual Representation: S2 Time Series & 64-Dim Embeddings</h3>
+          </div>
+        </div>
+        <div class="method-block__body">
+          <p>
+            <strong>Monthly Sentinel-2 Time Series (2020–2025):</strong> Extracted on Google Earth Engine over a centered moving window of ~60 days (second half of previous month, full reference month, first half of following month), excluding observations contaminated by clouds and shadows (cloud/shadow masking audit pending). The monthly value is calculated as the joint median of all valid pixel-date pairs:
+          </p>
+          <p style="font-family: monospace; font-size: 0.8rem; background: rgba(0,0,0,0.03); padding: 0.35rem 0.6rem; border-radius: 4px; text-align: center;">
+            Ĩ(i, k, m) = median { I(i, k, p, t) : p ∈ grid(i), t ∈ window(m) }
+          </p>
+          <p>
+            Covering NDVI, EVI, NDII, NDWI, PSRI, and CAI. A final audit of valid observation counts, edge months, and the resampling of native 20 m bands to 10 m is currently in progress.
+          </p>
+          <p>
+            <strong>AlphaEarth Foundations Latent Embeddings:</strong> 64-dimensional annual latent vectors (A00–A63) per 10 m pixel. Because spatial averaging of unit vectors reduces the resultant vector norm, an explicit <strong>L2-renormalization (||ē|| = 1)</strong> will be enforced upon recomputation before calculating cosine similarity. Embeddings are temporally anchored to the field collection year.
+          </p>
+          <div class="method-tags">
+            <span class="method-tag">Sentinel-2 (10 m)</span>
+            <span class="method-tag">60-Day Moving Window</span>
+            <span class="method-tag">Joint Median Ĩ(i,k,m)</span>
+            <span class="method-tag">64-Dim Embeddings</span>
+            <span class="method-tag">L2-Renormalization Pending</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. MULTI-STAGE FILTERING (COSINE & SOM) -->
+      <div class="method-block fade-up">
+        <div class="method-block__header">
+          <div class="method-block__icon">🧠</div>
+          <div>
+            <div class="method-block__eyebrow">Filtering Architecture · Status: Preliminary & In Development</div>
+            <h3 class="method-block__title">4. Cosine Similarity (Stage 1) & 12×12 SOM (Stage 2)</h3>
+          </div>
+        </div>
+        <div class="method-block__body">
+          <p>
+            <strong>Filtering Stage 1 (Embedding Similarity — Preliminary):</strong> Cosine similarity calculation between candidate embeddings and the 608 classified Embrapa references. Assigns Top-1 provisional label, Top-3 nearest neighbors, and concordance index <em>md3 ∈ {1, 2, 3}</em>. Tested under five exploratory sensitivity scenarios (Scenarios A through E, incorporating similarity cutoffs, neighbor unanimity, Collection 11 corroboration, and separation margin <em>s₁ − s₂</em>). All thresholds remain exploratory and subject to final calibration.
+          </p>
+          <p>
+            <strong>Filtering Stage 2 (Self-Organizing Maps — Under Development):</strong> 12×12 Kohonen grid (144 neurons) organizing multivariate time series.
+          </p>
+          <ul class="method-block__list">
+            <li><strong>Consistency Filter Scope:</strong> The SOM combines approved candidates with the 701 Embrapa reference areas. Because candidate points vastly outnumber reference points, the SOM output functions as a <em>spectral-temporal consistency filter, not an independent validation</em>.</li>
+            <li><strong>Dimensionality:</strong> A 12-value vector applies only to a single spectral index in one annual cycle; with <em>J</em> indices, each annual block is <strong>12×J</strong>, expanding to <strong>72×J</strong> for the full 6-year multi-year series (2020–2025).</li>
+            <li><strong>Bayesian Smoothing:</strong> Evaluates neighborhood coherence using <strong>Dirichlet-Multinomial Bayesian smoothing</strong> (with the Normal-Normal conjugate family evaluated as an alternative), triaging candidates into: <em>Keep</em>, <em>Forward for CBERS-4A Inspection</em>, or <em>Reject</em>.</li>
+            <li><strong>Preparation Controls:</strong> Standardizing each variable, missing data handling, monitoring quantization and topographic errors, seed initialization, and strict segregation of reference evidence from candidate pseudo-label frequencies.</li>
+          </ul>
+          <div class="method-tags">
+            <span class="method-tag">Top-1 / Top-3 & md3</span>
+            <span class="method-tag">Scenarios A–E</span>
+            <span class="method-tag">12×12 SOM (144 Neurons)</span>
+            <span class="method-tag">12×J / 72×J Dimensions</span>
+            <span class="method-tag">Dirichlet-Multinomial</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. CBERS-4A VISUAL INSPECTION -->
+      <div class="method-block fade-up">
+        <div class="method-block__header">
+          <div class="method-block__icon">🔍</div>
+          <div>
+            <div class="method-block__eyebrow">High-Resolution Quality Control · Status: Planning</div>
+            <h3 class="method-block__title">5. Stratified Inspection on Pan-Sharpened CBERS-4A (~2 m)</h3>
+          </div>
+        </div>
+        <div class="method-block__body">
+          <p>
+            <strong>High-Resolution Verification:</strong> High-resolution visual inspection of pre-filtered candidates and borderline cases using ~2 m nominal resolution pan-sharpened CBERS-4A imagery (WPM sensor). 
+            <em>Scope Limitation:</em> This visual inspection serves as a training-sample quality control filter, <strong>does not constitute map validation</strong> (which occurs after the cartographic product is completed), and <strong>cannot substitute for in situ field observation across all pasture condition categories</strong>.
+          </p>
+          <p>
+            <strong>Sample Sizing with Finite Population Correction:</strong> Designed using the finite population correction formula based on an illustrative filtered universe of <em>N = 40,000</em> candidate points:
+          </p>
+          <p style="font-family: monospace; font-size: 0.8rem; background: rgba(0,0,0,0.03); padding: 0.35rem 0.6rem; border-radius: 4px; text-align: center;">
+            n₀ = (z² · p · (1 − p)) / e² = (1.96² · 0.5 · 0.5) / 0.03² ≈ 1,067.11<br>
+            n = n₀ / (1 + (n₀ − 1) / N) = 1,067.11 / (1 + 1,066.11 / 40,000) ≈ 1,039.43 ≈ 1,040 points
+          </p>
+          <p>
+            <em>Important Statistical Qualification:</em> The N = 40,000 figure is strictly illustrative, and the 3% margin of error at 95% confidence applies solely to an <strong>overall binary proportion</strong> (e.g., valid pasture vs. non-pasture / correct vs. incorrect pseudo-label), <strong>not</strong> to estimating per-category accuracy across the 7 individual pasture condition classes.
+          </p>
+          <p>
+            <strong>Blind Multi-Interpreter Protocol:</strong> Candidate pseudo-labels are concealed from interpreters. Inter-interpreter agreement will be quantitatively measured, and systematic adjudication will be performed for disagreements.
+          </p>
+          <div class="method-tags">
+            <span class="method-tag">CBERS-4A (~2 m)</span>
+            <span class="method-tag">Finite Correction (n ≈ 1,040)</span>
+            <span class="method-tag">Binary Proportion Margin (3%)</span>
+            <span class="method-tag">Blind Multi-Interpreter</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. MACHINE LEARNING & FIELD CAMPAIGN -->
+      <div class="method-block fade-up">
+        <div class="method-block__header">
+          <div class="method-block__icon">🌲</div>
+          <div>
+            <div class="method-block__eyebrow">Machine Learning & Field Validation · Status: Planning</div>
+            <h3 class="method-block__title">6. Random Forest (10 m) & Operational Field Pilot</h3>
+          </div>
+        </div>
+        <div class="method-block__body">
+          <p>
+            <strong>Machine Learning Pasture Models:</strong> Assembly of the final curated training database with documented provenance and confidence flags. Models will employ <strong>Random Forest (10 m)</strong> partitioned by spatial block cross-validation (<em>spatial k-fold</em>) to prevent spatial autocorrelation leakage.
+          </p>
+          <p>
+            <strong>In Situ Field Campaign & Precision Limits:</strong> Planned operational pilot of <strong>~100 field localities</strong> across the Cerrado, designed in collaboration with IME/UFG. Logistical priority is allocated to Goiás, with complementary transects across biome gradients.
+          </p>
+          <p>
+            <em>Statistical Limitation:</em> A sample of n ≈ 100 points yields a margin of error of approximately <strong>±8 percentage points</strong> for an expected overall accuracy around 80% (before design effect). Consequently, this field campaign functions as an <strong>operational pilot for calibration</strong>, not a definitive per-category accuracy assessment for the entire biome.
+          </p>
+          <p>
+            <strong>Independent Validation:</strong> Post-classification statistical evaluation combining high-resolution imagery and in situ field observations to estimate overall map accuracy.
+          </p>
+          <div class="method-tags">
+            <span class="method-tag">Random Forest (10 m)</span>
+            <span class="method-tag">Spatial Block Partitioning</span>
+            <span class="method-tag">~100 Field Localities</span>
+            <span class="method-tag">Margin ±8 pp (Pilot Scale)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. RISK MITIGATION & QUALITY ASSURANCE (FULL WIDTH) -->
+      <div class="method-block method-block--wide fade-up">
+        <div class="method-block__header">
+          <div class="method-block__icon">🛡️</div>
+          <div>
+            <div class="method-block__eyebrow">Quality Assurance & Risk Controls · Table 5 of Report</div>
+            <h3 class="method-block__title">7. Methodological Risk Controls & Traceability Framework</h3>
+          </div>
+        </div>
+        <div class="method-block__body">
+          <p>
+            To guarantee scientific integrity and reproducibility, the project integrates proactive controls across seven core methodological risk areas (Report Product 1, Table 5):
+          </p>
+          <ul class="method-block__list">
+            <li><strong>1. Circularity with MapBiomas:</strong> Preserve candidate provenance; evaluate model scenarios with and without Collection 11 constraints; base final validation on independent high-resolution imagery and field observations.</li>
+            <li><strong>2. Class Imbalance:</strong> Track per-category retention rates; calibrate category-specific similarity thresholds; prevent artificial absorption of minority categories.</li>
+            <li><strong>3. Spatial Mixing at Edges:</strong> Compute homogeneity and edge metrics for the 3×3 candidate windows to flag mixed edge pixels.</li>
+            <li><strong>4. Temporal Class Change:</strong> Anchor reference labels strictly to their field collection year prior to multi-year propagation.</li>
+            <li><strong>5. Mathematical Vector Norm Distortion:</strong> Explicitly compute and unit-normalize L2 norms on spatial mean embeddings to eliminate non-unit dot product distortion.</li>
+            <li><strong>6. SOM Dominated by Pseudo-Labels:</strong> Segregate field reference support from candidate pseudo-label frequencies to prevent circular reinforcement loops.</li>
+            <li><strong>7. Validation Concentrated in Goiás:</strong> Pair the Goiás-centered field pilot with biome-wide stratified satellite inspection (CBERS-4A ~2 m) to ensure balanced statistical inference.</li>
+          </ul>
+          <div class="method-tags">
+            <span class="method-tag">Table 5 Risk Controls (7 Risks)</span>
+            <span class="method-tag">Circularity Prevention</span>
+            <span class="method-tag">Class Imbalance Mitigation</span>
+            <span class="method-tag">Vector Norm Correction</span>
+            <span class="method-tag">Audit-Ready Traceability</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. UPCOMING DECISIONS & ROADMAP (FULL WIDTH) -->
+      <div class="method-block method-block--wide fade-up" style="background: rgba(18, 153, 18, 0.02); border-color: rgba(18, 153, 18, 0.25);">
+        <div class="method-block__header">
+          <div class="method-block__icon">📋</div>
+          <div>
+            <div class="method-block__eyebrow">Upcoming Decisions and Technical Deliverables</div>
+            <h3 class="method-block__title">8. Upcoming Decisions and Technical Deliverables</h3>
+          </div>
+        </div>
+        <div class="method-block__body">
+          <p>
+            In alignment with the concluding roadmap of Product 1, the immediate operational phase requires the resolution of eight technical milestones:
+          </p>
+          <ol class="method-block__list" style="padding-left: 1.2rem;">
+            <li><strong>Class Dictionary Reconciliation:</strong> Consolidate a single versioned dictionary for the 7 condition categories, formalizing operational criteria and reconciling the 608 classified Embrapa samples.</li>
+            <li><strong>Sentinel-2 Series Audit:</strong> Finalize the verification of cloud/shadow masks, minimum valid observations, edge month behavior, and the resampling of native 20 m bands to 10 m (affecting NDII, PSRI, and CAI).</li>
+            <li><strong>Renormalized Cosine Similarity:</strong> Complete the recomputation of similarity matrices using verified L2-renormalized embedding means.</li>
+            <li><strong>Threshold & Margin Sensitivity Calibration:</strong> Finalize empirical thresholds for Top-1, Top-3, md3, and separation margins (s₁ − s₂) across Scenarios A through E.</li>
+            <li><strong>SOM Configuration & Smoothing:</strong> Define final SOM grid parameters, evaluate input dimensionality (12×J vs 72×J), and calibrate Dirichlet-Multinomial vs Normal-Normal smoothing.</li>
+            <li><strong>CBERS-4A Sample Draw:</strong> Draw the stratified quality control sample (n ≈ 1,040 points) and execute the blind multi-interpreter inspection protocol.</li>
+            <li><strong>Training Dataset Assembly & Separability:</strong> Construct the approved training dataset and evaluate spectral-temporal separability among condition categories.</li>
+            <li><strong>Model Training & Validation:</strong> Train Random Forest 10 m pasture models with spatial block partitioning and execute independent image- and field-based validation.</li>
+          </ol>
+          <div class="method-tags">
+            <span class="method-tag">8 Technical Decisions</span>
+            <span class="method-tag">Dictionary Consolidation</span>
+            <span class="method-tag">20 m to 10 m Resampling</span>
+            <span class="method-tag">SOM Calibration</span>
+            <span class="method-tag">CBERS-4A Draw</span>
+            <span class="method-tag">10 m Model Training</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

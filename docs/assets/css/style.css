@@ -612,6 +612,109 @@ body {
 }
 
 /* ──────────────────────────────────────────────────────────
+       METHODOLOGY BLOCKS & DETAILS
+    ────────────────────────────────────────────────────────── */
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.3rem;
+  margin-top: 2rem;
+}
+
+.method-block {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.6rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.method-block:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.method-block--wide {
+  grid-column: 1 / -1;
+}
+
+.method-block__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.method-block__icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.method-block__eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+.method-block__title {
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin: 0.1rem 0 0;
+}
+
+.method-block__body {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #333;
+}
+
+.method-block__body p {
+  margin-bottom: 0.8rem;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+.method-block__body p:last-child {
+  margin-bottom: 0;
+}
+
+.method-block__list {
+  margin: 0.6rem 0 0.8rem 1.2rem;
+  padding: 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.method-block__list li {
+  margin-bottom: 0.35rem;
+}
+
+.method-tags {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.method-tag {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  background: rgba(18, 153, 18, 0.08);
+  color: var(--color-accent);
+  border: 1px solid rgba(18, 153, 18, 0.15);
+}
+
+/* ──────────────────────────────────────────────────────────
        DELIVERABLES
     ────────────────────────────────────────────────────────── */
 .deliverables {
