@@ -73,7 +73,7 @@ window.addEventListener('scroll', () => {
   // CartoDB Voyager basemap
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · ' +
-      '<a href="https://carto.com/attributions">CARTO</a> · LAPIG/UFG & Embrapa',
+      '<a href="https://carto.com/attributions">CARTO</a> · LAPIG/UFG · WRI Brasil',
     subdomains: 'abcd',
     maxZoom: 19
   }).addTo(map);
@@ -431,7 +431,7 @@ window.addEventListener('scroll', () => {
             marker.bindPopup(`
               <div class="popup-box" style="font-family: var(--font-sans); font-size: 0.8rem; min-width: 200px;">
                 <div style="font-weight: 700; color: #1e3a8a; border-bottom: 1px solid #ddd; padding-bottom: 3px; margin-bottom: 6px;">
-                  📍 Embrapa Reference (Ground Truth)
+                  📍 Field Reference (Ground Truth)
                 </div>
                 <div><strong>Target FID:</strong> #${pt.fid}</div>
                 <div><strong>Typology:</strong> <span style="display:inline-flex; align-items: center; padding: 2px 7px; border-radius: 4px; background: ${cfg.color}35; color: #000000; font-weight: 700; border: 1px solid ${cfg.color};"><span style="display:inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: ${cfg.color}; margin-right: 5px; border: 1px solid rgba(0,0,0,0.25);"></span>${cfg.label}</span></div>
@@ -443,7 +443,7 @@ window.addEventListener('scroll', () => {
           });
         }
       })
-      .catch(err => console.warn('Could not load Embrapa ground-truth points:', err));
+      .catch(err => console.warn('Could not load ground-truth points:', err));
   }
 
   // ── 8. Multi-Criteria Filter Engine ──
@@ -526,9 +526,9 @@ window.addEventListener('scroll', () => {
         </div>
         <div style="margin-top: 6px; line-height: 1.4; color: #111111;">
           <strong>Target Coords:</strong> ${pt.lat.toFixed(4)}, ${pt.lng.toFixed(4)}<br>
-          <strong>Embrapa Match:</strong> FID #${pt.target_fid_1} (${(pt.prod_escalar_1 || 0).toFixed(3)})<br>
+          <strong>Reference Match:</strong> FID #${pt.target_fid_1} (${(pt.prod_escalar_1 || 0).toFixed(3)})<br>
           <strong>Mean Md3:</strong> ${(pt.md3 || 0).toFixed(3)}<br>
-          <strong>Embrapa Ref:</strong> ${pt.loc_1 || '—'}
+          <strong>Reference Loc:</strong> ${pt.loc_1 || '—'}
         </div>
       </div>
     `;
@@ -1027,4 +1027,60 @@ window.addEventListener('scroll', () => {
       options: commonOptions
     });
   }
+
+  // ── 15. Methodology Accordion & Expand/Collapse Toggle ──
+  function setupMethodologyAccordion() {
+    const cards = document.querySelectorAll('.method-card');
+    const toggleAllBtn = document.getElementById('btn-toggle-all-method');
+    const toggleAllText = document.getElementById('btn-toggle-all-text');
+    let allExpanded = false;
+
+    if (!cards.length) return;
+
+    cards.forEach(card => {
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-expanded', 'false');
+
+      // Click / touch toggle
+      card.addEventListener('click', (e) => {
+        // Ignore clicks on links or interactive elements inside body
+        if (e.target.closest('a') || e.target.closest('button')) return;
+        
+        const isOpen = card.classList.toggle('is-open');
+        card.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      // Keyboard accessibility (Enter / Space)
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          if (e.target.closest('a') || e.target.closest('button')) return;
+          e.preventDefault();
+          const isOpen = card.classList.toggle('is-open');
+          card.setAttribute('aria-expanded', String(isOpen));
+        }
+      });
+    });
+
+    if (toggleAllBtn && toggleAllText) {
+      toggleAllBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        allExpanded = !allExpanded;
+        cards.forEach(card => {
+          if (allExpanded) {
+            card.classList.add('is-open');
+            card.setAttribute('aria-expanded', 'true');
+          } else {
+            card.classList.remove('is-open');
+            card.setAttribute('aria-expanded', 'false');
+          }
+        });
+        toggleAllText.textContent = allExpanded ? 'Recolher Todos' : 'Expandir Todos';
+        toggleAllBtn.classList.toggle('active', allExpanded);
+      });
+    }
+  }
+
+  setupMethodologyAccordion();
 })();

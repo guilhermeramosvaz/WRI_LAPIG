@@ -6,7 +6,7 @@
       <div class="section__eyebrow">Interactive Visualizations</div>
       <h2 class="section__title">Spatial Distribution & Md3 Classification</h2>
       <p class="section__desc">
-        Cross-matching of MapBiomas sample points with Embrapa's 701 reference points via 64-dimensional dot product.
+        Cross-matching of MapBiomas sample points with 701 field reference points via 64-dimensional dot product.
         Explore samples on the map, filter by year, pasture vigor (CVP), and similarity thresholds, or draw a rectangle to analyze custom geographic areas.
       </p>
 
@@ -26,8 +26,8 @@
             <button class="map-btn map-btn--clear-rect" id="btn-clear-rect" title="Clear rectangle selection" style="display: none;">
               ✕ Clear Selection
             </button>
-            <button class="map-btn map-btn--embrapa" id="btn-toggle-embrapa" title="Toggle Embrapa 701 field reference points layer">
-              📍 Embrapa Points (701)
+            <button class="map-btn map-btn--embrapa" id="btn-toggle-embrapa" title="Toggle 701 field reference points layer">
+              📍 Reference Points (701)
             </button>
           </div>
 
@@ -184,7 +184,7 @@
 
           <div class="map-panel__card chart-card chart-card--embrapa">
             <div class="chart-header">
-              <div class="map-panel__title">Embrapa Reference (701 Field Points)</div>
+              <div class="map-panel__title">Field Reference (701 Points)</div>
               <span class="chart-badge chart-badge--ref">Ground Truth</span>
             </div>
             <div class="chart-container">
@@ -210,11 +210,11 @@
               <th>Sample ID</th>
               <th>Target Coords (Lat, Lon)</th>
               <th>CVP Vigor</th>
-              <th>Embrapa Match (FID)</th>
+              <th>Reference Match (FID)</th>
               <th>Assigned Typology</th>
               <th>Top-1 Similarity</th>
               <th>Mean Md3</th>
-              <th>Embrapa Coords (Lat, Lon)</th>
+              <th>Reference Coords (Lat, Lon)</th>
             </tr>
           </thead>
           <tbody id="overlap-tbody">

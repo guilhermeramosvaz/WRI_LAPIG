@@ -6,7 +6,7 @@
     <div class="section__eyebrow">Methodological Framework & Technical Progress</div>
     <h2 class="section__title">Methodological Architecture & Quality Assurance Framework</h2>
     <p class="section__desc">
-      Detailed technical overview of the sampling plan, representation spaces, two-stage filtering, quality control protocols, and machine learning roadmap under the WRI Brasil · FUNAPE · LAPIG/UFG · Embrapa Cenargen agreement (Report Product 1 — August 17, 2026).
+      Detailed technical overview of the sampling plan, representation spaces, two-stage filtering, quality control protocols, and machine learning roadmap under the WRI Brasil · FUNAPE · LAPIG/UFG agreement (Report Product 1 — August 17, 2026).
     </p>
 
     <!-- SCOPE LIMITATION NOTICE -->
@@ -25,7 +25,7 @@
           <span class="method-step__status method-step__status--assembled">Assembled</span>
         </div>
         <div class="method-step__title">1. Reference & Candidates</div>
-        <div class="method-step__desc">701 Embrapa Polygons + 62,009 Candidate points</div>
+        <div class="method-step__desc">701 Reference Polygons + 62,009 Candidate points</div>
       </div>
 
       <div class="method-step fade-up">
@@ -74,21 +74,34 @@
       </div>
     </div>
 
-    <!-- THEMATIC METHODOLOGY CARDS (2-COLUMN GRID) -->
-    <div class="method-grid">
+    <!-- THEMATIC METHODOLOGY CARDS TOOLBAR & GRID -->
+    <div class="method-grid-toolbar fade-up">
+      <div class="method-grid-toolbar__hint">
+        <span>💡</span>
+        <span>Passe o mouse ou clique em qualquer cartão para ver o conteúdo e detalhes técnicos completos.</span>
+      </div>
+      <button class="method-toolbar-btn" id="btn-toggle-all-method" title="Expandir ou recolher todos os blocos metodológicos">
+        <span id="btn-toggle-all-text">Expandir Todos</span> ⤢
+      </button>
+    </div>
+
+    <div class="method-grid" id="method-cards-grid">
 
       <!-- 1. INSTITUTIONAL CONTEXT & GOALS -->
       <div class="method-card fade-up">
         <div class="method-card__header">
           <div class="method-card__icon-box">🏛️</div>
-          <div>
+          <div class="method-card__header-text">
             <div class="method-card__eyebrow">Institutional Governance · Component 01</div>
             <h3 class="method-card__title">1. Governance, Scope & Strategic Goals</h3>
+          </div>
+          <div class="method-card__indicator" title="Expandir detalhes">
+            <span>▼</span>
           </div>
         </div>
         <div class="method-card__body">
           <p>
-            The project operates under the technical agreement between <strong>WRI Brasil</strong> and <strong>FUNAPE</strong>, with technical execution by <strong>LAPIG/UFG</strong> in technical cooperation with <strong>Embrapa Cenargen</strong> (Project GR000153-73077-CARGILL-BRAZIL), under the scientific coordination of <strong>Prof. Dr. Laerte G. Ferreira</strong> and statistical consulting by <strong>Prof. Luis Rodrigo Fernandes Baumann</strong> (IME/UFG).
+            The project operates under the technical agreement between <strong>WRI Brasil</strong> and <strong>FUNAPE</strong>, with technical execution by <strong>LAPIG/UFG</strong> (Project GR000153-73077-CARGILL-BRAZIL), under the scientific coordination of <strong>Prof. Dr. Laerte G. Ferreira</strong> and statistical consulting by <strong>Prof. Luis Rodrigo Fernandes Baumann</strong> (IME/UFG).
           </p>
           <div class="method-subcard method-subcard--accent">
             <strong>Strategic Objective:</strong> Develop the sampling and analytical infrastructure to produce the first version of the <strong>new 10-meter resolution pasture map for the Cerrado biome</strong>, specifically designed to <em>differentiate among viable pasture condition categories</em> and quantify sampling uncertainty across the biome.
@@ -96,7 +109,6 @@
           <div class="method-tags">
             <span class="method-tag">WRI Brasil · FUNAPE</span>
             <span class="method-tag">LAPIG / UFG</span>
-            <span class="method-tag">Embrapa Cenargen</span>
             <span class="method-tag">10 m Cerrado Pasture Map</span>
           </div>
         </div>
@@ -106,14 +118,17 @@
       <div class="method-card fade-up">
         <div class="method-card__header">
           <div class="method-card__icon-box">📍</div>
-          <div>
+          <div class="method-card__header-text">
             <div class="method-card__eyebrow">Databases & Independence · Status: Assembled</div>
-            <h3 class="method-card__title">2. Embrapa Ground Truth & 62,009 Candidates</h3>
+            <h3 class="method-card__title">2. Ground Truth Reference & 62,009 Candidates</h3>
+          </div>
+          <div class="method-card__indicator" title="Expandir detalhes">
+            <span>▼</span>
           </div>
         </div>
         <div class="method-card__body">
           <p>
-            <strong>Embrapa Reference Base (701 Polygons):</strong> 701 in situ polygons (~1 ha). Currently, 608 polygons have consolidated labels across pasture condition categories, while 93 remain unclassified (retained for unsupervised tasks).
+            <strong>Field Reference Base (701 Polygons):</strong> 701 in situ polygons (~1 ha). Currently, 608 polygons have consolidated labels across pasture condition categories, while 93 remain unclassified (retained for unsupervised tasks).
           </p>
           <div class="method-subcard method-subcard--warning">
             <strong>Dictionary Reconciliation & Integrity Rule:</strong> There is an active inconsistency between an initial 5-class proposal and the 7-class implementation; a single unified dictionary is currently being constructed. An explicit <em>integrity rule</em> prevents presenting category distributions as definitive until this reconciliation is formalized. Polygons include partially intercepted pixels in full (without area-weighting). The 93 unclassified samples may enter unsupervised SOM training, but <em>must not be used to assign neuron labels or vote in Top-k decisions</em>.
@@ -128,7 +143,7 @@
             <strong>Spatial Support & Scenarios:</strong> Candidate extraction uses a <strong>3×3 pixel window (900 m² / 0.09 ha)</strong>, carrying spectral mixing risks at field boundaries. The <em>Agreement Scenario</em> (corroborated by Col. 11) totals <strong>56,952 candidates</strong>, while the <em>Inclusive Scenario</em> comprises <strong>62,009 candidates</strong>.
           </p>
           <div class="method-tags">
-            <span class="method-tag">701 Embrapa Polygons</span>
+            <span class="method-tag">701 Reference Polygons</span>
             <span class="method-tag">62,009 Candidates</span>
             <span class="method-tag">56,952 Agreement</span>
             <span class="method-tag">3×3 Window (900 m²)</span>
@@ -141,9 +156,12 @@
       <div class="method-card fade-up">
         <div class="method-card__header">
           <div class="method-card__icon-box">🛰️</div>
-          <div>
+          <div class="method-card__header-text">
             <div class="method-card__eyebrow">Dense Remote Sensing · Status: Extracted</div>
             <h3 class="method-card__title">3. S2 Time Series & 64-Dim Embeddings</h3>
+          </div>
+          <div class="method-card__indicator" title="Expandir detalhes">
+            <span>▼</span>
           </div>
         </div>
         <div class="method-card__body">
@@ -173,14 +191,17 @@
       <div class="method-card fade-up">
         <div class="method-card__header">
           <div class="method-card__icon-box">🧠</div>
-          <div>
+          <div class="method-card__header-text">
             <div class="method-card__eyebrow">Filtering Architecture · Status: Preliminary & In Dev</div>
             <h3 class="method-card__title">4. Cosine Similarity & 12×12 SOM Filtering</h3>
+          </div>
+          <div class="method-card__indicator" title="Expandir detalhes">
+            <span>▼</span>
           </div>
         </div>
         <div class="method-card__body">
           <p>
-            <strong>Stage 1 (Embedding Similarity — Preliminary):</strong> Cosine similarity against 608 classified Embrapa references, assigning Top-1 provisional labels, Top-3 nearest neighbors, and concordance index <em>md3 ∈ {1, 2, 3}</em> across five sensitivity scenarios (Scenarios A–E). All thresholds remain exploratory and subject to final calibration.
+            <strong>Stage 1 (Embedding Similarity — Preliminary):</strong> Cosine similarity against 608 classified field references, assigning Top-1 provisional labels, Top-3 nearest neighbors, and concordance index <em>md3 ∈ {1, 2, 3}</em> across five sensitivity scenarios (Scenarios A–E). All thresholds remain exploratory and subject to final calibration.
           </p>
           <p>
             <strong>Stage 2 (Self-Organizing Maps — Under Development):</strong> 12×12 Kohonen grid (144 neurons) organizing multivariate time series:
@@ -205,9 +226,12 @@
       <div class="method-card fade-up">
         <div class="method-card__header">
           <div class="method-card__icon-box">🔍</div>
-          <div>
+          <div class="method-card__header-text">
             <div class="method-card__eyebrow">High-Resolution Quality Control · Status: Planning</div>
             <h3 class="method-card__title">5. Stratified Inspection on CBERS-4A (~2 m)</h3>
+          </div>
+          <div class="method-card__indicator" title="Expandir detalhes">
+            <span>▼</span>
           </div>
         </div>
         <div class="method-card__body">
@@ -243,9 +267,12 @@
       <div class="method-card fade-up">
         <div class="method-card__header">
           <div class="method-card__icon-box">🌲</div>
-          <div>
+          <div class="method-card__header-text">
             <div class="method-card__eyebrow">Machine Learning & Field Validation · Status: Planning</div>
             <h3 class="method-card__title">6. Random Forest (10 m) & Field Pilot</h3>
+          </div>
+          <div class="method-card__indicator" title="Expandir detalhes">
+            <span>▼</span>
           </div>
         </div>
         <div class="method-card__body">
@@ -274,9 +301,12 @@
       <div class="method-card method-card--full fade-up">
         <div class="method-card__header">
           <div class="method-card__icon-box" style="background: rgba(3, 105, 161, 0.08); border-color: rgba(3, 105, 161, 0.2);">🛡️</div>
-          <div>
+          <div class="method-card__header-text">
             <div class="method-card__eyebrow" style="color: #0369a1;">Quality Assurance & Risk Controls · Table 5 of Report</div>
             <h3 class="method-card__title">7. Methodological Risk Controls & Traceability Framework</h3>
+          </div>
+          <div class="method-card__indicator" title="Expandir detalhes">
+            <span>▼</span>
           </div>
         </div>
         <div class="method-card__body">
@@ -327,9 +357,12 @@
       <div class="method-card method-card--full fade-up" style="border-color: rgba(18, 153, 18, 0.3); background: rgba(18, 153, 18, 0.015);">
         <div class="method-card__header">
           <div class="method-card__icon-box">📋</div>
-          <div>
+          <div class="method-card__header-text">
             <div class="method-card__eyebrow">Concluding Technical Roadmap</div>
             <h3 class="method-card__title">Upcoming Decisions and Technical Deliverables</h3>
+          </div>
+          <div class="method-card__indicator" title="Expandir detalhes">
+            <span>▼</span>
           </div>
         </div>
         <div class="method-card__body">
@@ -341,7 +374,7 @@
               <div class="roadmap-card__num">1</div>
               <div class="roadmap-card__content">
                 <strong>Class Dictionary Reconciliation</strong>
-                <p>Consolidate a single versioned dictionary for the 7 condition categories, formalizing operational criteria and reconciling the 608 classified Embrapa samples.</p>
+                <p>Consolidate a single versioned dictionary for the 7 condition categories, formalizing operational criteria and reconciling the 608 classified field samples.</p>
               </div>
             </div>
             <div class="roadmap-card">
