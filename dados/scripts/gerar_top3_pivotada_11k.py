@@ -80,11 +80,14 @@ def processar_ano(ano: int, con: duckdb.DuckDBPyConnection):
     col_85k_class = f"CLASS_{min(ano, 2024)}"
     col_past_class = f"class_{ano}"
 
-    # Arquivos de saída
+    # Arquivos de saída (salva tanto com prefixo 11k quanto 12k para compatibilidade)
     out_parquet = DIR_SAIDA / f"tabela_top3_pivotada_11k_{ano}.parquet"
+    out_parquet_12k = DIR_SAIDA / f"tabela_top3_pivotada_12k_{ano}.parquet"
     out_csv = DIR_SAIDA / f"tabela_top3_11k_{ano}.csv"
     out_csv_assets = DIR_ASSETS / f"tabela_top3_11k_{ano}.csv"
+    out_csv_assets_12k = DIR_ASSETS / f"tabela_top3_12k_{ano}.csv"
     out_json_assets = DIR_ASSETS / f"tabela_top3_11k_{ano}.json"
+    out_json_assets_12k = DIR_ASSETS / f"tabela_top3_12k_{ano}.json"
 
     # Termos do produto escalar (A00*A00 + ... + A63*A63)
     prod_terms = " + ".join([f"(e.A{i:02d} * m.A{i:02d})" for i in range(64)])
@@ -110,7 +113,7 @@ def processar_ano(ano: int, con: duckdb.DuckDBPyConnection):
                 A60, A61, A62, A63
             FROM '{ARQ_PASTAGEM.as_posix()}'
             WHERE year = {ano} 
-              AND ({col_past_class} = 'Pastagem' OR {col_past_class} = 'Pastagem natural')
+              AND {col_past_class} = 'Pastagem'
         ),
         mapbiomas_85k AS (
             SELECT 
@@ -243,11 +246,13 @@ def processar_ano(ano: int, con: duckdb.DuckDBPyConnection):
 
     # 1. Exportar Parquet
     con.execute(f"COPY ({sql_query}) TO '{out_parquet.as_posix()}' (FORMAT 'parquet', COMPRESSION 'zstd');")
+    con.execute(f"COPY ({sql_query}) TO '{out_parquet_12k.as_posix()}' (FORMAT 'parquet', COMPRESSION 'zstd');")
     size_parquet = out_parquet.stat().st_size / (1024 * 1024)
 
     # 2. Exportar CSV
     con.execute(f"COPY (SELECT * FROM '{out_parquet.as_posix()}') TO '{out_csv.as_posix()}' (FORMAT 'csv', HEADER true);")
     con.execute(f"COPY (SELECT * FROM '{out_parquet.as_posix()}') TO '{out_csv_assets.as_posix()}' (FORMAT 'csv', HEADER true);")
+    con.execute(f"COPY (SELECT * FROM '{out_parquet.as_posix()}') TO '{out_csv_assets_12k.as_posix()}' (FORMAT 'csv', HEADER true);")
     size_csv = out_csv_assets.stat().st_size / (1024 * 1024)
 
     # 3. Exportar JSON Compacto para Web
@@ -299,7 +304,7 @@ def processar_ano(ano: int, con: duckdb.DuckDBPyConnection):
         ])
 
     compact_payload = {
-        'dataset': '11k',
+        'dataset': '12k',
         'year': int(ano),
         'total': len(rows),
         'tipologias': TIP_LIST,
@@ -308,6 +313,9 @@ def processar_ano(ano: int, con: duckdb.DuckDBPyConnection):
     }
 
     with open(out_json_assets, 'w', encoding='utf-8') as f:
+        json.dump(compact_payload, f, separators=(',', ':'))
+
+    with open(out_json_assets_12k, 'w', encoding='utf-8') as f:
         json.dump(compact_payload, f, separators=(',', ':'))
 
     size_json = out_json_assets.stat().st_size / (1024 * 1024)

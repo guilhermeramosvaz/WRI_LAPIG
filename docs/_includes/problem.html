@@ -3,31 +3,30 @@
   ═══════════════════════════════════════════════════════ -->
   <section class="section reveal" id="cards-problema">
     <div class="section__eyebrow">Context and Rationale</div>
-    <h2 class="section__title">Challenges in Mapping Cerrado Pastures</h2>
+    <h2 class="section__title">Challenges in Mapping Cerrado Pastures & Sample Curation</h2>
     <p class="section__desc">
-      The high spatial and ecological heterogeneity of pastures in the Cerrado biome demands innovative methodologies combining high-resolution remote sensing,
-      dense spectral representations, and rigorous in situ validation.
+      The high spatial, temporal, and ecological heterogeneity of pastures in the Cerrado biome demands a traceable strategy to expand sample sets from high-quality field references, filter pseudo-labeling errors in complementary representation spaces, and rigorously document uncertainty.
     </p>
     <div class="cards">
       <div class="card fade-up">
-        <div class="card__eyebrow">Territorial Sampling</div>
-        <div class="card__title">62,395 Annual Samples across the Cerrado</div>
+        <div class="card__eyebrow">Sample Expansion at Scale</div>
+        <div class="card__title">62,009 Candidates across the Cerrado</div>
         <p class="card__desc">
-          Continuous multi-year historical series combining stratified samples (50k Series) and pasture collection filters (12k Series) from 2019 to 2025, totaling 438,200 observations for land use transition dynamics.
+          Structured universe combining 5,453 Sentinel-2 Col. 4 points, 6,556 Landsat validation points, and 50,000 persistent pasture points (2020–2025) stratified across low (~35%), medium (~44%), and high (~21%) vigor. Sensitivity analysis comparing inclusive universe vs. 44,943 points corroborated by Collection 11.
         </p>
       </div>
       <div class="card fade-up">
-        <div class="card__eyebrow">Spectral Representation</div>
-        <div class="card__title">Sentinel-2 Embeddings (64 Dimensions)</div>
+        <div class="card__eyebrow">Dual Representation Spaces</div>
+        <div class="card__title">64-Dim Embeddings & S2 Time Series</div>
         <p class="card__desc">
-          Multidimensional latent space at 10-meter spatial resolution, synthesizing seasonal phenological shifts, vegetative vigor, soil exposure, and canopy texture.
+          AlphaEarth Foundations annual embeddings (64 latent dimensions at 10 m) combined with monthly Sentinel-2 spectral series (NDVI, EVI, NDII, NDWI, PSRI, CAI) extracted via a 60-day moving window using the joint median of valid pixel-date pairs.
         </p>
       </div>
       <div class="card fade-up">
-        <div class="card__eyebrow">Similarity & Validation</div>
-        <div class="card__title">Cosine Similarity with Embrapa Ground Truth</div>
+        <div class="card__eyebrow">Quality Control & Validation</div>
+        <div class="card__title">Cosine Similarity, SOM & CBERS-4A</div>
         <p class="card__desc">
-          Massive dot-product computation between the sample points and Embrapa's 701 ground-truth points, determining maximum similarity matches and the Md3 concordance metric.
+          L2-renormalized cosine similarity against 608 classified Embrapa reference polygons, Top-1/Top-3 md3 concordance, 12×12 SOM clustering with Dirichlet-Multinomial Bayesian smoothing, and stratified ~2 m CBERS-4A visual inspection before Random Forest training.
         </p>
       </div>
     </div>

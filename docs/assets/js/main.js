@@ -541,7 +541,7 @@ window.addEventListener('scroll', () => {
     const countSubEl = document.getElementById('counter-sub');
     const chartTitleEl = document.getElementById('chart-title');
 
-    const total = allData.length || (currentDataset === '50k' ? 50000 : 12395);
+    const total = allData.length || (currentDataset === '50k' ? 50000 : 12009);
     const current = filteredData.length;
     const pct = total > 0 ? ((current / total) * 100).toFixed(1) : '100';
     const seriesLabel = currentDataset === '50k' ? '50k Series' : '12k Series';

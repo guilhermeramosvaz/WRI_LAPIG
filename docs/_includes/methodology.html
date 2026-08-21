@@ -4,54 +4,57 @@
   <section class="section--alt reveal" id="metodologia">
     <div class="section__inner">
       <div class="section__eyebrow">Methodology</div>
-      <h2 class="section__title">Methodological Pipeline & Processing</h2>
+      <h2 class="section__title">Methodological Pipeline & Multi-Stage Quality Controls</h2>
       <p class="section__desc">
-        From orbital Sentinel-2 image acquisition to embedding extraction and similarity metrics against Embrapa ground truth.
+        Progressive sample expansion, representation space filtering, and quality control architecture for the new 10 m Cerrado pasture mapping.
       </p>
 
       <div class="pipeline">
         <div class="pipeline__step fade-up">
           <div class="pipeline__icon">🛰️</div>
-          <div class="pipeline__label">Sentinel-2 MSI</div>
-          <div class="pipeline__sub">Optical bands, Red-Edge, NIR, SWIR · 10 m</div>
+          <div class="pipeline__label">Sentinel-2 & AlphaEarth</div>
+          <div class="pipeline__sub">60-day monthly medians & 64-dim embeddings · 10 m (2020–2025)</div>
         </div>
         <div class="pipeline__step fade-up">
-          <div class="pipeline__icon">☁️</div>
-          <div class="pipeline__label">Cloud Masking</div>
-          <div class="pipeline__sub">Cloud Score Plus · Adaptive threshold 0.50</div>
-        </div>
-        <div class="pipeline__step fade-up">
-          <div class="pipeline__icon">📊</div>
-          <div class="pipeline__label">Spectral Indices</div>
-          <div class="pipeline__sub">NDVI, NDWI, CAI, CRI1, ARI, RGR, PSRI, SATVI</div>
+          <div class="pipeline__icon">📍</div>
+          <div class="pipeline__label">Reference & Candidates</div>
+          <div class="pipeline__sub">701 Embrapa polygons (~1 ha) + 62,009 candidate points</div>
         </div>
         <div class="pipeline__step fade-up">
           <div class="pipeline__icon">📐</div>
-          <div class="pipeline__label">Temporal Reductions</div>
-          <div class="pipeline__sub">Wet season seasonal statistics & medians</div>
+          <div class="pipeline__label">Cosine Similarity & md3</div>
+          <div class="pipeline__sub">L2-renormalized dot product, Top-1/Top-3 & md3 concordance</div>
         </div>
         <div class="pipeline__step fade-up">
           <div class="pipeline__icon">🧠</div>
-          <div class="pipeline__label">64-Dim Embeddings</div>
-          <div class="pipeline__sub">Annual latent vectors (A00 through A63)</div>
+          <div class="pipeline__label">SOM Neural Filtering</div>
+          <div class="pipeline__sub">12×12 grid (144 neurons) & Dirichlet-Multinomial smoothing</div>
         </div>
         <div class="pipeline__step fade-up">
-          <div class="pipeline__icon">⚡</div>
-          <div class="pipeline__label">Similarity & Md3</div>
-          <div class="pipeline__sub">DuckDB dot-product with 701 Embrapa points</div>
+          <div class="pipeline__icon">🔍</div>
+          <div class="pipeline__label">CBERS-4A Inspection</div>
+          <div class="pipeline__sub">Stratified ~2 m pan-sharpened quality control (~1,040 points)</div>
+        </div>
+        <div class="pipeline__step fade-up">
+          <div class="pipeline__icon">🌲</div>
+          <div class="pipeline__label">Random Forest & Field</div>
+          <div class="pipeline__sub">10 m classification models & ~100 field campaign points</div>
         </div>
       </div>
 
       <div class="prose" style="margin-top: 2rem;">
         <p>
-          The pipeline processes <strong>Sentinel-2 (10 m)</strong> satellite imagery on Google Earth Engine with automated <strong>cloud masking</strong> and
-          multispectral metric extraction throughout the <strong>rainy season</strong> in the Cerrado biome. Each sample point is assigned a
-          <strong>64-dimensional embedding vector</strong> (A00 to A63), capturing the vegetation's structural and phenological signature.
+          The pipeline structures a progressive, verifiable sample expansion framework designed for the new <strong>10 m pasture mapping of the Cerrado biome</strong>. 
+          For each of the <strong>701 Embrapa Cenargen field polygons</strong> (approximately 1 ha; 608 classified across 7 pasture condition categories and 93 unlabeled) and 
+          the <strong>62,009 candidate points</strong> (50,000 persistent Sentinel-2 points, 5,453 MapBiomas Col. 4 S2 points, and 6,556 Landsat validation points), two complementary representation spaces are organized across <strong>2020–2025</strong>:
         </p>
         <p>
-          Leveraging the high-performance <strong>DuckDB</strong> analytical engine, each of the annual sample points is compared via <strong>dot product (cosine similarity)</strong>
-          against all 701 Embrapa field reference points. The algorithm ranks the top-matching references, extracts the corresponding typology,
-          and computes the <strong>Mean Similarity Concordance (Md3)</strong>, enabling multi-year temporal monitoring from 2019 to 2025.
+          <strong>1. Monthly Sentinel-2 Time Series:</strong> Extracted on Google Earth Engine using a centered moving window of ~60 days (the second half of the previous month, the full reference month, and the first half of the following month). The monthly value is calculated as the joint median of all cloud-free, valid pixel-date pairs (covering NDVI, EVI, NDII, NDWI, PSRI, and CAI).<br>
+          <strong>2. Annual Latent Embeddings (AlphaEarth Foundations):</strong> 64-dimensional annual vectors (A00–A63) representative of the ~1 ha spatial support. Because the spatial average of unit vectors does not preserve a unit norm, explicit <strong>L2-renormalization</strong> is enforced before calculating cosine similarity against the 608 classified Embrapa references.
+        </p>
+        <p>
+          Candidates approved through embedding similarity (evaluating Top-1/Top-3 nearest neighbors, concordance score <em>md3</em>, margin separation, and MapBiomas Col. 11 agreement) undergo a second filtering stage in a <strong>12×12 Self-Organizing Map (SOM)</strong>. The SOM evaluates spectral-temporal coherence using <strong>Dirichlet-Multinomial Bayesian smoothing</strong>, categorizing samples into <em>keep</em>, <em>forward for inspection</em>, or <em>reject</em>. 
+          Pre-selected subsets undergo high-resolution visual quality control using <strong>pan-sharpened CBERS-4A imagery (~2 m)</strong> under a blind, multi-interpreter protocol before feeding the <strong>Random Forest</strong> models and undergoing subsequent image- and field-based validation (~100 localities, prioritizing Goiás).
         </p>
       </div>
     </div>

@@ -3,20 +3,22 @@
   ═══════════════════════════════════════════════════════ -->
 <section class="section section--alt reveal" id="som-analise">
   <div class="section__inner">
-    <div class="section__eyebrow">Neural Networks & Unsupervised Clustering</div>
+    <div class="section__eyebrow">Neural Networks & Time Series Curation</div>
     <h2 class="section__title">SOM Analysis (Self-Organizing Maps)</h2>
     <p class="section__desc">
-      Methodology based on Kohonen Self-Organizing Maps for topological clustering, dimensionality reduction,
-      and spatial-temporal pattern detection in pasture degradation and recovery trajectories across the Cerrado.
+      Methodology based on 12×12 Kohonen Self-Organizing Maps (144 neurons) for organizing multivariate Sentinel-2 time series,
+      evaluating spectral-temporal neighborhood coherence, and filtering pseudo-labels via Dirichlet-Multinomial Bayesian smoothing.
     </p>
 
     <div class="som-development-card fade-up">
       <div class="som-development-icon">🧠</div>
-      <h3 class="som-development-title">SOM Neural Network Clustering</h3>
+      <h3 class="som-development-title">12×12 SOM Topological Curation (144 Neurons)</h3>
       <div class="som-development-divider"></div>
-      <p class="som-development-status">Under Development...</p>
-      <small class="som-development-note">
-        Topological neural models and U-Matrix distance matrices are currently being processed and will be integrated in upcoming deliverables.
+      <p class="som-development-status">Component 06 — Under Development</p>
+      <small class="som-development-note" style="display: block; max-width: 680px; margin: 0.8rem auto 0; text-align: left; line-height: 1.6;">
+        • <strong>Multivariate Input:</strong> Standardized monthly indices (NDVI, EVI, NDII, NDWI, PSRI, CAI) over annual (12×J) and multi-year (72×J) temporal support.<br>
+        • <strong>Bayesian Smoothing:</strong> Dirichlet-Multinomial smoothing over neuron neighborhoods to categorize candidates into: <em>Keep</em>, <em>Forward for CBERS-4A Inspection</em>, or <em>Reject</em>.<br>
+        • <strong>Self-Reference Control:</strong> Separate tracking of Embrapa reference evidence from candidate pseudo-label frequencies to prevent confirmation bias.
       </small>
     </div>
   </div>

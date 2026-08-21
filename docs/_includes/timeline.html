@@ -2,39 +2,59 @@
        TIMELINE
   ═══════════════════════════════════════════════════════ -->
   <section class="section reveal" id="cronograma">
-    <div class="section__eyebrow">Project Workflow</div>
-    <h2 class="section__title">Methodological Stages</h2>
+    <div class="section__eyebrow">Project Status & Activities</div>
+    <h2 class="section__title">Status of Activities (Product 1 — August 17, 2026)</h2>
+    <p class="section__desc">
+      Tracking of methodological components, current execution status, and next technical deliverables.
+    </p>
 
     <div class="timeline">
       <div class="timeline__item done">
-        <div class="timeline__date">Stage 01</div>
-        <div class="timeline__title">Sentinel-2 Embedding Extraction</div>
-        <div class="timeline__desc">Data cube processing and 64-dimensional annual vector generation (2019 to 2025) on Google Earth Engine.</div>
+        <div class="timeline__date">Component 01 · Status: Assembled</div>
+        <div class="timeline__title">1. Embrapa Base</div>
+        <div class="timeline__desc">701 polygons of approximately 1 ha; 608 classified across 7 pasture condition categories and 93 without a consolidated class.</div>
       </div>
+
       <div class="timeline__item done">
-        <div class="timeline__date">Stage 02</div>
-        <div class="timeline__title">Geolocation & Temporal Partitioning</div>
-        <div class="timeline__desc">Geographic coordinate alignment (lat_target, lon_target) and division of records into structured annual datasets.</div>
+        <div class="timeline__date">Component 02 · Status: Extracted</div>
+        <div class="timeline__title">2. Sentinel-2 Time Series</div>
+        <div class="timeline__desc">Monthly composites (2020–2025) for references and candidates using ~60-day moving window joint medians; audit of valid observations in progress.</div>
       </div>
+
       <div class="timeline__item done">
-        <div class="timeline__date">Stage 03</div>
-        <div class="timeline__title">Dot-Product Similarity Computation</div>
-        <div class="timeline__desc">High-throughput streaming execution in DuckDB comparing samples against Embrapa's 701 ground-truth points.</div>
+        <div class="timeline__date">Component 03 · Status: Extracted</div>
+        <div class="timeline__title">3. Annual Latent Embeddings</div>
+        <div class="timeline__desc">64-dimensional AlphaEarth Foundations vectors per year (2020–2025); verification and L2 norm correction of mean vectors applied before similarity calculation.</div>
       </div>
+
       <div class="timeline__item done">
-        <div class="timeline__date">Stage 04</div>
-        <div class="timeline__title">Top-3 Ranking & Md3 Metric</div>
-        <div class="timeline__desc">Pivoting top similarity matches, assigning pasture typologies, and computing the mean concordance score (Md3).</div>
+        <div class="timeline__date">Component 04 · Status: Assembled</div>
+        <div class="timeline__title">4. Candidate Points Universe</div>
+        <div class="timeline__desc">62,009 candidates with provenance preserved; sensitivity scenarios structured with and without the 5,057 points that disagree with MapBiomas Collection 11.</div>
       </div>
+
       <div class="timeline__item current">
-        <div class="timeline__date">Stage 05</div>
-        <div class="timeline__title">Web Optimization & Interactive Viewer</div>
-        <div class="timeline__desc">Data matrix compression and high-performance browser rendering via GPU-accelerated Leaflet Canvas.</div>
+        <div class="timeline__date">Component 05 · Status: Preliminary (Active Milestone)</div>
+        <div class="timeline__title">5. Embedding-Based Filtering</div>
+        <div class="timeline__desc">Top-1/Top-3 similarity matches, concordance metric (md3), separation margins, and sensitivity thresholds evaluated across Scenarios A through E.</div>
       </div>
+
       <div class="timeline__item future">
-        <div class="timeline__date">Stage 06</div>
-        <div class="timeline__title">Cross-Analysis & Territorial Documentation</div>
-        <div class="timeline__desc">Concordance evaluation against MapBiomas collections, threshold filters, and technical report delivery.</div>
+        <div class="timeline__date">Component 06 · Status: Under Development</div>
+        <div class="timeline__title">6. SOM-Based Filtering (Self-Organizing Maps)</div>
+        <div class="timeline__desc">Initial 12×12 neuron grid (144 units); multivariate dimensionality, normalization, neighborhood, and Dirichlet-Multinomial Bayesian smoothing under evaluation.</div>
+      </div>
+
+      <div class="timeline__item future">
+        <div class="timeline__date">Component 07 · Status: Planning</div>
+        <div class="timeline__title">7. CBERS-4A Visual Inspection (~2 m)</div>
+        <div class="timeline__desc">Stratified sampling (~1,040 points for 3% margin of error at 95% confidence) after embedding-SOM selection with blind multi-interpreter protocol.</div>
+      </div>
+
+      <div class="timeline__item future">
+        <div class="timeline__date">Component 08 · Status: Planning</div>
+        <div class="timeline__title">8. Field Data Collection & Subsequent Validation</div>
+        <div class="timeline__desc">Initial campaign of approximately 100 field localities across the Cerrado (logistical priority given to Goiás) for targeted validation of the 10 m map.</div>
       </div>
     </div>
   </section>

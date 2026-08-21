@@ -1,28 +1,30 @@
-# Characterization and Mapping of Cerrado Pastures with Spectral Embeddings (Sentinel-2)
+# Improvement of Pasture Mapping in the Cerrado Biome
 
-Institutional repository containing data, high-performance analytical pipelines (DuckDB / Python), and an interactive web platform developed through technical cooperation between **LAPIG/UFG**, **WRI Brasil**, and **Embrapa**.
+Institutional repository containing data, high-performance analytical pipelines (DuckDB / Python), and an interactive web platform developed under the agreement between **WRI Brasil** and **FUNAPE**, with technical execution by **LAPIG/UFG** in cooperation with **Embrapa Cenargen** (**Project GR000153-73077-CARGILL-BRAZIL**).
+
+Deliverable: **Product 1 — Detailed Sampling Plan and Sampling Improvement Strategies** (August 17, 2026).
 
 ---
 
 ## 📊 Summary of Datasets & Sample Series
 
-The platform integrates **438,200 MapBiomas samples** across a 7-year historical series (2019 to 2025), matched via **64-dimensional dot product** against Embrapa's **701 in situ ground-truth reference points**:
+The platform integrates **62,009 candidate samples** (in 2025) across a multi-year historical series (2020 to 2025), matched via **64-dimensional L2-renormalized cosine similarity** against Embrapa's **701 in situ reference polygons** (~1 ha; 608 classified across 7 pasture condition categories + 93 unlabeled):
 
-| Sample Series | Description & Stratification | Samples / Year (2025) | Historical Series Total (2019–2025) |
+| Sample Series | Description & Stratification | Samples / Year (2025) | Provenance & Nature |
 | :--- | :--- | :--- | :--- |
-| **50k Series** | Stratified random sampling based on Pasture Vigor Condition (CVP) | **50,000** | **350,000** |
-| **12k Series** | Pasture-filtered union: MapBiomas Pasture (Col. 11) + MapBiomas 85k | **12,395** | **88,200** |
-| **Combined Total** | Comprehensive spatial coverage across the Cerrado biome | **62,395** | **438,200** |
-| **Embrapa Reference** | In situ ground-truth reference points classified into 7 canonical typologies | **701** | **701** |
+| **50k Series** | Stratified random sampling from persistent pasture (2020–2025) | **50,000** | Proportional to 2025 vigor strata: Low (~35%), Medium (~44%), High (~21%) |
+| **12k Series** | MapBiomas Col. 4 S2 (5,453) + MapBiomas 85k Landsat validation (6,556) | **12,009** | Visual inspection pasture samples & interpreted validation subset |
+| **Total Candidates** | Inclusive universe before similarity, SOM, and CBERS-4A filters | **62,009** | Scenarios: Inclusive (62,009) vs. Agreement with Col. 11 (56,952) |
+| **Embrapa Reference** | In situ field reference polygons (~1 ha) | **701** | 608 classified across 7 categories + 93 unclassified |
 
 ### Annual Breakdown of the 12k Series:
-* **2019**: 12,892 points
-* **2020**: 12,792 points
-* **2021**: 12,681 points
-* **2022**: 12,548 points
-* **2023**: 12,470 points
-* **2024**: 12,422 points
-* **2025**: 12,395 points
+* **2019**: 12,483 points
+* **2020**: 12,386 points
+* **2021**: 12,281 points
+* **2022**: 12,149 points
+* **2023**: 12,080 points
+* **2024**: 12,034 points
+* **2025**: 12,009 points
 
 ---
 
